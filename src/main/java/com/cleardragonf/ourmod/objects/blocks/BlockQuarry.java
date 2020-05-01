@@ -11,12 +11,10 @@ public class BlockQuarry extends Block{
 
 	public BlockQuarry(Properties properties) {
 		super(properties);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public boolean hasTileEntity(BlockState state) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	

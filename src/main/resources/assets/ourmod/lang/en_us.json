@@ -9,6 +9,9 @@
 	
 	"block.ourmod.forcefield": "Force Field",
 	"block.ourmod.quarry": "Quarry",
+	"block.ourmod.portablechest": "Portable Chest",
 	
-	"itemGroup.ourmodtab": "Our Mod"
+	"itemGroup.ourmodtab": "Our Mod",
+	
+	"container.portablechest": "Portable Chest"
 }

@@ -2,7 +2,6 @@ package com.cleardragonf.ourmod.tileentity;
 
 import javax.annotation.Nullable;
 
-import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import com.cleardragonf.ourmod.util.helpers.NBTHelper;
 

@@ -3,9 +3,9 @@ package com.cleardragonf.ourmod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.cleardragonf.ourmod.OurMod.OurModItemGroup;
-import com.cleardragonf.ourmod.init.BlockInit;
-import com.cleardragonf.ourmod.init.ItemInit;
+import com.cleardragonf.ourmod.init.BlockInitNew;
+import com.cleardragonf.ourmod.init.ItemInitNew;
+import com.cleardragonf.ourmod.init.ModContainerTypes;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 
 import net.minecraft.block.Blocks;
@@ -19,6 +19,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -27,6 +28,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("ourmod")
+@Mod.EventBusSubscriber(modid = OurMod.MOD_ID, bus = Bus.MOD)
 public class OurMod
 {
     // Directly reference a log4j logger.
@@ -41,15 +43,31 @@ public class OurMod
         modEventBus.addListener(this::setup);
         // Register the doClientStuff method for modloading
         modEventBus.addListener(this::doClientStuff);
-
-        ModTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
         
+        ItemInitNew.ITEMS.register(modEventBus);
+        BlockInitNew.BLOCKS.register(modEventBus);
+        
+        ModTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
+        ModContainerTypes.CONTAINER_TYPES.register(modEventBus);
         instance = this;
         
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
     
+    @SubscribeEvent
+	public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
+		final IForgeRegistry<Item> registry = event.getRegistry();
+		
+		BlockInitNew.BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block -> {
+			final Item.Properties properties = new Item.Properties().group(OurModItemGroup.instance);
+			final BlockItem blockItem = new BlockItem(block, properties);
+			blockItem.setRegistryName(block.getRegistryName());
+			registry.register(blockItem);
+		});
+
+		LOGGER.debug("Registered BlockItems!");
+	}
 
     private void setup(final FMLCommonSetupEvent event)
     {
@@ -78,7 +96,7 @@ public class OurMod
     	
     	@Override
     	public ItemStack createIcon() {
-    		return new ItemStack(BlockInit.forcefield);
+    		return new ItemStack(BlockInitNew.FORCEFIELD.get());
     	}
     }
 }
