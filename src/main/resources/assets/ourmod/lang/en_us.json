@@ -1,0 +1,14 @@
+{
+	"item.ourmod.cornoncob": "Corn on the Cob",
+	"item.ourmod.corn": "Corn",
+	"item.ourmod.tomato": "Tomato",
+	"item.ourmod.brocoli": "Brocoli",
+	"item.ourmod.lettuce": "Lettuce",
+	"item.ourmod.onion": "Onion",
+	"item.ourmod.rice": "Rice",
+	
+	"block.ourmod.forcefield": "Force Field",
+	"block.ourmod.quarry": "Quarry",
+	
+	"itemGroup.ourmodtab": "Our Mod"
+}
