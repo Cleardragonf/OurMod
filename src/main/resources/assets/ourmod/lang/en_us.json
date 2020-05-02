@@ -7,6 +7,8 @@
 	"item.ourmod.onion": "Onion",
 	"item.ourmod.rice": "Rice",
 	
+	"block.ourmod.tomatocrop": "Tomato Crop",	
+	
 	"block.ourmod.forcefield": "Force Field",
 	"block.ourmod.quarry": "Quarry",
 	"block.ourmod.portablechest": "Portable Chest",

@@ -1,6 +1,5 @@
 package com.cleardragonf.ourmod.objects.blocks;
 
-import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import com.cleardragonf.ourmod.tileentity.PortableChestTileEntity;
 

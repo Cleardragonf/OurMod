@@ -7,6 +7,7 @@ import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ItemInitNew;
 import com.cleardragonf.ourmod.init.ModContainerTypes;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
+import com.cleardragonf.ourmod.objects.blocks.TomatoCrop;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
@@ -59,7 +60,7 @@ public class OurMod
 	public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
 		final IForgeRegistry<Item> registry = event.getRegistry();
 		
-		BlockInitNew.BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block -> {
+		BlockInitNew.BLOCKS.getEntries().stream().filter(block -> !(block.get() instanceof TomatoCrop)).map(RegistryObject::get).forEach(block -> {
 			final Item.Properties properties = new Item.Properties().group(OurModItemGroup.instance);
 			final BlockItem blockItem = new BlockItem(block, properties);
 			blockItem.setRegistryName(block.getRegistryName());
