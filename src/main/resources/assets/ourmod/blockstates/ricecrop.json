@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"age=0" : {"model": "ourmod:block/ricecrop0"},
+		"age=1" : {"model": "ourmod:block/ricecrop1"},
+		"age=2" : {"model": "ourmod:block/ricecrop2"},
+		"age=3" : {"model": "ourmod:block/ricecrop3"},
+		"age=4" : {"model": "ourmod:block/ricecrop4"},
+		"age=5" : {"model": "ourmod:block/ricecrop5"},
+		"age=6" : {"model": "ourmod:block/ricecrop6"},
+		"age=7" : {"model": "ourmod:block/ricecrop7"}
+	}
+}

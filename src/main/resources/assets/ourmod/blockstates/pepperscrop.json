@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"age=0" : {"model": "ourmod:block/pepperscrop0"},
+		"age=1" : {"model": "ourmod:block/pepperscrop1"},
+		"age=2" : {"model": "ourmod:block/pepperscrop2"},
+		"age=3" : {"model": "ourmod:block/pepperscrop3"},
+		"age=4" : {"model": "ourmod:block/pepperscrop4"},
+		"age=5" : {"model": "ourmod:block/pepperscrop5"},
+		"age=6" : {"model": "ourmod:block/pepperscrop6"},
+		"age=7" : {"model": "ourmod:block/pepperscrop7"}
+	}
+}

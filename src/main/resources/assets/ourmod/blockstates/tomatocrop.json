@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"age=0" : {"model": "ourmod:block/tomatocrop0"},
+		"age=1" : {"model": "ourmod:block/tomatocrop1"},
+		"age=2" : {"model": "ourmod:block/tomatocrop2"},
+		"age=3" : {"model": "ourmod:block/tomatocrop3"},
+		"age=4" : {"model": "ourmod:block/tomatocrop4"},
+		"age=5" : {"model": "ourmod:block/tomatocrop5"},
+		"age=6" : {"model": "ourmod:block/tomatocrop6"},
+		"age=7" : {"model": "ourmod:block/tomatocrop7"}
+	}
+}
