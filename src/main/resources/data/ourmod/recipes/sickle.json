@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"iii",
+		"  i",
+		"IiI"
+	],
+	"key": {
+		"i" : {
+			"item": "minecraft:iron_ingot"
+		},
+		"I" :{
+			"tag": "minecraft:planks"
+		}
+	},
+	"result": {
+		"item": "ourmod:sickle"
+	}
+}

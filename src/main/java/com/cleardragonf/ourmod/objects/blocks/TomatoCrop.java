@@ -38,6 +38,10 @@ public class TomatoCrop extends CropsBlock{
 		return SHAPE_BY_AGE[state.get(this.getAgeProperty())];
 	}
 	
+	public void resetAge() {
+		this.setDefaultState(this.stateContainer.getBaseState().with(this.getAgeProperty(), Integer.valueOf(0)));
+	}
+	
 	
 	
 }
