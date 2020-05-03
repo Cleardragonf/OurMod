@@ -1,0 +1,6 @@
+{
+	"parent": "block/crop",
+	"textures": {
+		"crop": "ourmod:blocks/ricecrop_stage6"
+	}
+}

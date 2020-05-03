@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.CropsBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -31,6 +32,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.RegistryObject;
 
 public class Sickle extends Item{
 
@@ -86,7 +88,10 @@ public class Sickle extends Item{
 		            PlayerEntity playerentity = context.getPlayer();
 		            world.playSound(playerentity, blockpos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	     		//Checks what type of crop it is.
-	            
+	            if(block instanceof CropsBlock) {
+	            	//TODO: working within here to try and figure out the blocks FINAL class so that i can cast to the block for wildcard
+	            	
+	            }
 	            if(block instanceof TomatoCrop) {
 	    			block = (TomatoCrop)block;
 	    				ItemStack stack = new ItemStack(ItemInitNew.TOMATO.get().asItem());

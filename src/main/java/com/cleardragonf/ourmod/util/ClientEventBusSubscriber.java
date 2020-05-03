@@ -21,5 +21,6 @@ public class ClientEventBusSubscriber {
 	public static void clientSetup(FMLClientSetupEvent event) {
 		ScreenManager.registerFactory(ModContainerTypes.PORTABLE_CHEST.get(), PortableChestScreen::new);
 		RenderTypeLookup.setRenderLayer(BlockInitNew.TOMATO_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.RICE_CROP.get(), RenderType.getCutout());
 	}
 }
