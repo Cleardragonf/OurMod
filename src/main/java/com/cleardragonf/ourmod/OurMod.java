@@ -9,8 +9,11 @@ import com.cleardragonf.ourmod.init.ModContainerTypes;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import com.cleardragonf.ourmod.objects.blocks.RiceCrop;
 import com.cleardragonf.ourmod.objects.blocks.TomatoCrop;
+import com.cleardragonf.ourmod.setup.ClientProxy;
+import com.cleardragonf.ourmod.setup.IProxy;
+import com.cleardragonf.ourmod.setup.ModSetup;
+import com.cleardragonf.ourmod.setup.ServerProxy;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -20,6 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -36,6 +40,11 @@ public class OurMod
 {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
+    
+    //Communication of Server vs Client
+    public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
+    public static ModSetup setup = new ModSetup();
+    
     
     public final static String MOD_ID = "ourmod";
     public static OurMod instance;
@@ -57,6 +66,7 @@ public class OurMod
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
+
     
     @SubscribeEvent
 	public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
@@ -74,8 +84,9 @@ public class OurMod
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        // some preinit code
-        LOGGER.info("HELLO FROM PREINIT");
+    	setup.init();
+    	proxy.init();
+    	LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
     }
 

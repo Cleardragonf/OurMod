@@ -2,6 +2,7 @@ package com.cleardragonf.ourmod.util.helpers;
 
 import javax.annotation.Nullable;
 
+import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import com.cleardragonf.ourmod.tileentity.QuarryTileEntity;
 
 import net.minecraft.item.Item;
@@ -17,6 +18,8 @@ public class NBTHelper {
 		}
 		if(o instanceof QuarryTileEntity) {
 			return writeQuarry((QuarryTileEntity)o);
+		}if(o instanceof EssenceCollectorTileEntity) {
+			return writeEssence((EssenceCollectorTileEntity)o);
 		}
 
 		
@@ -34,6 +37,13 @@ public class NBTHelper {
 	}
 	
 	private static CompoundNBT writeQuarry(QuarryTileEntity o) {
+		CompoundNBT compound = new CompoundNBT();
+		compound.putInt("x", o.x);
+		compound.putInt("y", o.y);
+		compound.putInt("z", o.z);
+		return compound;
+	}
+	private static CompoundNBT writeEssence(EssenceCollectorTileEntity o) {
 		CompoundNBT compound = new CompoundNBT();
 		compound.putInt("x", o.x);
 		compound.putInt("y", o.y);

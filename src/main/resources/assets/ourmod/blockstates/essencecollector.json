@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north" : { "model": "ourmod:block/ssencecollector"},
+		"facing=south" : { "model": "ourmod:block/essencecollector", "y": 180},
+		"facing=west" : { "model": "ourmod:block/essencecollector", "y": 270},
+		"facing=east" : { "model": "ourmod:block/essencecollector", "y": 90},
+		"facing=up" : { "model": "ourmod:block/essencecollector", "x": -90},
+		"facing=down" : { "model": "ourmod:block/essencecollector", "x": 90}
+	}
+}

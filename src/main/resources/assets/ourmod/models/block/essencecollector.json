@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube_all",
+	"textures": {
+		"particle": "ourmod:blocks/essencecollector",
+		"down": "ourmod:blocks/essencecollector",
+		"up": "ourmod:blocks/essencecollector",
+		"east": "ourmod:blocks/essencecollector",
+		"west": "ourmod:blocks/essencecollector",
+		"north": "ourmod:blocks/essencecollector_front",
+		"south": "ourmod:blocks/essencecollector"
+	}
+}
