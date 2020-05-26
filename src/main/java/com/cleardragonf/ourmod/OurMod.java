@@ -1,5 +1,9 @@
 package com.cleardragonf.ourmod;
 
+import com.cleardragonf.ourmod.network.NetRegistries;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,9 +47,13 @@ public class OurMod
     
     //Communication of Server vs Client
     public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(location("main"), () -> "1", "1"::equals, "1"::equals);
     public static ModSetup setup = new ModSetup();
-    
-    
+
+    public static ResourceLocation location (String name){
+        return new ResourceLocation("ourmod", name);
+    }
+
     public final static String MOD_ID = "ourmod";
     public static OurMod instance;
     public OurMod() {
@@ -79,6 +87,8 @@ public class OurMod
 			registry.register(blockItem);
 		});
 
+
+
 		LOGGER.debug("Registered BlockItems!");
 	}
 
@@ -92,6 +102,7 @@ public class OurMod
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
+        NetRegistries.registerMSG();
         
     }
     // You can use SubscribeEvent and let the Event Bus discover methods to call
