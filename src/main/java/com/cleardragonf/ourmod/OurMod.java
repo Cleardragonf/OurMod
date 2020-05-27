@@ -1,7 +1,9 @@
 package com.cleardragonf.ourmod;
 
+import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.events.SurvivalEvents;
 import com.cleardragonf.ourmod.network.NetRegistries;
+import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -71,11 +73,14 @@ public class OurMod
         ModTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
         ModContainerTypes.CONTAINER_TYPES.register(modEventBus);
         instance = this;
-        
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @SubscribeEvent
+    public static void registerEffects(RegistryEvent.Register<Effect> event) {
+        EntityEffects.registerAll(event.getRegistry());
+    }
     
     @SubscribeEvent
 	public static void onRegisterItems(final RegistryEvent.Register<Item> event) {

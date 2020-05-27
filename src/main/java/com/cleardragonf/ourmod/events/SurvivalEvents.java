@@ -1,6 +1,7 @@
 package com.cleardragonf.ourmod.events;
 
 import com.cleardragonf.ourmod.OurMod;
+import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.entity.EntityStats;
 import com.cleardragonf.ourmod.entity.SurvivalAttributes;
 import com.cleardragonf.ourmod.network.server.SurvivalStatsPacket;
@@ -11,14 +12,18 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
@@ -29,6 +34,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkDirection;
 
 import java.io.Console;
+import java.util.Random;
 
 @Mod.EventBusSubscriber
 public class SurvivalEvents {
@@ -223,6 +229,21 @@ public class SurvivalEvents {
         }
     }
 
+    public static void applyThirst(LivingEntity entity){
+        Random rand = new Random();
+        int thirst = rand.nextInt(2);
+    }
+
+    @SubscribeEvent
+    public static void drinkWaterFromBottle(LivingEntityUseItemEvent.Finish event){
+        if(event.getEntityLiving() instanceof PlayerEntity){
+            if(PotionUtils.getPotionFromItem(event.getItem()) == Potions.WATER){
+                applyThirst(event.getEntityLiving());
+                EntityStats.addThirst(event.getEntityLiving(), 5.0D);
+            }
+        }
+    }
+
 
 
     @SubscribeEvent//this portion is to be used to give hyperthermia or hypothermia based on their temps....look into creating those Effets....
@@ -231,35 +252,34 @@ public class SurvivalEvents {
             ServerPlayerEntity player = (ServerPlayerEntity)event.getEntityLiving();
             double tempeature = EntityStats.getTemperature(player);
 
-            double maxHeatStage1 = 37.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D;
-            double maxHeatStage2 = 37.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D + 0.3333333333333333D;
-            double maxHeatStage3 = 37.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D + 0.4444444444444444D;
-            double maxColdStage1 = 37.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D;
-            double maxColdStage2 = 37.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D + 0.3333333333333333D;
-            double maxColdStage3 = 37.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D + 0.4444444444444444D;
-
-            if(EntityStats.getTemperature(player) != 0){
+            double maxHeatStage1 = 47.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D;
+            double maxHeatStage2 = 48.0d + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D;
+            double maxHeatStage3 = 49.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D;
+            double maxColdStage1 = 20.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D;
+            double maxColdStage2 = 10.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D;
+            double maxColdStage3 = 0.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D;
+            if(!player.isPotionActive(EntityEffects.HYPERTHERMIA)){
                 if(tempeature > maxHeatStage1 && tempeature <= maxHeatStage2){
-                    EntityStats.addThirst((LivingEntity)player, -0.05d);
-                    player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 0, false, false, false));
+                    EntityStats.addThirst((LivingEntity)player, -0.01d);
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 10, 0, false, false, false));
                 }else if(tempeature > maxHeatStage2 && tempeature <= maxHeatStage3){
-                    EntityStats.addThirst((LivingEntity)player, -0.1d);
-                    player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 1, false, false, false));
+                    EntityStats.addThirst((LivingEntity)player, -0.05d);
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 10, 1, false, false, false));
                 }else if(tempeature > maxHeatStage3){
-                    EntityStats.addThirst((LivingEntity)player, -0.2d);
-                    player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 2, false, false, false));
+                    EntityStats.addThirst((LivingEntity)player, -0.1d);
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 10, 2, false, false, false));
                 }
             }
-            if(EntityStats.getTemperature(player) != 100){
+            if(!player.isPotionActive(EntityEffects.HYPOTHERMIA)){
                 if(tempeature < maxColdStage1 && tempeature >= maxColdStage2){
-                    EntityStats.addThirst((LivingEntity)player, -0.05d);
-                    player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 0, false, false, false));
+                    EntityStats.addThirst((LivingEntity)player, -0.01d);
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 10, 0, false, false, false));
                 }else if(tempeature < maxColdStage2 && tempeature >= maxColdStage3){
-                    EntityStats.addThirst((LivingEntity)player, -0.1d);
-                    player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 1, false, false, false));
+                    EntityStats.addThirst((LivingEntity)player, -0.01d);
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 10, 1, false, false, false));
                 }else if(tempeature < maxColdStage3){
-                    EntityStats.addThirst((LivingEntity)player, -0.2d);
-                    player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 2, false, false, false));
+                    EntityStats.addThirst((LivingEntity)player, -0.01d);
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 10, 2, false, false, false));
                 }
             }
         }
