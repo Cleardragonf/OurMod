@@ -1,5 +1,6 @@
 package com.cleardragonf.ourmod;
 
+import com.cleardragonf.ourmod.events.SurvivalEvents;
 import com.cleardragonf.ourmod.network.NetRegistries;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -98,6 +99,8 @@ public class OurMod
     	proxy.init();
     	LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+        SurvivalEvents.registerHeatMap();
+        SurvivalEvents.registerBiomeHeatMap();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

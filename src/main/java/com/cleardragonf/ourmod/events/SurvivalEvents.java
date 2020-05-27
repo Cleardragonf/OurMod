@@ -43,14 +43,80 @@ public class SurvivalEvents {
     }
 
     public static void registerBiomeHeatMap(){
-        BIOME_HEAT_MAP.put(Biomes.DESERT, 100.0F);
-        BIOME_HEAT_MAP.put(Biomes.DESERT_HILLS, 100.0F);
-        BIOME_HEAT_MAP.put(Biomes.DESERT_LAKES, 100.0F);
-        BIOME_HEAT_MAP.put(Biomes.BEACH, 90.0F);
-        BIOME_HEAT_MAP.put(Biomes.COLD_OCEAN, 0.0F);
-        BIOME_HEAT_MAP.put(Biomes.DEEP_COLD_OCEAN, 0.0F);
-        BIOME_HEAT_MAP.put(Biomes.DEEP_FROZEN_OCEAN, 0.0F);
-        BIOME_HEAT_MAP.put(Biomes.PLAINS, 32.0F);
+        BIOME_HEAT_MAP.put(Biomes.BADLANDS, 45.0f);
+        BIOME_HEAT_MAP.put(Biomes.BADLANDS_PLATEAU, 45.0f);
+        BIOME_HEAT_MAP.put(Biomes.BAMBOO_JUNGLE, 39.0f);
+        BIOME_HEAT_MAP.put(Biomes.BAMBOO_JUNGLE_HILLS, 39.0f);
+        BIOME_HEAT_MAP.put(Biomes.BIRCH_FOREST, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.BIRCH_FOREST_HILLS, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.COLD_OCEAN, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.DEEP_FROZEN_OCEAN, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.DEEP_COLD_OCEAN, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.DESERT_LAKES, 49.0f);
+        BIOME_HEAT_MAP.put(Biomes.DESERT, 49.0f);
+        BIOME_HEAT_MAP.put(Biomes.DESERT_HILLS, 49.0f);
+        BIOME_HEAT_MAP.put(Biomes.DARK_FOREST, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.DARK_FOREST_HILLS, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.DEEP_LUKEWARM_OCEAN, 27.0f);
+        BIOME_HEAT_MAP.put(Biomes.DEEP_OCEAN, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.DEEP_WARM_OCEAN, 30.0f);
+        BIOME_HEAT_MAP.put(Biomes.END_BARRENS, -5.0f);
+        BIOME_HEAT_MAP.put(Biomes.END_HIGHLANDS, -5.0f);
+        BIOME_HEAT_MAP.put(Biomes.END_MIDLANDS, -5.0f);
+        BIOME_HEAT_MAP.put(Biomes.ERODED_BADLANDS, 45.0f);
+        BIOME_HEAT_MAP.put(Biomes.FLOWER_FOREST, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.FOREST, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.FROZEN_OCEAN, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.FROZEN_RIVER, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.GIANT_SPRUCE_TAIGA, 20.0f);
+        BIOME_HEAT_MAP.put(Biomes.GIANT_SPRUCE_TAIGA_HILLS, 20.0f);
+        BIOME_HEAT_MAP.put(Biomes.GIANT_TREE_TAIGA, 20.0f);
+        BIOME_HEAT_MAP.put(Biomes.GIANT_TREE_TAIGA_HILLS, 20.0f);
+        BIOME_HEAT_MAP.put(Biomes.GRAVELLY_MOUNTAINS, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.ICE_SPIKES, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.JUNGLE, 39.0f);
+        BIOME_HEAT_MAP.put(Biomes.JUNGLE_EDGE, 39.0f);
+        BIOME_HEAT_MAP.put(Biomes.JUNGLE_HILLS, 39.0f);
+        BIOME_HEAT_MAP.put(Biomes.LUKEWARM_OCEAN, 28.0f);
+        BIOME_HEAT_MAP.put(Biomes.MODIFIED_BADLANDS_PLATEAU, 45.0f);
+        BIOME_HEAT_MAP.put(Biomes.MODIFIED_GRAVELLY_MOUNTAINS, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.MODIFIED_JUNGLE, 39.0f);
+        BIOME_HEAT_MAP.put(Biomes.MODIFIED_JUNGLE_EDGE, 39.0f);
+        BIOME_HEAT_MAP.put(Biomes.MODIFIED_WOODED_BADLANDS_PLATEAU, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.MOUNTAIN_EDGE, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.MOUNTAINS, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.MUSHROOM_FIELD_SHORE, 30.0f);
+        BIOME_HEAT_MAP.put(Biomes.MUSHROOM_FIELDS, 30.0f);
+        BIOME_HEAT_MAP.put(Biomes.NETHER, 100.0f);
+        BIOME_HEAT_MAP.put(Biomes.OCEAN, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.PLAINS, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.RIVER, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.SAVANNA, 42.0f);
+        BIOME_HEAT_MAP.put(Biomes.SAVANNA_PLATEAU, 42.0f);
+        BIOME_HEAT_MAP.put(Biomes.SHATTERED_SAVANNA, 42.0f);
+        BIOME_HEAT_MAP.put(Biomes.SHATTERED_SAVANNA_PLATEAU, 42.0f);
+        BIOME_HEAT_MAP.put(Biomes.SMALL_END_ISLANDS, -5.0f);
+        BIOME_HEAT_MAP.put(Biomes.SNOWY_BEACH, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.SNOWY_MOUNTAINS, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.SNOWY_TAIGA, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.SNOWY_TAIGA_HILLS, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.SNOWY_TAIGA_MOUNTAINS, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.SNOWY_TUNDRA, 0.0f);
+        BIOME_HEAT_MAP.put(Biomes.STONE_SHORE, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.SUNFLOWER_PLAINS, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.SWAMP, 30.0f);
+        BIOME_HEAT_MAP.put(Biomes.SWAMP_HILLS, 30.0f);
+        BIOME_HEAT_MAP.put(Biomes.TAIGA, 20.0f);
+        BIOME_HEAT_MAP.put(Biomes.TAIGA_HILLS, 20.0f);
+        BIOME_HEAT_MAP.put(Biomes.TAIGA_MOUNTAINS, 15.0f);
+        BIOME_HEAT_MAP.put(Biomes.TALL_BIRCH_FOREST, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.TALL_BIRCH_HILLS, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.THE_END, -5.0f);
+        BIOME_HEAT_MAP.put(Biomes.THE_VOID, 25.0f);
+        BIOME_HEAT_MAP.put(Biomes.WARM_OCEAN, 30.0f);
+        BIOME_HEAT_MAP.put(Biomes.WOODED_BADLANDS_PLATEAU, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.WOODED_HILLS, 35.0f);
+        BIOME_HEAT_MAP.put(Biomes.WOODED_MOUNTAINS, 30.0f);
     }
 
     @SubscribeEvent
@@ -213,6 +279,8 @@ public class SurvivalEvents {
         }
         if(type == TempType.BIOME){
            if(BIOME_HEAT_MAP.containsKey(world.getBiome(pos))){
+
+               System.out.println("Found one");
                return BIOME_HEAT_MAP.getFloat(world.getBiome(pos));
            }
            return blockLight / 3.0F + 37.0F;
@@ -229,10 +297,14 @@ public class SurvivalEvents {
         return 37.0F;//Default Temp
     }
 
+    public static float getAverageWorldTemperature(){
+        return 50.0F;
+    }
+
     private enum TempType {
-        BIOME(100, 990.0D),
-        BLOCK(20, 750.0D),
-        SHADE(20, 1000.0D),
+        BIOME(60, 10.0D),
+        BLOCK(60, 750.0D),
+        SHADE(200, 1000.0D),
         SUN(200, 1000.0D);
 
         double reductionAmount;
@@ -254,4 +326,28 @@ public class SurvivalEvents {
     }
 
 
+    @SubscribeEvent
+    public static void updateTemperature(LivingEvent.LivingUpdateEvent event){
+        if(event.getEntityLiving() instanceof ServerPlayerEntity){
+            ServerPlayerEntity player = (ServerPlayerEntity)event.getEntityLiving();
+            for(TempType type : TempType.values()){
+                double temperature;
+                if(type == TempType.SHADE || type == TempType.SUN){
+                    temperature = getExactWorldTemperature(player.world, player.getPosition(), type);
+                }
+                else if(type == TempType.BIOME){
+                    temperature = getExactWorldTemperature(player.world, player.getPosition(), type);
+                }
+                else{
+                    temperature = getAverageWorldTemperature();
+                }
+                double modifier = (temperature - EntityStats.getTemperature((LivingEntity)player)) / type.getReductionAmount();
+                int modInt = (int)(modifier * 1000.0D);
+                modifier = modInt / 1000.0D;
+                if(player.ticksExisted % type.getTickInterval() == type.getTickInterval() - 1)
+                    EntityStats.addTemperature((LivingEntity)player, modifier);
+
+            }
+        }
+    }
 }

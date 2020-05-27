@@ -81,12 +81,12 @@ public class EntityStats {
         CompoundNBT compound = player.getPersistentData();
         if(compound != null && compound.contains("ourmod:Temperature")){
             double defaultTemp = 37.0D;
-            double maxHeat1 = 37.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D;
-            double maxHeat2 = 37.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D + 0.3333333333333333D;
-            double maxHeat3 = 37.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D + 0.4444444444444444D;
-            double maxCold1 = 37.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D;
-            double maxCold2 = 37.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D + 0.3333333333333333D;
-            double maxCold3 = 37.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D + 0.4444444444444444D;
+            double maxHeat1 = 50.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D;
+            double maxHeat2 = 50.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D + 0.3333333333333333D;
+            double maxHeat3 = 50.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D + 0.4444444444444444D;
+            double maxCold1 = 50.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D;
+            double maxCold2 = 50.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D + 0.3333333333333333D;
+            double maxCold3 = 50.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D + 0.4444444444444444D;
             if (getTemperature(player) > defaultTemp && getTemperature(player) <= maxHeat1) {
                 if (temperature < 0.0D) {
                     setTemperature(player, getTemperature(player) + temperature * 1.5D);
