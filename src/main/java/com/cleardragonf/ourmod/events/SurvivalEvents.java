@@ -300,7 +300,6 @@ public class SurvivalEvents {
         if(type == TempType.BIOME){
            if(BIOME_HEAT_MAP.containsKey(world.getBiome(pos))){
 
-               System.out.println("Found one");
                return BIOME_HEAT_MAP.getFloat(world.getBiome(pos));
            }
            return blockLight / 3.0F + 37.0F;

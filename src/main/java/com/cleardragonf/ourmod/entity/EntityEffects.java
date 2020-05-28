@@ -1,5 +1,6 @@
 package com.cleardragonf.ourmod.entity;
 
+import com.cleardragonf.ourmod.OurMod;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
@@ -35,7 +36,7 @@ public class EntityEffects {
     }
 
     public static Effect register(String name, Effect effect) {
-        effect.setRegistryName("ourmod" + name);
+        effect.setRegistryName(OurMod.location(name));
         EFFECT.add(effect);
         return effect;
     }

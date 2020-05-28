@@ -18,5 +18,8 @@
 	
 	"itemGroup.ourmodtab": "Our Mod",
 	
-	"container.portablechest": "Portable Chest"
+	"container.portablechest": "Portable Chest",
+
+	"effect.ourmod.hypothermia": "Hypothermia",
+	"effect.ourmod.hyperthermia": "Hyperthermia"
 }
