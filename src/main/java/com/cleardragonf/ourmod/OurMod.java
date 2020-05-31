@@ -144,4 +144,8 @@ public class OurMod
     		return new ItemStack(BlockInitNew.FORCEFIELD.get());
     	}
     }
+
+    private void testing(){
+        System.out.println();
+    }
 }
