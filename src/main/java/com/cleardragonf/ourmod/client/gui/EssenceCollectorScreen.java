@@ -44,5 +44,7 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
 		this.blit(x, y, 0, 0, this.xSize, this.ySize);
+		//x,y,tx,ty,width,height @RyuShiTenshiKage
+		this.blit(x +13, y + 169, 179, 133, 8, 100);
 	}
 }
