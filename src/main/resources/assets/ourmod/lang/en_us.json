@@ -14,11 +14,13 @@
 	"block.ourmod.forcefield": "Force Field",
 	"block.ourmod.quarry": "Quarry",
 	"block.ourmod.portablechest": "Portable Chest",
+	"block.ourmod.fishingnet": "Fishing Net",
 	"block.ourmod.essencecollector": "Essence Collector",
 	
 	"itemGroup.ourmodtab": "Our Mod",
 	
 	"container.portablechest": "Portable Chest",
+	"container.fishingnet": "Fishing Net",
 
 	"effect.ourmod.hypothermia": "Hypothermia",
 	"effect.ourmod.hyperthermia": "Hyperthermia"

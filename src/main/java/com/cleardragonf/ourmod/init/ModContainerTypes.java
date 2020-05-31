@@ -1,6 +1,7 @@
 package com.cleardragonf.ourmod.init;
 
 import com.cleardragonf.ourmod.OurMod;
+import com.cleardragonf.ourmod.container.FishingNetContainer;
 import com.cleardragonf.ourmod.container.PortableChestContainer;
 
 import net.minecraft.inventory.container.ContainerType;
@@ -13,5 +14,5 @@ public class ModContainerTypes {
 	public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = new DeferredRegister<ContainerType<?>>(ForgeRegistries.CONTAINERS, OurMod.MOD_ID);
 	
 	public static final RegistryObject<ContainerType<PortableChestContainer>> PORTABLE_CHEST = CONTAINER_TYPES.register("portablechest", () -> IForgeContainerType.create(PortableChestContainer::new ));
-	
+	public static final RegistryObject<ContainerType<FishingNetContainer>> FISHING_NET = CONTAINER_TYPES.register("fishingnet", () -> IForgeContainerType.create(FishingNetContainer::new ));
 }
