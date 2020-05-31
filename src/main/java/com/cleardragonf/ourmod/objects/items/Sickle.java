@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ItemInitNew;
-import com.cleardragonf.ourmod.objects.blocks.TomatoCrop;
+import com.cleardragonf.ourmod.objects.blocks.*;
 import com.cleardragonf.ourmod.util.helpers.KeyboardHelper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -101,6 +101,87 @@ public class Sickle extends Item{
 	                        p_220043_1_.sendBreakAnimation(context.getHand());
 	                     });
 	            }
+				 if(block instanceof OnionCrop) {
+					 block = (OnionCrop)block;
+					 ItemStack stack = new ItemStack(ItemInitNew.ONION.get().asItem());
+					 ItemStack item = context.getItem();
+					 resetCrop(block, stack, world, context.getPlayer(), blockpos, blockstate);
+					 context.getItem().damageItem(1, playerentity, (p_220043_1_) -> {
+						 p_220043_1_.sendBreakAnimation(context.getHand());
+					 });
+				 }
+				 if(block instanceof CornCrop) {
+					 block = (CornCrop)block;
+					 ItemStack stack = new ItemStack(ItemInitNew.CORN.get().asItem());
+					 ItemStack item = context.getItem();
+					 resetCrop(block, stack, world, context.getPlayer(), blockpos, blockstate);
+					 context.getItem().damageItem(1, playerentity, (p_220043_1_) -> {
+						 p_220043_1_.sendBreakAnimation(context.getHand());
+					 });
+				 }
+				 if(block instanceof CucumberCrop) {
+					 block = (CucumberCrop)block;
+					 ItemStack stack = new ItemStack(ItemInitNew.CUCUMBER.get().asItem());
+					 ItemStack item = context.getItem();
+					 resetCrop(block, stack, world, context.getPlayer(), blockpos, blockstate);
+					 context.getItem().damageItem(1, playerentity, (p_220043_1_) -> {
+						 p_220043_1_.sendBreakAnimation(context.getHand());
+					 });
+				 }
+				 if(block instanceof BroccoliCrop) {
+					 block = (BroccoliCrop)block;
+					 ItemStack stack = new ItemStack(ItemInitNew.BROCCOLI.get().asItem());
+					 ItemStack item = context.getItem();
+					 resetCrop(block, stack, world, context.getPlayer(), blockpos, blockstate);
+					 context.getItem().damageItem(1, playerentity, (p_220043_1_) -> {
+						 p_220043_1_.sendBreakAnimation(context.getHand());
+					 });
+				 }
+				 if(block instanceof LettuceCrop) {
+					 block = (LettuceCrop)block;
+					 ItemStack stack = new ItemStack(ItemInitNew.LETTUCE.get().asItem());
+					 ItemStack item = context.getItem();
+					 resetCrop(block, stack, world, context.getPlayer(), blockpos, blockstate);
+					 context.getItem().damageItem(1, playerentity, (p_220043_1_) -> {
+						 p_220043_1_.sendBreakAnimation(context.getHand());
+					 });
+				 }
+				 if(block instanceof PeanutCrop) {
+					 block = (PeanutCrop)block;
+					 ItemStack stack = new ItemStack(ItemInitNew.PEANUT.get().asItem());
+					 ItemStack item = context.getItem();
+					 resetCrop(block, stack, world, context.getPlayer(), blockpos, blockstate);
+					 context.getItem().damageItem(1, playerentity, (p_220043_1_) -> {
+						 p_220043_1_.sendBreakAnimation(context.getHand());
+					 });
+				 }
+				 if(block instanceof PepperCrop) {
+					 block = (PepperCrop)block;
+					 ItemStack stack = new ItemStack(ItemInitNew.PEPPER.get().asItem());
+					 ItemStack item = context.getItem();
+					 resetCrop(block, stack, world, context.getPlayer(), blockpos, blockstate);
+					 context.getItem().damageItem(1, playerentity, (p_220043_1_) -> {
+						 p_220043_1_.sendBreakAnimation(context.getHand());
+					 });
+				 }
+				 if(block instanceof CauliflowerCrop) {
+					 block = (CauliflowerCrop)block;
+					 ItemStack stack = new ItemStack(ItemInitNew.CAULIFLOWER.get().asItem());
+					 ItemStack item = context.getItem();
+					 resetCrop(block, stack, world, context.getPlayer(), blockpos, blockstate);
+					 context.getItem().damageItem(1, playerentity, (p_220043_1_) -> {
+						 p_220043_1_.sendBreakAnimation(context.getHand());
+					 });
+				 }
+				 if(block instanceof EggplantCrop) {
+					 block = (EggplantCrop)block;
+					 ItemStack stack = new ItemStack(ItemInitNew.EGGPLANT.get().asItem());
+					 ItemStack item = context.getItem();
+					 resetCrop(block, stack, world, context.getPlayer(), blockpos, blockstate);
+					 context.getItem().damageItem(1, playerentity, (p_220043_1_) -> {
+						 p_220043_1_.sendBreakAnimation(context.getHand());
+					 });
+				 }
 	            
 	            return ActionResultType.SUCCESS;
 	      }

@@ -1,6 +1,7 @@
 package com.cleardragonf.ourmod.init;
 
 import com.cleardragonf.ourmod.OurMod;
+import com.cleardragonf.ourmod.container.EssenceCollectorContainer;
 import com.cleardragonf.ourmod.container.FishingNetContainer;
 import com.cleardragonf.ourmod.container.PortableChestContainer;
 
@@ -15,4 +16,5 @@ public class ModContainerTypes {
 	
 	public static final RegistryObject<ContainerType<PortableChestContainer>> PORTABLE_CHEST = CONTAINER_TYPES.register("portablechest", () -> IForgeContainerType.create(PortableChestContainer::new ));
 	public static final RegistryObject<ContainerType<FishingNetContainer>> FISHING_NET = CONTAINER_TYPES.register("fishingnet", () -> IForgeContainerType.create(FishingNetContainer::new ));
+	public static final RegistryObject<ContainerType<EssenceCollectorContainer>> ESSENCE_COLLECTOR = CONTAINER_TYPES.register("essencecollector", () -> IForgeContainerType.create(EssenceCollectorContainer::new ));
 }

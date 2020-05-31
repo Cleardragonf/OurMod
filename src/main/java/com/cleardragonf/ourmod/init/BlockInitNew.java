@@ -26,5 +26,15 @@ public class BlockInitNew {
 	//CROPS
 	public static final RegistryObject<Block> TOMATO_CROP = BLOCKS.register("tomatocrop", () -> new TomatoCrop(Block.Properties.from(Blocks.WHEAT)));
 	public static final RegistryObject<Block> RICE_CROP = BLOCKS.register("ricecrop", () -> new RiceCrop(Block.Properties.from(Blocks.WHEAT)));
-	
+	public static final RegistryObject<Block> ONION_CROP  = BLOCKS.register("onioncrop", () -> new OnionCrop(Block.Properties.from(Blocks.WHEAT)));
+	public static final RegistryObject<Block> CORN_CROP  = BLOCKS.register("corncrop", () -> new CornCrop(Block.Properties.from(Blocks.WHEAT)));
+	public static final RegistryObject<Block> CUCUMBER_CROP  = BLOCKS.register("cucumbercrop", () -> new CucumberCrop(Block.Properties.from(Blocks.WHEAT)));
+	public static final RegistryObject<Block> BROCCOLI_CROP = BLOCKS.register("broccolicrop", () -> new BroccoliCrop(Block.Properties.from(Blocks.WHEAT)));
+	public static final RegistryObject<Block> LETTUCE_CROP = BLOCKS.register("lettucecrop", () -> new LettuceCrop(Block.Properties.from(Blocks.WHEAT)));
+	public static final RegistryObject<Block> PEANUT_CROP = BLOCKS.register("peanutcrop", () -> new PeanutCrop(Block.Properties.from(Blocks.WHEAT)));
+	public static final RegistryObject<Block> PEPPER_CROP = BLOCKS.register("peppercrop", () -> new PepperCrop(Block.Properties.from(Blocks.WHEAT)));
+	public static final RegistryObject<Block> CAULIFLOWER_CROP = BLOCKS.register("cauliflowercrop", () -> new CauliflowerCrop(Block.Properties.from(Blocks.WHEAT)));
+	public static final RegistryObject<Block> EGGPLANT_CROP = BLOCKS.register("eggplantcrop", () -> new EggplantCrop(Block.Properties.from(Blocks.WHEAT)));
+
+
 }

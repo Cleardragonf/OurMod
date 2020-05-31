@@ -71,7 +71,7 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 
 	@Override
 	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent("container.example_chest");
+		return new TranslationTextComponent("Fishing Net");
 	}
 
 	@Override

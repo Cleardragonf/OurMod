@@ -1,11 +1,13 @@
 package com.cleardragonf.ourmod.util;
 
 import com.cleardragonf.ourmod.OurMod;
+import com.cleardragonf.ourmod.client.gui.EssenceCollectorScreen;
 import com.cleardragonf.ourmod.client.gui.FishingNetScreen;
 import com.cleardragonf.ourmod.client.gui.PortableChestScreen;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModContainerTypes;
 
+import com.cleardragonf.ourmod.objects.blocks.EssenceCollector;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -22,7 +24,17 @@ public class ClientEventBusSubscriber {
 	public static void clientSetup(FMLClientSetupEvent event) {
 		ScreenManager.registerFactory(ModContainerTypes.PORTABLE_CHEST.get(), PortableChestScreen::new);
 		ScreenManager.registerFactory(ModContainerTypes.FISHING_NET.get(), FishingNetScreen::new);
+		ScreenManager.registerFactory(ModContainerTypes.ESSENCE_COLLECTOR.get(), EssenceCollectorScreen::new);
 		RenderTypeLookup.setRenderLayer(BlockInitNew.TOMATO_CROP.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(BlockInitNew.RICE_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.ONION_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.CORN_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.CUCUMBER_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.BROCCOLI_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.LETTUCE_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.PEANUT_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.PEPPER_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.CAULIFLOWER_CROP.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockInitNew.EGGPLANT_CROP.get(), RenderType.getCutout());
 	}
 }

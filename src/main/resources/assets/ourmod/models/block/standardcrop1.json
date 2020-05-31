@@ -1,0 +1,6 @@
+{
+	"parent": "block/crop",
+	"textures": {
+		"crop": "ourmod:blocks/standardcrop_stage1"
+	}
+}

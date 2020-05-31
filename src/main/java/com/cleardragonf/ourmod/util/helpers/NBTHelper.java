@@ -45,9 +45,12 @@ public class NBTHelper {
 	}
 	private static CompoundNBT writeEssence(EssenceCollectorTileEntity o) {
 		CompoundNBT compound = new CompoundNBT();
-		compound.putInt("x", o.x);
-		compound.putInt("y", o.y);
-		compound.putInt("z", o.z);
+		compound.putInt("fireenergy", o.FireEnergy.getEnergyStored());
+		compound.putInt("waterenergy", o.WaterEnergy.getEnergyStored());
+		compound.putInt("airenergy", o.AirEnergy.getEnergyStored());
+		compound.putInt("earthenergy", o.EarthEnergy.getEnergyStored());
+		compound.putInt("darkenergy", o.DarkEnergy.getEnergyStored());
+		compound.putInt("lightenergy", o.LightEnergy.getEnergyStored());
 		return compound;
 	}
 	

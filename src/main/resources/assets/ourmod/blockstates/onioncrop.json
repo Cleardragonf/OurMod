@@ -1,12 +1,12 @@
 {
 	"variants": {
-		"age=0" : {"model": "ourmod:block/onioncrop0"},
-		"age=1" : {"model": "ourmod:block/onioncrop1"},
-		"age=2" : {"model": "ourmod:block/onioncrop2"},
-		"age=3" : {"model": "ourmod:block/onioncrop3"},
-		"age=4" : {"model": "ourmod:block/onioncrop4"},
-		"age=5" : {"model": "ourmod:block/onioncrop5"},
-		"age=6" : {"model": "ourmod:block/onioncrop6"},
-		"age=7" : {"model": "ourmod:block/onioncrop7"}
+		"age=0" : {"model": "ourmod:block/standardcrop0"},
+		"age=1" : {"model": "ourmod:block/standardcrop1"},
+		"age=2" : {"model": "ourmod:block/standardcrop2"},
+		"age=3" : {"model": "ourmod:block/standardcrop3"},
+		"age=4" : {"model": "ourmod:block/standardcrop4"},
+		"age=5" : {"model": "ourmod:block/standardcrop5"},
+		"age=6" : {"model": "ourmod:block/standardcrop6"},
+		"age=7" : {"model": "ourmod:block/standardcrop7"}
 	}
 }

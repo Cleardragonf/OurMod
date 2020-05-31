@@ -3,6 +3,7 @@ package com.cleardragonf.ourmod;
 import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.events.SurvivalEvents;
 import com.cleardragonf.ourmod.network.NetRegistries;
+import com.cleardragonf.ourmod.objects.blocks.*;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -14,8 +15,6 @@ import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ItemInitNew;
 import com.cleardragonf.ourmod.init.ModContainerTypes;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
-import com.cleardragonf.ourmod.objects.blocks.RiceCrop;
-import com.cleardragonf.ourmod.objects.blocks.TomatoCrop;
 import com.cleardragonf.ourmod.setup.ClientProxy;
 import com.cleardragonf.ourmod.setup.IProxy;
 import com.cleardragonf.ourmod.setup.ModSetup;
@@ -88,7 +87,18 @@ public class OurMod
 	public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
 		final IForgeRegistry<Item> registry = event.getRegistry();
 		
-		BlockInitNew.BLOCKS.getEntries().stream().filter(block -> !(block.get() instanceof TomatoCrop)).filter(block -> !(block.get() instanceof RiceCrop)).map(RegistryObject::get).forEach(block -> {
+		BlockInitNew.BLOCKS.getEntries().stream().filter(block -> !(block.get() instanceof TomatoCrop))
+                .filter(block -> !(block.get() instanceof RiceCrop))
+                .filter(block -> !(block.get() instanceof OnionCrop))
+                .filter(block -> !(block.get() instanceof CornCrop))
+                .filter(block -> !(block.get() instanceof CucumberCrop))
+                .filter(block -> !(block.get() instanceof BroccoliCrop))
+                .filter(block -> !(block.get() instanceof LettuceCrop))
+                .filter(block -> !(block.get() instanceof PeanutCrop))
+                .filter(block -> !(block.get() instanceof PepperCrop))
+                .filter(block -> !(block.get() instanceof CauliflowerCrop))
+                .filter(block -> !(block.get() instanceof EggplantCrop))
+                .map(RegistryObject::get).forEach(block -> {
 			final Item.Properties properties = new Item.Properties().group(OurModItemGroup.instance);
 			final BlockItem blockItem = new BlockItem(block, properties);
 			blockItem.setRegistryName(block.getRegistryName());
