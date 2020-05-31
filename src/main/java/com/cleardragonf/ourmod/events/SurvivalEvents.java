@@ -41,7 +41,7 @@ public class SurvivalEvents {
     public static Object2FloatMap<BlockState> BLOCK_HEAT_MAP = (Object2FloatMap<BlockState>)new Object2FloatOpenHashMap();
     public static Object2FloatMap<Biome> BIOME_HEAT_MAP = (Object2FloatMap<Biome>)new Object2FloatOpenHashMap();
 
-    public static void registerHeatMap(){
+    public static void  registerHeatMap(){
         BLOCK_HEAT_MAP.put(Blocks.LAVA.getDefaultState(), 1000.0F);
         BLOCK_HEAT_MAP.put(Blocks.SAND.getDefaultState(), 100.0F);
         BLOCK_HEAT_MAP.put(Blocks.WATER.getDefaultState(), -25.0F);
@@ -218,10 +218,10 @@ public class SurvivalEvents {
         if(event.getEntityLiving() instanceof ServerPlayerEntity){
             ServerPlayerEntity player = (ServerPlayerEntity)event.getEntityLiving();
             if(player.isSprinting()){
-                EntityStats.addThirst(player, -0.05d);
+                EntityStats.addThirst(player, -0.01d);
             }
             if(player.isActualySwimming()){
-                EntityStats.addThirst(player, -0.05d);
+                EntityStats.addThirst(player, -0.001d);
             }
             if(player.isOnLadder()){
 
@@ -252,34 +252,34 @@ public class SurvivalEvents {
             ServerPlayerEntity player = (ServerPlayerEntity)event.getEntityLiving();
             double tempeature = EntityStats.getTemperature(player);
 
-            double maxHeatStage1 = 47.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D;
-            double maxHeatStage2 = 48.0d + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D;
-            double maxHeatStage3 = 49.0D + player.getAttribute(SurvivalAttributes.HEAT_RESISTANCE).getBaseValue() * 1.0D;
-            double maxColdStage1 = 20.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D;
-            double maxColdStage2 = 10.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D;
-            double maxColdStage3 = 0.0D - player.getAttribute(SurvivalAttributes.COLD_RESISTANCE).getBaseValue() * 1.0D;
+            double maxHeatStage1 = 40.0D;
+            double maxHeatStage2 = 45.0d;
+            double maxHeatStage3 = 50.0D;
+            double maxColdStage1 = 10.0D;
+            double maxColdStage2 = 5.0D;
+            double maxColdStage3 = 0.0D;
             if(!player.isPotionActive(EntityEffects.HYPERTHERMIA)){
                 if(tempeature > maxHeatStage1 && tempeature <= maxHeatStage2){
                     EntityStats.addThirst((LivingEntity)player, -0.01d);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 10, 0, false, false, false));
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 100, 0, false, false, false));
                 }else if(tempeature > maxHeatStage2 && tempeature <= maxHeatStage3){
                     EntityStats.addThirst((LivingEntity)player, -0.05d);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 10, 1, false, false, false));
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 120, 1, false, false, false));
                 }else if(tempeature > maxHeatStage3){
                     EntityStats.addThirst((LivingEntity)player, -0.1d);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 10, 2, false, false, false));
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 160, 2, false, false, false));
                 }
             }
             if(!player.isPotionActive(EntityEffects.HYPOTHERMIA)){
                 if(tempeature < maxColdStage1 && tempeature >= maxColdStage2){
                     EntityStats.addThirst((LivingEntity)player, -0.01d);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 10, 0, false, false, false));
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 100, 0, false, false, false));
                 }else if(tempeature < maxColdStage2 && tempeature >= maxColdStage3){
                     EntityStats.addThirst((LivingEntity)player, -0.01d);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 10, 1, false, false, false));
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 120, 1, false, false, false));
                 }else if(tempeature < maxColdStage3){
                     EntityStats.addThirst((LivingEntity)player, -0.01d);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 10, 2, false, false, false));
+                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 160, 2, false, false, false));
                 }
             }
         }
@@ -313,11 +313,11 @@ public class SurvivalEvents {
         if(type == TempType.SHADE){
             return skyLight / 1.5F - 5.0F +37.0F;
         }
-        return 37.0F;//Default Temp
+        return 25.0F;//Default Temp
     }
 
     public static float getAverageWorldTemperature(){
-        return 50.0F;
+        return 25.0F;
     }
 
     private enum TempType {
