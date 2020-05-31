@@ -87,56 +87,14 @@ public class EntityStats {
             double maxCold1 = 10.0D;
             double maxCold2 = 5.0D;
             double maxCold3 = 0.0D;
-            if (getTemperature(player) > defaultTemp && getTemperature(player) <= maxHeat1) {
-                if (temperature < 0.0D) {
-                    setTemperature(player, getTemperature(player) + temperature * 1.5D);
-                } else {
-                    setTemperature(player, getTemperature(player) + temperature);
-                }
-            } else if (getTemperature(player) > maxHeat1 && getTemperature(player) <= maxHeat2) {
-                if (temperature < 0.0D) {
-                    setTemperature(player, getTemperature(player) + temperature);
-                } else {
-                    setTemperature(player, getTemperature(player) + temperature / 10.0D);
-                }
-            } else if (getTemperature(player) > maxHeat2 && getTemperature(player) <= maxHeat3) {
-                if (temperature < 0.0D) {
-                    setTemperature(player, getTemperature(player) + temperature / 10.0D);
-                } else {
-                    setTemperature(player, getTemperature(player) + temperature / 100.0D);
-                }
-            } else if (getTemperature(player) > maxHeat3) {
-                if (temperature < 0.0D) {
-                    setTemperature(player, getTemperature(player) + temperature / 100.0D);
-                } else {
+            if (getTemperature(player) > maxCold3 && getTemperature(player) < maxHeat3) {
+                setTemperature(player, getTemperature(player) + temperature);
+                if(getTemperature(player) > maxHeat3){
                     setTemperature(player, maxHeat3);
                 }
-            } else if (getTemperature(player) < defaultTemp && getTemperature(player) <= maxCold1) {
-                if (temperature > 0.0D) {
-                    setTemperature(player, getTemperature(player) + temperature * 1.5D);
-                } else {
-                    setTemperature(player, getTemperature(player) + temperature);
-                }
-            } else if (getTemperature(player) < maxCold1 && getTemperature(player) >= maxCold2) {
-                if (temperature > 0.0D) {
-                    setTemperature(player, getTemperature(player) + temperature);
-                } else {
-                    setTemperature(player, getTemperature(player) + temperature / 10.0D);
-                }
-            } else if (getTemperature(player) < maxCold2 && getTemperature(player) >= maxCold3) {
-                if (temperature > 0.0D) {
-                    setTemperature(player, getTemperature(player) + temperature / 10.0D);
-                } else {
-                    setTemperature(player, getTemperature(player) + temperature / 100.0D);
-                }
-            } else if (getTemperature(player) < maxCold3) {
-                if (temperature < 0.0D) {
-                    setTemperature(player, getTemperature(player) + temperature / 100.0D);
-                } else {
+                if(getTemperature(player) < maxCold3){
                     setTemperature(player, maxCold3);
                 }
-            } else {
-                setTemperature(player, getTemperature(player) + temperature);
             }
             return true;
         }

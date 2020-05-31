@@ -42,9 +42,8 @@ public class SurvivalEvents {
     public static Object2FloatMap<Biome> BIOME_HEAT_MAP = (Object2FloatMap<Biome>)new Object2FloatOpenHashMap();
 
     public static void  registerHeatMap(){
-        BLOCK_HEAT_MAP.put(Blocks.LAVA.getDefaultState(), 1000.0F);
-        BLOCK_HEAT_MAP.put(Blocks.SAND.getDefaultState(), 100.0F);
-        BLOCK_HEAT_MAP.put(Blocks.WATER.getDefaultState(), -25.0F);
+        BLOCK_HEAT_MAP.put(Blocks.LAVA.getDefaultState(), 50.0f);
+        BLOCK_HEAT_MAP.put(Blocks.WATER.getDefaultState(), 25.0f);
 
     }
 
