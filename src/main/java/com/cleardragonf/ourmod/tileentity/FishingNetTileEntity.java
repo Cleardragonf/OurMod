@@ -25,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -205,24 +206,34 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 			init();
 		tick++;
 		if (tick == 40) {
-			ItemStack stack = new ItemStack(getFishList().getItem());
 			tick = 0;
-			for (int i = 0; i < 36; i++) {
-				if (this.items.getStackInSlot(i).isEmpty()) {
-					stack.setCount(this.items.getStackInSlot(i).getCount() + 1);
-					items.setStackInSlot(i, stack);
-					break;
-				} else {
-					if (this.items.getStackInSlot(i).getStack().getItem().equals(stack)) {
-						stack.setCount(this.items.getStackInSlot(i).getCount() + 1);
-						items.setStackInSlot(i, stack);
-						break;
-					}
-				}
+			if(this.getTileEntity().getWorld().getBiome(pos).equals(Biomes.OCEAN) || this.getTileEntity().getWorld().getBiome(pos).equals(Biomes.DEEP_OCEAN)
+					|| this.getTileEntity().getWorld().getBiome(pos).equals(Biomes.WARM_OCEAN) || this.getTileEntity().getWorld().getBiome(pos).equals(Biomes.LUKEWARM_OCEAN)){
+
+				execute();
 			}
+
 		}
 
 
+	}
+
+	private void execute() {
+		ItemStack stack = new ItemStack(getFishList().getItem());
+		tick = 0;
+		for (int i = 0; i < 36; i++) {
+			if (this.items.getStackInSlot(i).isEmpty()) {
+				stack.setCount(this.items.getStackInSlot(i).getCount() + 1);
+				items.setStackInSlot(i, stack);
+				break;
+			} else {
+				if (this.items.getStackInSlot(i).getStack().getItem().equals(stack)) {
+					stack.setCount(this.items.getStackInSlot(i).getCount() + 1);
+					items.setStackInSlot(i, stack);
+					break;
+				}
+			}
+		}
 	}
 
 	private void init() {
