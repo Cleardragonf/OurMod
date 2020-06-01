@@ -1,5 +1,6 @@
 package com.cleardragonf.ourmod.container;
 
+import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModContainerTypes;
 import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
@@ -44,5 +45,10 @@ public class EssenceCollectorContainer extends Container {
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {
 		return isWithinUsableDistance(canInteractWithCallable, playerIn, BlockInitNew.ESSENCE_COLLECTOR.get());
+	}
+
+	public CustomEnergyStorage getAir(){
+		EssenceCollectorTileEntity tile = (EssenceCollectorTileEntity) tileEntity;
+		return tile.AirEnergy;
 	}
 }

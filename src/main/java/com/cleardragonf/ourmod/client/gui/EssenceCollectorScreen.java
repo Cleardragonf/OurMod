@@ -15,8 +15,8 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 
 	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(OurMod.MOD_ID, "textures/gui/essencecollector.png");
 
-	public EssenceCollectorScreen(EssenceCollectorContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
-		super(screenContainer, inv, titleIn);
+	public EssenceCollectorScreen(EssenceCollectorContainer Container, PlayerInventory inv, ITextComponent titleIn) {
+		super(Container, inv, titleIn);
 		this.guiLeft = 0;
 		this.guiTop = 0;
 		this.xSize = 176;
@@ -44,7 +44,12 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
 		this.blit(x, y, 0, 0, this.xSize, this.ySize);
-		//x,y,tx,ty,width,height @RyuShiTenshiKage
-		this.blit((x + 1),(y + 1), 179,33,8, 100);
+		//x,y,texturex,texturey,width,height @RyuShiTenshiKage
+		//Air Essence GUI
+		///this.blit((x + 17),y + 34, 179,33,8, this.container.getAir().getEnergyStored()/ 1000);
+		this.blit((x + 17),(y + 133) - (this.container.getAir().getEnergyStored()/100), 179,132  - (this.container.getAir().getEnergyStored()/100),8, (this.container.getAir().getEnergyStored()/ 100));
+
+
+		this.font.drawString("Wind: '" + this.container.getAir().getEnergyStored() + "'", 8.0f, 9.0f, 4210752);
 	}
 }
