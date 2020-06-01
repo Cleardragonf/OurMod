@@ -80,10 +80,6 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 	}
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return super.getUpdatePacket();
-	}
-	@Override
 
 	public ITextComponent getDisplayName() {
 
@@ -256,6 +252,22 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 		}
 	}
 
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		this.write(tag);
+		return super.getUpdatePacket();
+	}
+
+	@Override
+	public CompoundNBT getUpdateTag() {
+		write(tag);
+		return tag;
+	}
+
+	@Override
+	public void handleUpdateTag(CompoundNBT tag) {
+		this.read(tag);
+	}
 
 	@Nullable
 	@Override

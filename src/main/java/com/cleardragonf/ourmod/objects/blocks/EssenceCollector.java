@@ -85,4 +85,5 @@ public class EssenceCollector extends Block {
 			}
 		}
 	}
+
 }
