@@ -57,4 +57,58 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 
 		this.font.drawString("Wind: '" + this.container.getAir().getEnergyStored() + "'", 8.0f, 9.0f, 4210752);
 	}
+	protected void renderHoveredToolTip(int x, int y){
+		int relX = (this.width - this.xSize) /2;
+		int relY = (this.height - this.ySize) /2;
+		if(trueZone(relX + 17, relY + 34, 8,100,x,y)) {
+			tooltipText("Fire: ", x, y);
+		}
+		if(trueZone(relX + 45, relY + 34, 8,100,x,y)) {
+			tooltipText("Water: ", x, y);
+		}
+		if(trueZone(relX + 68, relY + 34, 8,100,x,y)) {
+			tooltipText("Air: ", x, y);
+		}
+		if(trueZone(relX + 92, relY + 34, 8,100,x,y)) {
+			tooltipText("Earth: ", x, y);
+		}
+		if(trueZone(relX + 120, relY + 34, 8,100,x,y)) {
+			tooltipText("Dark: ", x, y);
+		}
+		if(trueZone(relX + 148, relY + 34, 8,100,x,y)) {
+			tooltipText("Light: ", x, y);
+		}
+		super.renderHoveredToolTip(x, y);
+	}
+
+	private boolean trueZone(int OffsX, int OffsY, int Width, int Height, double MouseX, double MouseY){
+		if(OffsX <= MouseX && MouseX <= OffsX + Width && OffsY <= MouseY && MouseY <= OffsY + Height){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public void tooltipText(String string, int x, int y) {
+		switch (string) {
+			case "Fire: ":
+				this.renderTooltip("Fire: '" + this.container.getFire().getEnergyStored() + "'", x, y);
+				break;
+			case "Water: ":
+				this.renderTooltip("Water: '" + this.container.getWater().getEnergyStored() + "'", x, y);
+				break;
+			case "Air: ":
+				this.renderTooltip("Air: '" + this.container.getAir().getEnergyStored() + "'", x, y);
+				break;
+			case "Earth: ":
+				this.renderTooltip("Earth: '" + this.container.getEarth().getEnergyStored() + "'", x, y);
+				break;
+			case "Dark: ":
+				this.renderTooltip("Dark: '" + this.container.getDark().getEnergyStored() + "'", x, y);
+				break;
+			case "Light: ":
+				this.renderTooltip("Light: '" + this.container.getLight().getEnergyStored() + "'", x, y);
+				break;
+		}
+	}
 }

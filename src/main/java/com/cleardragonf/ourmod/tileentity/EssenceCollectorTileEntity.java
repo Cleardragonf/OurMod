@@ -141,7 +141,6 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 		if (!initialized)
 			init();
 		tick++;
-		System.out.println(AirEnergy.getEnergyStored());
 		if (tick == 40) {
 			tick = 0;
 			if (y > 2)
@@ -187,13 +186,16 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 						final IFluidState fluidState = world.getFluidState(pooledMutable);
 						final Block block = blockState.getBlock();
 
-						if(block instanceof FireBlock || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA))){
+						if(block instanceof FireBlock || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || block==Blocks.CAMPFIRE){
 							++fireBlocksFound;
 						}else if(block == Blocks.WATER || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
 							++waterBlocksFound;
 						}else if(block == Blocks.AIR){
 							++airBlocksFound;
-						}else if(block == Blocks.DIRT){
+						}else if(block == Blocks.DIRT || block ==  Blocks.GRASS ||block ==  Blocks.GRANITE ||block ==  Blocks.STONE ||block ==  Blocks.ANDESITE
+								|| block == Blocks.CLAY || block == Blocks.DIORITE || block == Blocks.GRAVEL|| block == Blocks.ICE || block == Blocks.MOSSY_COBBLESTONE
+								|| block == Blocks.NETHERRACK || block == Blocks.OBSIDIAN || block == Blocks.PODZOL || block == Blocks.PRISMARINE ||block ==  Blocks.QUARTZ_BLOCK
+						|| block == Blocks.SAND){
 							++earthBlocksFound;
 						}
 					}
@@ -283,7 +285,11 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 
 
 	public void readRestorableNBT(CompoundNBT tag) {
-		this.EarthEnergy.setEnergyStored(tag.getInt("earthenergy"));
+		this.FireEnergy.setEnergyStored(tag.getInt("fireenergy"));
+		this.WaterEnergy.setEnergyStored(tag.getInt("waterenergy"));
 		this.AirEnergy.setEnergyStored(tag.getInt("airenergy"));
+		this.EarthEnergy.setEnergyStored(tag.getInt("earthenergy"));
+		this.DarkEnergy.setEnergyStored(tag.getInt("darkenergy"));
+		this.LightEnergy.setEnergyStored(tag.getInt("lightenergy"));
 	}
 }
