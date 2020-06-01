@@ -36,7 +36,7 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 	protected int numPlayersUsing;
 	private boolean initialized = false;
 	private CompoundNBT tag = new CompoundNBT();
-	public int tick;
+	public int tick, y;
 
 
 	public EssenceCollectorTileEntity(TileEntityType<?> typeIn) {
@@ -147,108 +147,114 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 		tick++;
 		System.out.println(AirEnergy.getEnergyStored());
 		if (tick == 40) {
-			final BlockPos tilePos = this.pos;
-			final World world = this.world;
-			if (world == null){
-				return;
-			}
-			int fireBlocksFound = 0;
-			int waterBlocksFound = 0;
-			int airBlocksFound = 0;
-			int earthBlocksFound = 0;
-			int darkBlocksFound = 0;
-			int lightBlocksFound = 0;
-			int multiplierBlocksFound = 0;
-
-			try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-				final int posX = tilePos.getX();
-				final int posY = tilePos.getY();
-				final int posZ = tilePos.getZ();
-
-					for(int z = -5; z <= 10; ++z){
-						for(int x = -5; x <= 10; ++x){
-							for(int y = -5; y <=10; y++){
-								final int dist = (x*x) + (y*y) + (z*z);
-								if (dist > 25){
-									continue;
-								}
-
-								if (dist < 1){
-									continue;
-								}
-
-								pooledMutable.setPos(posX + x,posY + y, posZ + z);
-								final BlockState blockState = world.getBlockState(pooledMutable);
-								final IFluidState fluidState = world.getFluidState(pooledMutable);
-								final Block block = blockState.getBlock();
-
-								if(block instanceof FireBlock || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA))){
-									++fireBlocksFound;
-								}else if(block == Blocks.WATER || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
-									++waterBlocksFound;
-								}else if(block == Blocks.AIR){
-									++airBlocksFound;
-								}else if(block == Blocks.DIRT){
-									++earthBlocksFound;
-								}
-							}
-						}
-					}
-			}
-
-			if(multiplierBlocksFound > 0){
-				fireBlocksFound *= multiplierBlocksFound;
-				waterBlocksFound *= multiplierBlocksFound;
-				airBlocksFound *= multiplierBlocksFound;
-				earthBlocksFound *= multiplierBlocksFound;
-				darkBlocksFound *= multiplierBlocksFound;
-				lightBlocksFound *= multiplierBlocksFound;
-			}
-			boolean needsSave = false;
-
-			if(this.FireEnergy.getEnergyStored() >= 100000){
-
-			}else{
-				FireEnergy.addEnergy(fireBlocksFound * 1);
-				needsSave = true;
-				write(tag);
-			}
-
-			if(this.WaterEnergy.getEnergyStored() >= 100000){
-
-			}else{
-				WaterEnergy.addEnergy(waterBlocksFound * 1);
-				needsSave = true;
-				write(tag);
-			}
-			if(this.AirEnergy.getEnergyStored() >= 100000){
-
-			}else{
-				AirEnergy.addEnergy(airBlocksFound * 1);
-				needsSave = true;
-				write(tag);
-			}
-			if(this.DarkEnergy.getEnergyStored() >= 100000){
-
-			}else{
-				DarkEnergy.addEnergy(darkBlocksFound * 1);
-				needsSave = true;
-				write(tag);
-			}
-			if(this.LightEnergy.getEnergyStored() >= 100000){
-
-			}else{
-				LightEnergy.addEnergy(lightBlocksFound * 1);
-				needsSave = true;
-				write(tag);
-			}
-
-			//TODO::Tick Features of Increasing the stored energy
+			tick = 0;
+			if (y > 2)
+				execute();
 		}
 
 
 	}
 
+	private void execute() {
+		final BlockPos tilePos = this.pos;
+		final World world = this.world;
+		if (world == null){
+			return;
+		}
+		int fireBlocksFound = 0;
+		int waterBlocksFound = 0;
+		int airBlocksFound = 0;
+		int earthBlocksFound = 0;
+		int darkBlocksFound = 0;
+		int lightBlocksFound = 0;
+		int multiplierBlocksFound = 0;
+
+		try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+			final int posX = tilePos.getX();
+			final int posY = tilePos.getY();
+			final int posZ = tilePos.getZ();
+
+			for(int z = -5; z <= 10; ++z){
+				for(int x = -5; x <= 10; ++x){
+					for(int y = -5; y <=10; y++){
+						final int dist = (x*x) + (y*y) + (z*z);
+						if (dist > 25){
+							continue;
+						}
+
+						if (dist < 1){
+							continue;
+						}
+
+						pooledMutable.setPos(posX + x,posY + y, posZ + z);
+						final BlockState blockState = world.getBlockState(pooledMutable);
+						final IFluidState fluidState = world.getFluidState(pooledMutable);
+						final Block block = blockState.getBlock();
+
+						if(block instanceof FireBlock || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA))){
+							++fireBlocksFound;
+						}else if(block == Blocks.WATER || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
+							++waterBlocksFound;
+						}else if(block == Blocks.AIR){
+							++airBlocksFound;
+						}else if(block == Blocks.DIRT){
+							++earthBlocksFound;
+						}
+					}
+				}
+			}
+		}
+
+		if(multiplierBlocksFound > 0){
+			fireBlocksFound *= multiplierBlocksFound;
+			waterBlocksFound *= multiplierBlocksFound;
+			airBlocksFound *= multiplierBlocksFound;
+			earthBlocksFound *= multiplierBlocksFound;
+			darkBlocksFound *= multiplierBlocksFound;
+			lightBlocksFound *= multiplierBlocksFound;
+		}
+		boolean needsSave = false;
+
+		if(this.FireEnergy.getEnergyStored() >= 100000){
+
+		}else{
+			FireEnergy.addEnergy(fireBlocksFound * 1);
+			needsSave = true;
+			write(tag);
+		}
+
+		if(this.WaterEnergy.getEnergyStored() >= 100000){
+
+		}else{
+			WaterEnergy.addEnergy(waterBlocksFound * 1);
+			needsSave = true;
+			write(tag);
+		}
+		if(this.AirEnergy.getEnergyStored() >= 100000){
+
+		}else{
+			AirEnergy.addEnergy(airBlocksFound * 1);
+			needsSave = true;
+			write(tag);
+		}
+		if(this.DarkEnergy.getEnergyStored() >= 100000){
+
+		}else{
+			DarkEnergy.addEnergy(darkBlocksFound * 1);
+			needsSave = true;
+			write(tag);
+		}
+		if(this.LightEnergy.getEnergyStored() >= 100000){
+
+		}else{
+			LightEnergy.addEnergy(lightBlocksFound * 1);
+			needsSave = true;
+			write(tag);
+		}
+		if(needsSave){
+			this.markDirty();
+		}
+	}
 
 
 	@Nullable
@@ -259,6 +265,8 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 
 	private void init() {
 		initialized = true;
+		y = 3;
+
 	}
 
 

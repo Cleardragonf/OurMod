@@ -47,7 +47,12 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 		//x,y,texturex,texturey,width,height @RyuShiTenshiKage
 		//Air Essence GUI
 		///this.blit((x + 17),y + 34, 179,33,8, this.container.getAir().getEnergyStored()/ 1000);
-		this.blit((x + 17),(y + 133) - (this.container.getAir().getEnergyStored()/100), 179,132  - (this.container.getAir().getEnergyStored()/100),8, (this.container.getAir().getEnergyStored()/ 100));
+		this.blit((x + 17),(y + 134) - (this.container.getFire().getEnergyStored()/1000), 179,132  - (this.container.getFire().getEnergyStored()/1000),8, (this.container.getFire().getEnergyStored()/ 1000));
+		this.blit((x + 45),(y + 134) - (this.container.getWater().getEnergyStored()/1000), 179,132  - (this.container.getWater().getEnergyStored()/1000),8, (this.container.getWater().getEnergyStored()/ 1000));
+		this.blit((x + 68),(y + 134) - (this.container.getAir().getEnergyStored()/1000), 179,132  - (this.container.getAir().getEnergyStored()/1000),8, (this.container.getAir().getEnergyStored()/ 1000));
+		this.blit((x + 92),(y + 134) - (this.container.getEarth().getEnergyStored()/1000), 179,132  - (this.container.getEarth().getEnergyStored()/1000),8, (this.container.getEarth().getEnergyStored()/ 1000));
+		this.blit((x + 120),(y + 134) - (this.container.getDark().getEnergyStored()/1000), 179,132  - (this.container.getDark().getEnergyStored()/1000),8, (this.container.getDark().getEnergyStored()/ 1000));
+		this.blit((x + 148),(y + 134) - (this.container.getLight().getEnergyStored()/1000), 179,132  - (this.container.getLight().getEnergyStored()/1000),8, (this.container.getLight().getEnergyStored()/ 1000));
 
 
 		this.font.drawString("Wind: '" + this.container.getAir().getEnergyStored() + "'", 8.0f, 9.0f, 4210752);

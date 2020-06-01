@@ -51,4 +51,25 @@ public class EssenceCollectorContainer extends Container {
 		EssenceCollectorTileEntity tile = (EssenceCollectorTileEntity) tileEntity;
 		return tile.AirEnergy;
 	}
+
+	public CustomEnergyStorage getFire(){
+		EssenceCollectorTileEntity tile = (EssenceCollectorTileEntity) tileEntity;
+		return tile.FireEnergy;
+	}
+	public CustomEnergyStorage getWater(){
+		EssenceCollectorTileEntity tile = (EssenceCollectorTileEntity) tileEntity;
+		return tile.WaterEnergy;
+	}
+	public CustomEnergyStorage getEarth(){
+		EssenceCollectorTileEntity tile = (EssenceCollectorTileEntity) tileEntity;
+		return tile.EarthEnergy;
+	}
+	public CustomEnergyStorage getDark(){
+		EssenceCollectorTileEntity tile = (EssenceCollectorTileEntity) tileEntity;
+		return tile.DarkEnergy;
+	}
+	public CustomEnergyStorage getLight(){
+		EssenceCollectorTileEntity tile = (EssenceCollectorTileEntity) tileEntity;
+		return tile.LightEnergy;
+	}
 }
