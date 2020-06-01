@@ -4,8 +4,10 @@ import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.events.SurvivalEvents;
 import com.cleardragonf.ourmod.network.NetRegistries;
 import com.cleardragonf.ourmod.objects.blocks.*;
+import com.cleardragonf.ourmod.world.OreGeneration;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
@@ -124,6 +126,11 @@ public class OurMod
         // do something that can only be done on the client
         NetRegistries.registerMSG();
         
+    }
+
+    @SubscribeEvent
+    public static void loadCompleteEvent(FMLLoadCompleteEvent event){
+        OreGeneration.setupOreGeneration();
     }
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent

@@ -36,5 +36,14 @@ public class BlockInitNew {
 	public static final RegistryObject<Block> CAULIFLOWER_CROP = BLOCKS.register("cauliflowercrop", () -> new CauliflowerCrop(Block.Properties.from(Blocks.WHEAT)));
 	public static final RegistryObject<Block> EGGPLANT_CROP = BLOCKS.register("eggplantcrop", () -> new EggplantCrop(Block.Properties.from(Blocks.WHEAT)));
 
+	//ORES
+	public static final RegistryObject<Block> WATER_MANA = BLOCKS.register("watermana", () -> new Block(Block.Properties.from(Blocks.COAL_ORE)));
+	public static final RegistryObject<Block> FIRE_MANA = BLOCKS.register("firemana", () -> new Block(Block.Properties.from(Blocks.COAL_ORE)));
+	public static final RegistryObject<Block> AIR_MANA = BLOCKS.register("airmana", () -> new Block(Block.Properties.from(Blocks.COAL_ORE)));
+	public static final RegistryObject<Block> EARTH_MANA = BLOCKS.register("earthmana", () -> new Block(Block.Properties.from(Blocks.COAL_ORE)));
+	public static final RegistryObject<Block> DARK_MANA = BLOCKS.register("darkmana", () -> new Block(Block.Properties.from(Blocks.COAL_ORE)));
+	public static final RegistryObject<Block> LIGHT_MANA = BLOCKS.register("lightmana", () -> new Block(Block.Properties.from(Blocks.COAL_ORE)));
+
+	//public static Block WATER_MANA;
 
 }

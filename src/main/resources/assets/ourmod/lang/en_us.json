@@ -7,6 +7,13 @@
 	"item.ourmod.onion": "Onion",
 	"item.ourmod.rice": "Rice",
 	"item.outmod.sickle": "Sickle",
+	"item.outmod.watermana": "Water Essence",
+	"item.outmod.firemana": "Fire Essence",
+	"item.outmod.airmana": "Air Essence",
+	"item.outmod.earthmana": "Earth Essence",
+	"item.outmod.darkmana": "Dark Essence",
+	"item.outmod.lightmana": "Light Essence",
+
 	
 	"block.ourmod.tomatocrop": "Tomato Seeds",
 	"block.ourmod.ricecrop": "Rice Seeds",
@@ -19,6 +26,12 @@
 	"block.ourmod.peppercrop": "Pepper Seeds",
 	"block.ourmod.cauliflowercrop": "Cauliflower Seeds",
 	"block.ourmod.eggplantcrop": "Eggplant Seeds",
+	"block.ourmod.watermana": "Water Essence",
+	"block.ourmod.firemana": "Fire  Essence",
+	"block.ourmod.airmana": "Air  Essence",
+	"block.ourmod.earthmana": "Earth Essence",
+	"block.ourmod.darkmana": "Dark Essence",
+	"block.ourmod.lightmana": "Light Essence",
 	
 	"block.ourmod.forcefield": "Force Field",
 	"block.ourmod.quarry": "Quarry",
