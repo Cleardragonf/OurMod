@@ -117,20 +117,17 @@ public class MCMChestTileEntity extends LockableLootTileEntity implements ITicka
 		if (!this.checkLootAndRead(compound)) {
 			ItemStackHelper.loadAllItems(compound, this.chestContents);
 		}
-		readRestorableNBT(tag);
+		readRestorableNBT(compound);
 	}
-	public CompoundNBT tag;
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		this.write(tag);
-		return super.getUpdatePacket();
+		return new SUpdateTileEntityPacket(this.pos, 0, this.write(new CompoundNBT()));
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
-		write(tag);
-		return tag;
+		return this.write(new CompoundNBT());
 	}
 
 	@Override
