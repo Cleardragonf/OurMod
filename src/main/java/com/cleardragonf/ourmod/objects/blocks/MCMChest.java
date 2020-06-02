@@ -91,7 +91,7 @@ public class MCMChest extends Block {
 		if(tileEntity instanceof MCMChestTileEntity) {
 			CompoundNBT tag = stack.getTag();
 			if(tag != null) {
-				//((MCMChestTileEntity)tileEntity).readRestorableNBT(tag);
+				((MCMChestTileEntity)tileEntity).readRestorableNBT(tag);
 				worldIn.notifyBlockUpdate(pos, getDefaultState(), getDefaultState(), Constants.BlockFlags.DEFAULT);
 			}
 		}

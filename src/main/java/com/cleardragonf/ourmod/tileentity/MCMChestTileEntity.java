@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -30,6 +31,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
@@ -46,7 +48,27 @@ public class MCMChestTileEntity extends LockableLootTileEntity implements ITicka
 	private LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
 	private boolean initialized = false;
 	private int tick;
+	public final ItemStackHandler inventory = new ItemStackHandler(120) {
 
+
+		@Override
+		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+			if (stack.getItem() == null) {
+				return stack;
+			}
+			return super.insertItem(slot, stack, simulate);
+		}
+
+		@Override
+		public boolean isItemValid(int slot, ItemStack stack) {
+			return stack.getItem() != null;
+		}
+
+		@Override
+		protected void onContentsChanged(int slot) {
+			MCMChestTileEntity.this.markDirty();
+		}
+	};
 
 	public MCMChestTileEntity(TileEntityType<?> typeIn) {
 		super(typeIn);
@@ -84,9 +106,7 @@ public class MCMChestTileEntity extends LockableLootTileEntity implements ITicka
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
 		super.write(compound);
-		if (!this.checkLootAndWrite(compound)) {
-			ItemStackHelper.saveAllItems(compound, this.chestContents);
-		}
+		compound.put("inv", inventory.serializeNBT());
 		return compound;
 	}
 
@@ -97,6 +117,30 @@ public class MCMChestTileEntity extends LockableLootTileEntity implements ITicka
 		if (!this.checkLootAndRead(compound)) {
 			ItemStackHelper.loadAllItems(compound, this.chestContents);
 		}
+		readRestorableNBT(tag);
+	}
+	public CompoundNBT tag;
+
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		this.write(tag);
+		return super.getUpdatePacket();
+	}
+
+	@Override
+	public CompoundNBT getUpdateTag() {
+		write(tag);
+		return tag;
+	}
+
+	@Override
+	public void handleUpdateTag(CompoundNBT tag) {
+		this.read(tag);
+	}
+
+
+	public void readRestorableNBT(CompoundNBT tag) {
+		this.inventory.deserializeNBT((tag.getCompound("inv")));
 	}
 
 	private void playSound(SoundEvent sound) {

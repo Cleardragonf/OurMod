@@ -254,6 +254,18 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 		}
 	}
 
+	@Nullable
+	@Override
+	public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+		return new EssenceCollectorContainer(id, inventory, this);
+	}
+
+	private void init() {
+		initialized = true;
+		y = 3;
+
+	}
+
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		this.write(tag);
@@ -269,18 +281,6 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 	@Override
 	public void handleUpdateTag(CompoundNBT tag) {
 		this.read(tag);
-	}
-
-	@Nullable
-	@Override
-	public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
-		return new EssenceCollectorContainer(id, inventory, this);
-	}
-
-	private void init() {
-		initialized = true;
-		y = 3;
-
 	}
 
 
