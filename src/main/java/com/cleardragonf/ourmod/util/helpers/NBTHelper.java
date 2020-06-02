@@ -3,6 +3,7 @@ package com.cleardragonf.ourmod.util.helpers;
 import javax.annotation.Nullable;
 
 import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
+import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import com.cleardragonf.ourmod.tileentity.QuarryTileEntity;
 
 import net.minecraft.item.Item;
@@ -20,6 +21,8 @@ public class NBTHelper {
 			return writeQuarry((QuarryTileEntity)o);
 		}if(o instanceof EssenceCollectorTileEntity) {
 			return writeEssence((EssenceCollectorTileEntity)o);
+		}if(o instanceof MCMChestTileEntity) {
+			return writeEssence((MCMChestTileEntity)o);
 		}
 
 		
@@ -51,6 +54,16 @@ public class NBTHelper {
 		compound.putInt("earthenergy", o.EarthEnergy.getEnergyStored());
 		compound.putInt("darkenergy", o.DarkEnergy.getEnergyStored());
 		compound.putInt("lightenergy", o.LightEnergy.getEnergyStored());
+		return compound;
+	}
+	private static CompoundNBT writeEssence(MCMChestTileEntity o) {
+		CompoundNBT compound = new CompoundNBT();
+//		compound.putInt("fireenergy", o.FireEnergy.getEnergyStored());
+//		compound.putInt("waterenergy", o.WaterEnergy.getEnergyStored());
+//		compound.putInt("airenergy", o.AirEnergy.getEnergyStored());
+//		compound.putInt("earthenergy", o.EarthEnergy.getEnergyStored());
+//		compound.putInt("darkenergy", o.DarkEnergy.getEnergyStored());
+//		compound.putInt("lightenergy", o.LightEnergy.getEnergyStored());
 		return compound;
 	}
 	

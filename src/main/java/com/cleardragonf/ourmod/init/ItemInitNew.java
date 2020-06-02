@@ -2,6 +2,7 @@ package com.cleardragonf.ourmod.init;
 
 import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.OurMod.OurModItemGroup;
+import com.cleardragonf.ourmod.objects.items.PowerEnscriber;
 import com.cleardragonf.ourmod.objects.items.Sickle;
 
 import net.minecraft.item.BlockItem;
@@ -40,5 +41,5 @@ public class ItemInitNew {
 	public static final RegistryObject<Item> CAULIFLOWER_SEED= ITEMS.register("cauliflowerseed", () -> new BlockItem(BlockInitNew.CAULIFLOWER_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> EGGPLANT_SEED= ITEMS.register("eggplantseed", () -> new BlockItem(BlockInitNew.EGGPLANT_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
 
-	
+	public static final RegistryObject<Item> POWER_ENSCRIBER = ITEMS.register("powerenscriber", () -> new PowerEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
 }
