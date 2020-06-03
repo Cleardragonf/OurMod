@@ -68,7 +68,6 @@ public class OurMod
         // Register the setup method for modloading
         modEventBus.addListener(this::setup);
         // Register the doClientStuff method for modloading
-        modEventBus.addListener(this::doClientStuff);
         
         ItemInitNew.ITEMS.register(modEventBus);
         BlockInitNew.BLOCKS.register(modEventBus);
@@ -120,13 +119,9 @@ public class OurMod
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         SurvivalEvents.registerHeatMap();
         SurvivalEvents.registerBiomeHeatMap();
+        NetRegistries.registerMSG();
     }
 
-    private void doClientStuff(final FMLClientSetupEvent event) {
-        // do something that can only be done on the client
-        NetRegistries.registerMSG();
-        
-    }
 
     @SubscribeEvent
     public static void loadCompleteEvent(FMLLoadCompleteEvent event){

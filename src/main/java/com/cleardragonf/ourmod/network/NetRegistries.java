@@ -5,7 +5,7 @@ package com.cleardragonf.ourmod.network;
 
 public class NetRegistries {
     public static void registerMSG(){
-        int netID = -1;
+        int netID = 0;
         OurMod.CHANNEL.registerMessage(netID++, SurvivalStatsPacket.class, SurvivalStatsPacket::encode, SurvivalStatsPacket::decode, SurvivalStatsPacket::handle);
     }
 }
