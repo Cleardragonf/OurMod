@@ -291,9 +291,9 @@ public class SurvivalEvents {
         float blockLight = world.getLight(pos);
         gameTime /= 66.0F;
         if(type == TempType.SUN){
-            if(skyLight > 5.0F){
-                return gameTime * 5.0F + 37.0F;
-            }
+            //if(skyLight > 5.0F){
+             //   return gameTime * 5.0F + 37.0F;
+            //}
             return 32.0F;
         }
         if(type == TempType.BIOME){
@@ -304,9 +304,9 @@ public class SurvivalEvents {
            return blockLight / 3.0F + 37.0F;
         }
         if(type == TempType.BLOCK){
-            if(BLOCK_HEAT_MAP.containsKey(world.getBlockState(pos))){
-                return BLOCK_HEAT_MAP.getFloat(world.getBlockState(pos));
-            }
+            //if(BLOCK_HEAT_MAP.containsKey(world.getBlockState(pos))){
+             //   return BLOCK_HEAT_MAP.getFloat(world.getBlockState(pos));
+            //}
             return blockLight / 3.0F + 37.0F;
         }
         if(type == TempType.SHADE){
