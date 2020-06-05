@@ -58,7 +58,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
 	public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
 	//temporary testing
-	public final ItemStackHandler inventory = new ItemStackHandler(300){
+	public final ItemStackHandler inventory = new ItemStackHandler(120){
 
 		@Override
 		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
@@ -99,53 +99,47 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		}
 
 		if (counter <= 0) {
-			handler.ifPresent(h -> {
+			ItemStack stack = new ItemStack(inventory.getStackInSlot(0).getStack().getItem());
+			Item mcmValueItem = stack.getItem();
 				//Takes the Clone slot and Existing MCM value and Begins Duplicating the Item.
-				if(!h.getStackInSlot(0).isEmpty()){
-					h.getStackInSlot(0).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a -> {
-						ItemStack stack = h.getStackInSlot(0).getStack();
-
+					inventory.getStackInSlot(0).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a -> {
 						energy.ifPresent(b -> {
 							if(((CustomEnergyStorage)b).getEnergyStored() >= a.mcmValue()){
 								ItemStack stack2;
 								for (int i = 5; i < 59; i++) {
-
-									if(h.getStackInSlot(i).isEmpty()){
-										stack2 = h.getStackInSlot(i).getStack();
-										stack2.setCount(stack2.getCount() + 1);
-										//h.insertItem(i, stack, false);
+									if(inventory.getStackInSlot(i).isEmpty()){
+										stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+										inventory.setStackInSlot(i, stack);
 										break;
-									}else{
-										if(h.getStackInSlot(i).getStack().getItem().equals(stack.getItem())){
-											if(h.getStackInSlot(i).getCount() < stack.getStack().getMaxStackSize()){
-												stack2 = h.getStackInSlot(i).getStack();
-												stack2.setCount(stack2.getCount() + 1);
-												//h.insertItem(i, stack, false);
-												break;
-											}
-
-										}
+									}else {
+									if(this.inventory.getStackInSlot(i).getStack().getItem().equals(mcmValueItem)) {
+										stack.setCount(this.inventory.getStackInSlot(i).getCount() + 1);
+										inventory.setStackInSlot(i, stack);
+										break;
 									}
+
 								}
 
-								((CustomEnergyStorage) b).consumeEnergy(a.mcmValue());
+								}
+
+
 							}
+							((CustomEnergyStorage) b).consumeEnergy(a.mcmValue());
 						});
 
 					});
-				}
 
 
 				//Removes inputs and Adds MCM Value to the Chest
 				for (int i = 1; i < 5; i++) {
 
-					if(!h.getStackInSlot(i).isEmpty()){
+					if(!inventory.getStackInSlot(i).isEmpty()){
 
 
-						h.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
+						inventory.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
 								energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(a.mcmValue()));
 						});
-						h.extractItem(i,1,false);
+						inventory.extractItem(i,1,false);
 						markDirty();
 
 					}
@@ -154,8 +148,6 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 				}
 				counter = 10;
-			});
-
 		}
 
 		BlockState blockState = world.getBlockState(pos);
@@ -197,7 +189,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	@Override
 	public void read(CompoundNBT tag) {
 		CompoundNBT invTag = tag.getCompound("inv");
-		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) h).deserializeNBT(invTag));
+		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
 		CompoundNBT energyTag = tag.getCompound("energy");
 		energy.ifPresent(h -> ((INBTSerializable<CompoundNBT>) h).deserializeNBT(energyTag));
 
@@ -208,7 +200,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	@Override
 	public CompoundNBT write(CompoundNBT tag) {
 		handler.ifPresent(h -> {
-			CompoundNBT compound = ((INBTSerializable<CompoundNBT>) h).serializeNBT();
+			CompoundNBT compound = ((INBTSerializable<CompoundNBT>) inventory).serializeNBT();
 			tag.put("inv", compound);
 		});
 		energy.ifPresent(h -> {
@@ -221,30 +213,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	}
 
 	private IItemHandler createHandler() {
-		return new ItemStackHandler(120) {
-
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-			}
-
-			@Override
-			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-				//return stack.getItem() == Items.DIAMOND;
-				return super.isItemValid(slot, stack);
-			}
-
-			@Nonnull
-			@Override
-			public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-				/*(if (stack.getItem() != Items.DIAMOND) {
-					return stack;
-				}
-
-				 */
-				return super.insertItem(slot, stack, simulate);
-			}
-		};
+		return inventory;
 	}
 
 	private IEnergyStorage createEnergy() {
