@@ -6,7 +6,9 @@ import com.cleardragonf.ourmod.container.FishingNetContainer;
 import com.cleardragonf.ourmod.container.MCMChestContainer;
 import com.cleardragonf.ourmod.container.PortableChestContainer;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,5 +20,8 @@ public class ModContainerTypes {
 	public static final RegistryObject<ContainerType<PortableChestContainer>> PORTABLE_CHEST = CONTAINER_TYPES.register("portablechest", () -> IForgeContainerType.create(PortableChestContainer::new ));
 	public static final RegistryObject<ContainerType<FishingNetContainer>> FISHING_NET = CONTAINER_TYPES.register("fishingnet", () -> IForgeContainerType.create(FishingNetContainer::new ));
 	public static final RegistryObject<ContainerType<EssenceCollectorContainer>> ESSENCE_COLLECTOR = CONTAINER_TYPES.register("essencecollector", () -> IForgeContainerType.create(EssenceCollectorContainer::new ));
-	public static final RegistryObject<ContainerType<MCMChestContainer>> MCM_CHEST = CONTAINER_TYPES.register("mcmchest", () -> IForgeContainerType.create(MCMChestContainer::new ));
+	public static final RegistryObject<ContainerType<MCMChestContainer>> MCM_CHEST = CONTAINER_TYPES.register("mcmchest", () -> IForgeContainerType.create((windowId, inv, data) -> {
+		BlockPos pos = data.readBlockPos();
+		return new MCMChestContainer(windowId, Minecraft.getInstance().world, pos, inv, Minecraft.getInstance().player);
+	}));
 }

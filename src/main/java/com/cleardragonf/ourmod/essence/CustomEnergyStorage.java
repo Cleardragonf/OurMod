@@ -1,27 +1,17 @@
 package com.cleardragonf.ourmod.essence;
 
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
 
-public class CustomEnergyStorage extends EnergyStorage {
-	public CustomEnergyStorage(final int capacity) {
-
-		super(capacity);
-
-	}
-
-	public CustomEnergyStorage(final int capacity, final int maxTransfer) {
-
+public class CustomEnergyStorage extends EnergyStorage implements INBTSerializable<CompoundNBT> {
+	public CustomEnergyStorage(int capacity, int maxTransfer) {
 		super(capacity, maxTransfer);
-
 	}
 
-
-	public CustomEnergyStorage(final int capacity, final int maxReceive, final int maxExtract) {
-
-		super(capacity, maxReceive, maxExtract);
-
+	public void setEnergy(int energy) {
+		this.energy = energy;
 	}
-
 
 	public void addEnergy(int energy) {
 		this.energy += energy;
@@ -37,20 +27,15 @@ public class CustomEnergyStorage extends EnergyStorage {
 		}
 	}
 
-	public CustomEnergyStorage(final int capacity, final int maxReceive, final int maxExtract, final int energy) {
-
-		super(capacity, maxReceive, maxExtract, energy);
-
+	@Override
+	public CompoundNBT serializeNBT() {
+		CompoundNBT tag = new CompoundNBT();
+		tag.putInt("energy", getEnergyStored());
+		return tag;
 	}
 
-
-	public int setEnergyStored(final int maxSet) {
-
-		final int energyReceived = Math.min(this.capacity - this.energy, maxSet);
-
-		this.energy += energyReceived;
-
-		return energyReceived;
-
+	@Override
+	public void deserializeNBT(CompoundNBT nbt) {
+		setEnergy(nbt.getInt("energy"));
 	}
 }
