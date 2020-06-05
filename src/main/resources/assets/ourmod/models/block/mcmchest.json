@@ -1,6 +1,12 @@
 {
-	"parent": "block/cube_all",
+	"parent": "block/cube",
 	"textures": {
-		"all": "ourmod:blocks/mcmchest"
+		"particle": "ourmod:blocks/mcmchest",
+		"down": "ourmod:blocks/mcmchest",
+		"up": "ourmod:blocks/mcmchest",
+		"east": "ourmod:blocks/mcmchest",
+		"west": "ourmod:blocks/mcmchest",
+		"north": "ourmod:blocks/mcmchest_front",
+		"south": "ourmod:blocks/mcmchest"
 	}
 }
