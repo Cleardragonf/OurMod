@@ -16,10 +16,12 @@ import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -31,16 +33,28 @@ public class MCMChestContainer extends Container {
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
 
+
 	public MCMChestContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
 		super(ModContainerTypes.MCM_CHEST.get(), windowId);
 		tileEntity = world.getTileEntity(pos);
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
 
+		/*Depressiated
 		tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-			addSlot(new SlotItemHandler(h, 0, 64, 24));
+			addSlot(new SlotItemHandler(h, 0, 134, 31));
 		});
-		layoutPlayerInventorySlots(10, 70);
+
+		 */
+		//Chest Mimic Slot(1)
+		((MCMChestTileEntity)tileEntity).handler.ifPresent(h ->addSlot(new SlotItemHandler(h, 0, 134, 31)));
+		//Chest Contents
+		((MCMChestTileEntity) tileEntity).handler.ifPresent(h -> addSlotBox(h,5,8,61,9,18,6,18));
+		//INPUT Slots (4)
+		((MCMChestTileEntity) tileEntity).handler.ifPresent(h -> addSlotBox(h,1,62,17,2,18,2,18));
+
+		layoutPlayerInventorySlots(8, 70);
+
 
 		trackInt(new IntReferenceHolder() {
 			@Override
@@ -127,10 +141,10 @@ public class MCMChestContainer extends Container {
 
 	private void layoutPlayerInventorySlots(int leftCol, int topRow) {
 		// Player inventory
-		addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
+		addSlotBox(playerInventory, 9, leftCol, 174, 9, 18, 3, 18);
 
 		// Hotbar
 		topRow += 58;
-		addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
+		addSlotRange(playerInventory, 0, leftCol, 232, 9, 18);
 	}
 }

@@ -1,5 +1,6 @@
 package com.cleardragonf.ourmod;
 
+import com.cleardragonf.ourmod.MCM.MCMValueProvider;
 import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.events.SurvivalEvents;
 import com.cleardragonf.ourmod.network.NetRegistries;
@@ -120,6 +121,7 @@ public class OurMod
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         SurvivalEvents.registerHeatMap();
         SurvivalEvents.registerBiomeHeatMap();
+        MCMValueProvider.registerCapability();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

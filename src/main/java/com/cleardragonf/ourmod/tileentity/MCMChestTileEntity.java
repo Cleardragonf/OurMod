@@ -1,5 +1,7 @@
 package com.cleardragonf.ourmod.tileentity;
 
+import com.cleardragonf.ourmod.MCM.IMCMValueCapability;
+import com.cleardragonf.ourmod.MCM.MCMValueProvider;
 import com.cleardragonf.ourmod.container.MCMChestContainer;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
@@ -32,6 +34,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -52,8 +55,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MCMChestTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-	private LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
-	private LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
+	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
+	public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
 
 	private int counter;
 
@@ -69,20 +72,33 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 		if (counter > 0) {
 			counter--;
-			if (counter <= 0) {
-				energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(10));
-			}
+
 			markDirty();
 		}
 
 		if (counter <= 0) {
 			handler.ifPresent(h -> {
-				ItemStack stack = h.getStackInSlot(0);
-				if (stack.getItem() == Items.DIAMOND) {
-					h.extractItem(0, 1, false);
-					counter = 10;
-					markDirty();
+				for (int i = 1; i < 5; i++) {
+
+					if(!h.getStackInSlot(i).isEmpty()){
+
+
+						h.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
+							if (counter <= 0) {
+
+								energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(a.mcmValue()));
+							}
+
+						});
+						h.extractItem(i,1,false);
+						markDirty();
+
+					}
+
+
+
 				}
+				counter = 10;
 			});
 		}
 
@@ -149,7 +165,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	}
 
 	private IItemHandler createHandler() {
-		return new ItemStackHandler(1) {
+		return new ItemStackHandler(120) {
 
 			@Override
 			protected void onContentsChanged(int slot) {
@@ -158,15 +174,18 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-				return stack.getItem() == Items.DIAMOND;
+				//return stack.getItem() == Items.DIAMOND;
+				return super.isItemValid(slot, stack);
 			}
 
 			@Nonnull
 			@Override
 			public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-				if (stack.getItem() != Items.DIAMOND) {
+				/*(if (stack.getItem() != Items.DIAMOND) {
 					return stack;
 				}
+
+				 */
 				return super.insertItem(slot, stack, simulate);
 			}
 		};

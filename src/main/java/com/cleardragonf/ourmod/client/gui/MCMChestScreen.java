@@ -18,6 +18,8 @@ public class MCMChestScreen extends ContainerScreen<MCMChestContainer> {
 
 	public MCMChestScreen(MCMChestContainer container, PlayerInventory inv, ITextComponent name) {
 		super(container, inv, name);
+		this.xSize = 176;
+		this.ySize = 256;
 	}
 
 	@Override
