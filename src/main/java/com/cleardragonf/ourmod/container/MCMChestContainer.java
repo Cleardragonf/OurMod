@@ -47,11 +47,14 @@ public class MCMChestContainer extends Container {
 
 		 */
 		//Chest Mimic Slot(1)
-		((MCMChestTileEntity)tileEntity).handler.ifPresent(h ->addSlot(new SlotItemHandler(h, 0, 134, 31)));
+		//((MCMChestTileEntity)tileEntity).handler.ifPresent(h ->addSlot(new SlotItemHandler(h, 0, 134, 31)));
+		addSlot(new SlotItemHandler(((MCMChestTileEntity) tileEntity).inventory, 0,134,31));
 		//Chest Contents
-		((MCMChestTileEntity) tileEntity).handler.ifPresent(h -> addSlotBox(h,5,8,61,9,18,6,18));
+		//((MCMChestTileEntity) tileEntity).handler.ifPresent(h -> addSlotBox(h,5,8,61,9,18,6,18));
+		addSlotBox(((MCMChestTileEntity) tileEntity).inventory, 5,8,61,9,18,6,18);
 		//INPUT Slots (4)
-		((MCMChestTileEntity) tileEntity).handler.ifPresent(h -> addSlotBox(h,1,62,17,2,18,2,18));
+		//((MCMChestTileEntity) tileEntity).handler.ifPresent(h -> addSlotBox(h,1,62,17,2,18,2,18));
+		addSlotBox(((MCMChestTileEntity) tileEntity).inventory, 1,62,17,2,18,2,18);
 
 		layoutPlayerInventorySlots(8, 70);
 
