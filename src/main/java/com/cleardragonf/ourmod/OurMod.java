@@ -1,5 +1,6 @@
 package com.cleardragonf.ourmod;
 
+import com.cleardragonf.ourmod.MCM.MCMValueProvider;
 import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.events.SurvivalEvents;
 import com.cleardragonf.ourmod.network.NetRegistries;
@@ -68,7 +69,8 @@ public class OurMod
         // Register the setup method for modloading
         modEventBus.addListener(this::setup);
         // Register the doClientStuff method for modloading
-        
+        modEventBus.addListener(this::doClientStuff);
+
         ItemInitNew.ITEMS.register(modEventBus);
         BlockInitNew.BLOCKS.register(modEventBus);
         
