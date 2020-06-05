@@ -2,6 +2,7 @@ package com.cleardragonf.ourmod.tileentity;
 
 import com.cleardragonf.ourmod.container.EssenceCollectorContainer;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
+import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import com.cleardragonf.ourmod.objects.blocks.EssenceCollector;
 import net.minecraft.block.Block;
@@ -186,17 +187,22 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 						final IFluidState fluidState = world.getFluidState(pooledMutable);
 						final Block block = blockState.getBlock();
 
-						if(block instanceof FireBlock || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || block==Blocks.CAMPFIRE){
+						if(block instanceof FireBlock || block == BlockInitNew.FIRE_MANA.get() || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || block==Blocks.CAMPFIRE){
 							++fireBlocksFound;
-						}else if(block == Blocks.WATER || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
+						}else if(block == Blocks.WATER || block == BlockInitNew.WATER_MANA.get()|| (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
 							++waterBlocksFound;
-						}else if(block == Blocks.AIR){
+						}else if(block == Blocks.AIR|| block == BlockInitNew.AIR_MANA.get()){
 							++airBlocksFound;
-						}else if(block == Blocks.DIRT || block ==  Blocks.GRASS ||block ==  Blocks.GRANITE ||block ==  Blocks.STONE ||block ==  Blocks.ANDESITE
+						}else if(block == Blocks.DIRT || block == BlockInitNew.EARTH_MANA.get()|| block ==  Blocks.GRASS ||block ==  Blocks.GRANITE ||block ==  Blocks.STONE ||block ==  Blocks.ANDESITE
 								|| block == Blocks.CLAY || block == Blocks.DIORITE || block == Blocks.GRAVEL|| block == Blocks.ICE || block == Blocks.MOSSY_COBBLESTONE
 								|| block == Blocks.NETHERRACK || block == Blocks.OBSIDIAN || block == Blocks.PODZOL || block == Blocks.PRISMARINE ||block ==  Blocks.QUARTZ_BLOCK
 						|| block == Blocks.SAND){
 							++earthBlocksFound;
+						}else if(block == BlockInitNew.DARK_MANA.get()) {
+							++darkBlocksFound;
+						}
+						else if(block == BlockInitNew.LIGHT_MANA.get()) {
+							++lightBlocksFound;
 						}
 					}
 				}
@@ -239,6 +245,13 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 
 		}else{
 			DarkEnergy.addEnergy(darkBlocksFound * 1);
+			needsSave = true;
+			write(tag);
+		}
+		if(this.EarthEnergy.getEnergyStored() >= 100000){
+
+		}else{
+			EarthEnergy.addEnergy(earthBlocksFound * 1);
 			needsSave = true;
 			write(tag);
 		}
