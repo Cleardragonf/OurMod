@@ -57,6 +57,28 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
 	public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
+	//temporary testing
+	public final ItemStackHandler inventory = new ItemStackHandler(300){
+
+		@Override
+		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+			if (stack.getItem() == null) {
+				return stack;
+			}
+			return super.insertItem(slot, stack, simulate);
+		}
+
+		@Override
+		public boolean isItemValid(int slot, ItemStack stack) {
+			return stack.getItem() != null;
+		}
+
+		@Override
+		protected void onContentsChanged(int slot) {
+			MCMChestTileEntity.this.markDirty();
+		}
+	};
+
 
 	private int counter;
 
@@ -78,17 +100,50 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 		if (counter <= 0) {
 			handler.ifPresent(h -> {
+				//Takes the Clone slot and Existing MCM value and Begins Duplicating the Item.
+				if(!h.getStackInSlot(0).isEmpty()){
+					h.getStackInSlot(0).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a -> {
+						ItemStack stack = h.getStackInSlot(0).getStack();
+
+						energy.ifPresent(b -> {
+							if(((CustomEnergyStorage)b).getEnergyStored() >= a.mcmValue()){
+								ItemStack stack2;
+								for (int i = 5; i < 59; i++) {
+
+									if(h.getStackInSlot(i).isEmpty()){
+										stack2 = h.getStackInSlot(i).getStack();
+										stack2.setCount(stack2.getCount() + 1);
+										//h.insertItem(i, stack, false);
+										break;
+									}else{
+										if(h.getStackInSlot(i).getStack().getItem().equals(stack.getItem())){
+											if(h.getStackInSlot(i).getCount() < stack.getStack().getMaxStackSize()){
+												stack2 = h.getStackInSlot(i).getStack();
+												stack2.setCount(stack2.getCount() + 1);
+												//h.insertItem(i, stack, false);
+												break;
+											}
+
+										}
+									}
+								}
+
+								((CustomEnergyStorage) b).consumeEnergy(a.mcmValue());
+							}
+						});
+
+					});
+				}
+
+
+				//Removes inputs and Adds MCM Value to the Chest
 				for (int i = 1; i < 5; i++) {
 
 					if(!h.getStackInSlot(i).isEmpty()){
 
 
 						h.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
-							if (counter <= 0) {
-
 								energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(a.mcmValue()));
-							}
-
 						});
 						h.extractItem(i,1,false);
 						markDirty();
@@ -100,6 +155,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 				}
 				counter = 10;
 			});
+
 		}
 
 		BlockState blockState = world.getBlockState(pos);
