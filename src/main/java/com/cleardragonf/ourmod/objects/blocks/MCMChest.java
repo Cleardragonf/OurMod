@@ -5,17 +5,24 @@ import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -29,8 +36,12 @@ import javax.annotation.Nullable;
 @Mod.EventBusSubscriber
 public class MCMChest extends Block {
 
-	public MCMChest(Properties properties) {
-		super(properties);
+	public MCMChest() {
+		super(Properties.create(Material.IRON)
+				.sound(SoundType.METAL)
+				.hardnessAndResistance(2.0f)
+				.lightValue(14)
+		);
 	}
 
 	@Override
@@ -38,63 +49,46 @@ public class MCMChest extends Block {
 		return true;
 	}
 
+	@Override
+	public int getLightValue(BlockState state) {
+		return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state) : 0;
+	}
 
+	@Nullable
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return ModTileEntityTypes.MCM_Chest.get().create();
+		return new MCMChestTileEntity();
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
-			Hand handIn, BlockRayTraceResult result) {
-		if (!worldIn.isRemote) {
-			TileEntity tile = worldIn.getTileEntity(pos);
-			if (tile instanceof MCMChestTileEntity) {
-				NetworkHooks.openGui((ServerPlayerEntity) player, (MCMChestTileEntity) tile, pos);
-				return ActionResultType.SUCCESS;
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+		if (entity != null) {
+			world.setBlockState(pos, state.with(BlockStateProperties.FACING, getFacingFromEntity(pos, entity)), 2);
+		}
+	}
+
+
+	@Override
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+		if (!world.isRemote) {
+			TileEntity tileEntity = world.getTileEntity(pos);
+			if (tileEntity instanceof INamedContainerProvider) {
+				NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+			} else {
+				throw new IllegalStateException("Our named container provider is missing!");
 			}
+			return ActionResultType.SUCCESS;
 		}
-		return ActionResultType.FAIL;
+		return super.onBlockActivated(state, world, pos, player, hand, trace);
 	}
 
-	@SubscribeEvent
-	public void onRightClick(PlayerInteractEvent.RightClickItem event){
-		if(event.getItemStack().getItem().equals(ItemInitNew.POWER_ENSCRIBER)){
-			System.out.println("Yes");
-		}else{
-			System.out.println("No");
-		}
+	public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity) {
+		Vec3d vec = entity.getPositionVec();
+		return Direction.getFacingFromVector((float) (vec.x - clickedBlock.getX()), (float) (vec.y - clickedBlock.getY()), (float) (vec.z - clickedBlock.getZ()));
 	}
 
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if(tileEntity instanceof MCMChestTileEntity) {
-			MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
-			ItemStack item = new ItemStack(this);
-			CompoundNBT tag = new CompoundNBT();
-			((MCMChestTileEntity)tileEntity).write(tag);
-
-			item.setTag(tag);
-
-			ItemEntity entity = new ItemEntity(worldIn, pos.getX() + .5, pos.getY(), pos.getZ() + .5, item);
-			worldIn.addEntity(entity);
-		}
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(BlockStateProperties.FACING, BlockStateProperties.POWERED);
 	}
-
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if(tileEntity instanceof MCMChestTileEntity) {
-			CompoundNBT tag = stack.getTag();
-			if(tag != null) {
-				((MCMChestTileEntity)tileEntity).readRestorableNBT(tag);
-				worldIn.notifyBlockUpdate(pos, getDefaultState(), getDefaultState(), Constants.BlockFlags.DEFAULT);
-			}
-		}
-	}
-
 }

@@ -21,8 +21,6 @@ public class NBTHelper {
 			return writeQuarry((QuarryTileEntity)o);
 		}if(o instanceof EssenceCollectorTileEntity) {
 			return writeEssence((EssenceCollectorTileEntity)o);
-		}if(o instanceof MCMChestTileEntity) {
-			return writeEssence((MCMChestTileEntity)o);
 		}
 
 		
@@ -54,11 +52,6 @@ public class NBTHelper {
 		compound.putInt("earthenergy", o.EarthEnergy.getEnergyStored());
 		compound.putInt("darkenergy", o.DarkEnergy.getEnergyStored());
 		compound.putInt("lightenergy", o.LightEnergy.getEnergyStored());
-		return compound;
-	}
-	private static CompoundNBT writeEssence(MCMChestTileEntity o) {
-		CompoundNBT compound = new CompoundNBT();
-		compound.put("inv", o.inventory.serializeNBT());
 		return compound;
 	}
 	
