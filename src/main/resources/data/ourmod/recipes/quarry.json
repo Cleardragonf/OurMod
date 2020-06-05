@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"iii",
+		"iIi",
+		"iii"
+	],
+	"key": {
+		"i" : {
+			"item": "minecraft:iron_ingot"
+		},
+		"I" :{
+			"item": "minecraft:diamond_pickaxe"
+		}
+	},
+	"result": {
+		"item": "ourmod:quarry"
+	}
+}
