@@ -119,6 +119,11 @@ public class OurMod
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         SurvivalEvents.registerHeatMap();
         SurvivalEvents.registerBiomeHeatMap();
+        MCMValueProvider.registerCapability();
+    }
+
+    private void doClientStuff(final FMLClientSetupEvent event) {
+        // do something that can only be done on the client
         NetRegistries.registerMSG();
     }
 

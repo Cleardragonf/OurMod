@@ -285,11 +285,11 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 
 
 	public void readRestorableNBT(CompoundNBT tag) {
-		this.FireEnergy.setEnergyStored(tag.getInt("fireenergy"));
-		this.WaterEnergy.setEnergyStored(tag.getInt("waterenergy"));
-		this.AirEnergy.setEnergyStored(tag.getInt("airenergy"));
-		this.EarthEnergy.setEnergyStored(tag.getInt("earthenergy"));
-		this.DarkEnergy.setEnergyStored(tag.getInt("darkenergy"));
-		this.LightEnergy.setEnergyStored(tag.getInt("lightenergy"));
+		this.FireEnergy.setEnergy(tag.getInt("fireenergy"));
+		this.WaterEnergy.setEnergy(tag.getInt("waterenergy"));
+		this.AirEnergy.setEnergy(tag.getInt("airenergy"));
+		this.EarthEnergy.setEnergy(tag.getInt("earthenergy"));
+		this.DarkEnergy.setEnergy(tag.getInt("darkenergy"));
+		this.LightEnergy.setEnergy(tag.getInt("lightenergy"));
 	}
 }
