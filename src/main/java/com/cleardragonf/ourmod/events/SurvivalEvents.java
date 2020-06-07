@@ -225,6 +225,9 @@ public class SurvivalEvents {
             if(player.isOnLadder()){
 
             }
+            if(player.isSwingInProgress){
+                EntityStats.addThirst(player, -0.001D);
+            }
         }
     }
 
