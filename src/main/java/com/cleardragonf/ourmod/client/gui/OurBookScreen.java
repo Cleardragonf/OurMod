@@ -36,8 +36,8 @@ public class OurBookScreen extends Screen {
         int x = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
         this.blit(x, y, 0, 0, this.xSize, this.ySize);
-        this.blit(x-150, y+235, 187,5,26,22);
-        this.blit(x+150, y+235, 213,5,26,22);
+        this.blit(x-150, y+215, 187,5,26,22);
+        this.blit(x+150, y+215, 213,5,26,22);
         super.render(mouseX, mouseY, partialTicks);
         /* //Button Based Code
         this.addButton(new Button (x + 100, y + 10, 50, 20, "Next Page", (button) -> {
