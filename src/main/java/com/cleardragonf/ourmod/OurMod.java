@@ -122,11 +122,11 @@ public class OurMod
         SurvivalEvents.registerHeatMap();
         SurvivalEvents.registerBiomeHeatMap();
         MCMValueProvider.registerCapability();
+        NetRegistries.registerMSG();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
-        NetRegistries.registerMSG();
     }
 
 

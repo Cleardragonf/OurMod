@@ -17,7 +17,7 @@ public class ItemInitNew {
 	public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, OurMod.MOD_ID);
 	
 	public static final RegistryObject<Item> SICKLE = ITEMS.register("sickle", () -> new Sickle(new Item.Properties().defaultMaxDamage(100).group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> OUR_BOOK = ITEMS.register("ourbook", () -> new OurBook(new Item.Properties().group(OurModItemGroup.instance)));
+	//public static final RegistryObject<Item> OUR_BOOK = ITEMS.register("ourbook", () -> new OurBook(new Item.Properties().group(OurModItemGroup.instance)));
 	//FOOD
 	public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
 	public static final RegistryObject<Item> RICE = ITEMS.register("rice", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));

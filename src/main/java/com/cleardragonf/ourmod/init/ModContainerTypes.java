@@ -6,6 +6,7 @@ import com.cleardragonf.ourmod.container.FishingNetContainer;
 import com.cleardragonf.ourmod.container.MCMChestContainer;
 import com.cleardragonf.ourmod.container.PortableChestContainer;
 
+import com.cleardragonf.ourmod.util.ClientEventBusSubscriber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.math.BlockPos;
