@@ -32,7 +32,6 @@ import java.util.Objects;
 public class MCMChestContainer extends Container {
 
 	private MCMChestTileEntity tileEntity;
-	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
 	private final IWorldPosCallable canInteractWithCallable;
 
@@ -99,7 +98,7 @@ public class MCMChestContainer extends Container {
 
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, BlockInitNew.MCM_CHEST.get());
+		return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerIn, BlockInitNew.MCM_CHEST.get());
 	}
 
 	@Override
