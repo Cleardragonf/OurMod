@@ -240,6 +240,6 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	@Nullable
 	@Override
 	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new MCMChestContainer(i, world, pos, playerInventory, playerEntity);
+		return new MCMChestContainer(i, playerInventory, this);
 	}
 }

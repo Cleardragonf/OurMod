@@ -3,7 +3,9 @@ package com.cleardragonf.ourmod.container;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModContainerTypes;
+import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
+import com.cleardragonf.ourmod.tileentity.PortableChestTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -29,16 +31,19 @@ import java.util.Objects;
 
 public class MCMChestContainer extends Container {
 
-	private TileEntity tileEntity;
+	private MCMChestTileEntity tileEntity;
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
+	private final IWorldPosCallable canInteractWithCallable;
 
 
-	public MCMChestContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
+	public MCMChestContainer(final int windowId, final PlayerInventory playerInventory,
+							 final MCMChestTileEntity tileEntity) {
 		super(ModContainerTypes.MCM_CHEST.get(), windowId);
-		tileEntity = world.getTileEntity(pos);
-		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
+		this.tileEntity = tileEntity;
+		this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
+
 
 		/*Depressiated
 		tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
@@ -71,6 +76,22 @@ public class MCMChestContainer extends Container {
 			}
 		});
 	}
+
+	public MCMChestContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
+		this(windowId, playerInventory, getTileEntity(playerInventory, data));
+	}
+
+	private static MCMChestTileEntity getTileEntity(final PlayerInventory playerInventory,
+															final PacketBuffer data) {
+		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
+		Objects.requireNonNull(data, "data cannot be null");
+		final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
+		if (tileAtPos instanceof MCMChestTileEntity) {
+			return (MCMChestTileEntity) tileAtPos;
+		}
+		throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
+	}
+
 
 	public int getEnergy() {
 		return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
