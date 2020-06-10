@@ -88,7 +88,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	@Override
 	public void tick() {
-		if (world.isRemote) {
+		if (!world.isRemote) {
 			return;
 		}
 
@@ -132,10 +132,10 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 				//Removes inputs and Adds MCM Value to the Chest
 				for (int i = 1; i < 5; i++) {
-
+					markDirty();
 					if(!inventory.getStackInSlot(i).isEmpty()){
 
-
+						markDirty();
 						inventory.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
 								energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(a.mcmValue()));
 						});
@@ -148,6 +148,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 				}
 				counter = 10;
+				markDirty();
 		}
 
 		BlockState blockState = world.getBlockState(pos);
@@ -242,4 +243,25 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
 		return new MCMChestContainer(i, playerInventory, this);
 	}
+
+	private CompoundNBT tag = new CompoundNBT();
+
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		this.write(tag);
+		return super.getUpdatePacket();
+	}
+
+	@Override
+	public CompoundNBT getUpdateTag() {
+		write(tag);
+		return tag;
+	}
+
+	@Override
+	public void handleUpdateTag(CompoundNBT tag) {
+		this.read(tag);
+	}
+
+
 }
