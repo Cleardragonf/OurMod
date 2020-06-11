@@ -2,6 +2,7 @@ package com.cleardragonf.ourmod.objects.blocks;
 
 import com.cleardragonf.ourmod.init.ItemInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
+import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -71,15 +72,13 @@ public class MCMChest extends Block {
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
 		if (!world.isRemote) {
-			TileEntity tileEntity = world.getTileEntity(pos);
-			if (tileEntity instanceof INamedContainerProvider) {
-				NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
-			} else {
-				throw new IllegalStateException("Our named container provider is missing!");
+			TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof MCMChestTileEntity) {
+				NetworkHooks.openGui((ServerPlayerEntity) player, (MCMChestTileEntity) tile, pos);
+				return ActionResultType.SUCCESS;
 			}
-			return ActionResultType.SUCCESS;
 		}
-		return super.onBlockActivated(state, world, pos, player, hand, trace);
+		return ActionResultType.FAIL;
 	}
 
 	public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity) {

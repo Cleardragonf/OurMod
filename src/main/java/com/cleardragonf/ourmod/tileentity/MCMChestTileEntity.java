@@ -192,7 +192,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		CompoundNBT invTag = tag.getCompound("inv");
 		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
 		CompoundNBT energyTag = tag.getCompound("energy");
-		energy.ifPresent(h -> ((INBTSerializable<CompoundNBT>) h).deserializeNBT(energyTag));
+		energy.ifPresent(h -> ((CustomEnergyStorage)h).setEnergy(tag.getInt("energy")));
 
 		counter = tag.getInt("counter");
 		super.read(tag);
@@ -205,8 +205,8 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 			tag.put("inv", compound);
 		});
 		energy.ifPresent(h -> {
-			CompoundNBT compound = ((INBTSerializable<CompoundNBT>) h).serializeNBT();
-			tag.put("energy", compound);
+			int place = h.getEnergyStored();
+			tag.putInt("energy", place);
 		});
 
 		tag.putInt("counter", counter);
