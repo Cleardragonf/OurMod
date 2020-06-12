@@ -17,6 +17,7 @@ public class MCMValues {
         mcmList.put(Items.IRON_BLOCK, 9000);
         mcmList.put(Items.IRON_ORE, 3000);
         mcmList.put(Items.IRON_NUGGET, 500);
+        mcmList.put(Items.IRON_INGOT, 1000);
         mcmList.put(Items.DIAMOND_ORE, 3000);
         mcmList.put(Items.COBBLESTONE, 1);
         mcmList.put(Items.STONE, 1);
@@ -92,6 +93,7 @@ public class MCMValues {
         mcmList.put(Items.MUSIC_DISC_WAIT, 2048);
         mcmList.put(Items.MUSIC_DISC_WARD, 2048);
         mcmList.put(Items.DIAMOND, 8192);
+        mcmList.put(Items.DIAMOND_BLOCK, 761856);
         mcmList.put(Items.FLINT, 4);
         mcmList.put(Items.COAL, 128);
         mcmList.put(Items.REDSTONE, 64);
@@ -102,6 +104,8 @@ public class MCMValues {
         mcmList.put(Items.BLACK_DYE, 16);
         mcmList.put(Items.ENCHANTED_BOOK, 2048);
         mcmList.put(Items.EMERALD_ORE, 16384);
+        mcmList.put(Items.EMERALD, 5461);
+        mcmList.put(Items.EMERALD_BLOCK, 49152);
         mcmList.put(Items.NETHER_STAR, 139264);
         mcmList.put(Items.CLAY_BALL, 16);
         mcmList.put(Items.BONE, 144);

@@ -109,7 +109,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 				//Takes the Clone slot and Existing MCM value and Begins Duplicating the Item.
 					inventory.getStackInSlot(0).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a -> {
 						energy.ifPresent(b -> {
-							if(((CustomEnergyStorage)b).getEnergyStored() >= a.mcmValue()){
+							if(((CustomEnergyStorage)b).getEnergyStored() >= MCMREader(mcmValueItem, a)){
 								ItemStack stack2;
 								for (int i = 5; i < 59; i++) {
 									if(inventory.getStackInSlot(i).isEmpty()){
@@ -127,9 +127,9 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 								}
 
-
+								((CustomEnergyStorage) b).consumeEnergy(MCMREader(mcmValueItem, a));
 							}
-							((CustomEnergyStorage) b).consumeEnergy(a.mcmValue());
+
 						});
 
 					});
