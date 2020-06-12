@@ -12,12 +12,13 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ObjectHolder;
 
 public class ItemInitNew {
 	public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, OurMod.MOD_ID);
 	
 	public static final RegistryObject<Item> SICKLE = ITEMS.register("sickle", () -> new Sickle(new Item.Properties().defaultMaxDamage(100).group(OurModItemGroup.instance)));
-	//public static final RegistryObject<Item> OUR_BOOK = ITEMS.register("ourbook", () -> new OurBook(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> OUR_BOOK = ITEMS.register("ourbook", () -> new OurBook(new Item.Properties().group(OurModItemGroup.instance)));
 	//FOOD
 	public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
 	public static final RegistryObject<Item> RICE = ITEMS.register("rice", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
@@ -44,4 +45,24 @@ public class ItemInitNew {
 	public static final RegistryObject<Item> EGGPLANT_SEED= ITEMS.register("eggplantseed", () -> new BlockItem(BlockInitNew.EGGPLANT_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
 
 	public static final RegistryObject<Item> POWER_ENSCRIBER = ITEMS.register("powerenscriber", () -> new PowerEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
+
+	//Blocks
+
+	@ObjectHolder("ourmod:lightmana")
+	public static final Item LIGHT_ESSENCE = null;
+
+	@ObjectHolder("ourmod:darkmana")
+	public static final Item DARK_ESSENCE = null;
+
+	@ObjectHolder("ourmod:firemana")
+	public static final Item FIRE_ESSENCE = null;
+
+	@ObjectHolder("ourmod:watermana")
+	public static final Item WATER_ESSENCE = null;
+
+	@ObjectHolder("ourmod:earthmana")
+	public static final Item EARTH_ESSENCE = null;
+
+	@ObjectHolder("ourmod:windmana")
+	public static final Item WIND_ESSENCE = null;
 }

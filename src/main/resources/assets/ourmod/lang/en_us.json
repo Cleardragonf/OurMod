@@ -12,12 +12,13 @@
 	"item.ourmod.cauliflower": "Cauliflower",
 	"item.ourmod.eggplant": "Eggplant",
 	"item.ourmod.sickle": "Sickle",
-	"item.outmod.watermana": "Water Essence",
-	"item.outmod.firemana": "Fire Essence",
-	"item.outmod.airmana": "Air Essence",
-	"item.outmod.earthmana": "Earth Essence",
-	"item.outmod.darkmana": "Dark Essence",
-	"item.outmod.lightmana": "Light Essence",
+	"item.ourmod.watermana": "Water Essence",
+	"item.ourmod.firemana": "Fire Essence",
+	"item.ourmod.airmana": "Air Essence",
+	"item.ourmod.earthmana": "Earth Essence",
+	"item.ourmod.darkmana": "Dark Essence",
+	"item.ourmod.lightmana": "Light Essence",
+	"item.ourmod.ourbook": "OurMod Guidebook",
 
 	
 	"block.ourmod.tomatocrop": "Tomato Seeds",
@@ -49,6 +50,7 @@
 	
 	"container.portablechest": "Portable Chest",
 	"container.fishingnet": "Fishing Net",
+	"container.mcmchest": "MCM Chest",
 
 	"effect.ourmod.hypothermia": "Hypothermia",
 	"effect.ourmod.hyperthermia": "Hyperthermia"
