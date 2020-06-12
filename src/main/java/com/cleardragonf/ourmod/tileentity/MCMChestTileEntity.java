@@ -1,7 +1,9 @@
 package com.cleardragonf.ourmod.tileentity;
 
 import com.cleardragonf.ourmod.MCM.IMCMValueCapability;
+import com.cleardragonf.ourmod.MCM.MCMValueCapability;
 import com.cleardragonf.ourmod.MCM.MCMValueProvider;
+import com.cleardragonf.ourmod.MCM.MCMValues;
 import com.cleardragonf.ourmod.container.MCMChestContainer;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
@@ -17,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -88,6 +91,8 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	@Override
 	public void tick() {
+		energy.ifPresent(h ->{
+		});
 		if (world.isRemote) {
 			return;
 		}
@@ -136,8 +141,10 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 					if(!inventory.getStackInSlot(i).isEmpty()){
 
 						markDirty();
+						Item inputstack = inventory.getStackInSlot(i).getStack().getItem();
 						inventory.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
-								energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(a.mcmValue()));
+							System.out.println(MCMREader(inputstack, a));
+							energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(MCMREader(inputstack, a)));
 						});
 						inventory.extractItem(i,1,false);
 						markDirty();
@@ -157,6 +164,15 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		}
 
 		sendOutPower();
+	}
+
+	private int MCMREader(Item a, IMCMValueCapability b) {
+		MCMValues itemValue = new MCMValues();
+		if(itemValue.getMap().containsKey(a)){
+			return itemValue.getMap().get(a);
+		}else{
+			return 1;
+		}
 	}
 
 	private void sendOutPower() {
@@ -244,16 +260,20 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		return new MCMChestContainer(i, playerInventory, this);
 	}
 
-	private CompoundNBT tag = new CompoundNBT();
+
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
+		CompoundNBT tag = new CompoundNBT();
 		this.write(tag);
-		return super.getUpdatePacket();
+
+		// the number here is generally ignored for non-vanilla TileEntities, 0 is safest
+		return new SUpdateTileEntityPacket(this.getPos(), 0 , tag);
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
+		CompoundNBT tag = new CompoundNBT();
 		write(tag);
 		return tag;
 	}
@@ -263,5 +283,9 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		this.read(tag);
 	}
 
-
+	// this method gets called on the client when it receives the packet that was sent in the previous method
+	@Override
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+		this.read(pkt.getNbtCompound());
+	}
 }

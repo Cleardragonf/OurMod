@@ -1,13 +1,17 @@
 package com.cleardragonf.ourmod;
 
+import com.cleardragonf.ourmod.MCM.MCMValueCapability;
 import com.cleardragonf.ourmod.MCM.MCMValueProvider;
 import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.events.SurvivalEvents;
 import com.cleardragonf.ourmod.network.NetRegistries;
 import com.cleardragonf.ourmod.objects.blocks.*;
 import com.cleardragonf.ourmod.world.OreGeneration;
+import net.minecraft.item.*;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -24,10 +28,6 @@ import com.cleardragonf.ourmod.setup.ModSetup;
 import com.cleardragonf.ourmod.setup.ServerProxy;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -41,6 +41,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import java.util.HashMap;
+import java.util.Map;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("ourmod")
@@ -112,6 +115,8 @@ public class OurMod
 
 		LOGGER.debug("Registered BlockItems!");
 	}
+    public final static MCMValueCapability mcmValue = new MCMValueCapability();
+    public static Map<ItemStack, Integer> mcmList = new HashMap<>();
 
     private void setup(final FMLCommonSetupEvent event)
     {

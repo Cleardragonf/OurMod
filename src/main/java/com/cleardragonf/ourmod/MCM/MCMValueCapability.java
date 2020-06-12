@@ -2,7 +2,7 @@ package com.cleardragonf.ourmod.MCM;
 
 public class MCMValueCapability implements IMCMValueCapability{
 
-    private static int mcmValue = 10000;
+    private static int mcmValue;
 
     static int minValue= 0;
 
