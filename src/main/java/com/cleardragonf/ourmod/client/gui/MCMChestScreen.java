@@ -31,7 +31,7 @@ public class MCMChestScreen extends ContainerScreen<MCMChestContainer> {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		drawString(Minecraft.getInstance().fontRenderer, "Energy: " + container.getEnergy(), 10, 10, 0xffffff);
+		//drawString(Minecraft.getInstance().fontRenderer, "Energy: " + container.getEnergy(), 10, 10, 0xffffff);
 	}
 
 	@Override
@@ -41,5 +41,7 @@ public class MCMChestScreen extends ContainerScreen<MCMChestContainer> {
 		int relX = (this.width - this.xSize) / 2;
 		int relY = (this.height - this.ySize) / 2;
 		this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
+		drawString(Minecraft.getInstance().fontRenderer, "Energy: " + container.getEnergy(), 10, 10, 0xffffff);
+
 	}
 }

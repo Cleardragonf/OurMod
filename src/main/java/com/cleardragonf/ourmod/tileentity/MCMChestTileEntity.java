@@ -88,7 +88,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	@Override
 	public void tick() {
-		if (!world.isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 
