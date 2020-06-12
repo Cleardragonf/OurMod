@@ -63,6 +63,6 @@ public class ItemInitNew {
 	@ObjectHolder("ourmod:earthmana")
 	public static final Item EARTH_ESSENCE = null;
 
-	@ObjectHolder("ourmod:windmana")
+	@ObjectHolder("ourmod:airmana")
 	public static final Item WIND_ESSENCE = null;
 }

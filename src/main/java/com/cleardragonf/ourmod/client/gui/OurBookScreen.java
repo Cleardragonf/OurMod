@@ -102,10 +102,10 @@ public class OurBookScreen extends Screen {
                 this.font.drawString("Found in the Dimension of Fire", x + 20, y + 60,4210752);
                 this.itemRenderer.renderItemIntoGUI(ItemInitNew.WATER_ESSENCE.getDefaultInstance(), x + 5, y + 80);
                 this.font.drawString("Found beneath the Tides", x + 20, y + 80,4210752);
-                this.itemRenderer.renderItemIntoGUI(ItemInitNew.EARTH_ESSENCE.getDefaultInstance(), x + 5, y +100);
-                this.font.drawString("Found deep in the ground", x + 20, y + 100,4210752);
-                this.itemRenderer.renderItemIntoGUI(ItemInitNew.WIND_ESSENCE.getDefaultInstance(), x + 5, x + 110);
-                this.font.drawString("Found high above", x + 20, y + 110,4210752);
+                this.itemRenderer.renderItemIntoGUI(ItemInitNew.EARTH_ESSENCE.getDefaultInstance(), x + 5, y + 100);
+                this.font.drawString("Found inside the ground", x + 20, y + 100,4210752);
+                this.itemRenderer.renderItemIntoGUI(ItemInitNew.WIND_ESSENCE.getDefaultInstance(), x + 5, y + 120);
+                this.font.drawString("Found high above", x + 20, y + 120,4210752);
 
 
             }else if(pageNumber ==3){
