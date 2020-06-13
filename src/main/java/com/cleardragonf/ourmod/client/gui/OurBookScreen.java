@@ -3,6 +3,7 @@ package com.cleardragonf.ourmod.client.gui;
 import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ItemInitNew;
+import com.cleardragonf.ourmod.objects.blocks.MCMChest;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -15,6 +16,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -27,6 +30,7 @@ public class OurBookScreen extends Screen {
         super(titleIn);
     }
     private static final ResourceLocation GUI = new ResourceLocation(OurMod.MOD_ID, "textures/gui/ourbook.png");
+    private static final ResourceLocation BLANK_CRAFTING = new ResourceLocation(OurMod.MOD_ID, "textures/gui/blankcrafting.png");
     int xSize = 185;
     int ySize = 245;
     public int pageNumber = 1;
@@ -39,8 +43,15 @@ public class OurBookScreen extends Screen {
     }
     protected Slot hoveredSlot;
 
+    public int tick = 1;
+
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        if(tick < 200){
+            tick++;
+        }else{
+            tick = 1;
+        }
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.renderBackground();
         this.minecraft.getTextureManager().bindTexture(GUI);
@@ -108,21 +119,159 @@ public class OurBookScreen extends Screen {
                 this.font.drawString("Found high above", x + 20, y + 120,4210752);
 
 
-            }else if(pageNumber ==3){
+            }
+            else if(pageNumber ==3){
+                this.font.drawString("Welcome Mage, to the Mystical Arts", x + 5, y + 20, 4210752);
+
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //left side
+                this.font.drawString("Chapter 2: Essence Harnessing", (x-180) + ((this.xSize/2) - (font.getStringWidth("Chapter 2: Essence Harnessing")/2)), y + 10, 4210752);
+                this.font.drawString("Essence and the Environment around", x - 180, y + 20, 4210752);
+                this.font.drawString("us can lead to an aboundance of", x - 180, y + 30, 4210752);
+                this.font.drawString("energies, also known as Essence.", x - 180, y + 40,4210752);
+                this.font.drawString("These Essence allow us to", x - 180, y - 1800,4210752);
+                this.font.drawString("manipulate the universe around", x - 180, y + 60,4210752);
+                this.font.drawString("us.", x - 180, y + 70,4210752);
+                this.font.drawString("In Order to first collect that", x - 180, y + 80,4210752);
+                this.font.drawString("energy...we'll need to build", x - 180, y + 90,4210752);
+                this.font.drawString("some sort of Essence Collector.", x - 180, y + 100,4210752);
+                this.font.drawString("", x - 180, y + 110,4210752);
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x -180, y + 140, 0,0,130,50);
+                int gridX = x - 180;
+                int gridY = y + 140;
+                if(tick<120){
+
+                    this.itemRenderer.renderItemIntoGUI(Items.LAVA_BUCKET.getDefaultInstance(), gridX + 1, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 18, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.WATER_BUCKET.getDefaultInstance(), gridX + 35, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.DIRT.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.SAND.getDefaultInstance(), gridX + 35, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.WATER_BUCKET.getDefaultInstance(), gridX + 1, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.OAK_PLANKS.getDefaultInstance(), gridX + 18, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.LAVA_BUCKET.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }
+                else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.ESSENCE_COLLECTOR.getDefaultInstance(), gridX + 105, gridY + 16);
+                }
+
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //right side
+                this.font.drawString("Chapter 3: Quarry", x + ((this.xSize/2) - (font.getStringWidth("Chapter 3: Quarry")/2)), y + 10, 4210752);
+                this.font.drawString("Quarries are the gifts", x + 5, y + 30, 4210752);
+                this.font.drawString("from Mother Gaia.  Simply", x + 5, y + 40, 4210752);
+                this.font.drawString("place on the ground and ", x + 5, y + 50,4210752);
+                this.font.drawString("watch her bless you with ", x + 5, y + 60,4210752);
+                this.font.drawString("quick and efficent Mining", x + 5, y + 70,4210752);
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x +5 , y + 140, 0,0,130,50);
+
+                gridX = x + 5;
+                if(tick<160){
+
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.DIAMOND_PICKAXE.getDefaultInstance(), gridX + 18, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }
+                else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.QUARRY.getDefaultInstance(), gridX + 105, gridY + 16);
+                }
 
             }else if(pageNumber ==4){
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //left side
 
-            }else if(pageNumber ==5){
+                this.font.drawString("Chapter 4: Matter Conversion Basics", (x - 180) + ((this.xSize/2) - (font.getStringWidth("Chapter 4: Matter Conversion Basics")/2)), y + 10, 4210752);
+                this.font.drawString("Matter in all blocks can be", x - 180, y + 30, 4210752);
+                this.font.drawString("converted into a basic state. This", x - 180, y + 40,4210752);
+                this.font.drawString("is called MCM or Matter Conversion", x - 180, y +50,4210752);
+                this.font.drawString("Magic.  In this Chapter you'll", x - 180, y + 60,4210752);
+                this.font.drawString("learn the basics of MCM and how", x - 180, y + 70,4210752);
+                this.font.drawString("to harness it.", x - 180, y + 80,4210752);
+                this.font.drawString("", x - 180, y + 90,4210752);
+                this.font.drawString("To convert a item to MCM you will", x - 180, y + 100,4210752);
+                this.font.drawString("need a MCM Chest", x  - 180, y + 110,4210752);
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x -180, y + 140, 0,0,130,50);
+                int gridX = x - 180;
+                int gridY = y + 140;
+                if(tick<120){
 
-            }else if(pageNumber ==6){
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.ESSENCE_COLLECTOR.getDefaultInstance(), gridX + 18, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.MCM_CHEST.getDefaultInstance(), gridX + 105, gridY + 16);
+                }
 
-            }else if(pageNumber ==7){
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //right side
+                this.font.drawString("Chapter 5: Fishing Nets", x + ((this.xSize/2) - (font.getStringWidth("Chapter 5: Fishing Nets")/2)), y + 10, 4210752);
+                this.font.drawString("Fishing Nets are powered by the", x + 5, y + 30, 4210752);
+                this.font.drawString("Seas and Oceanic Tides. Neither", x + 5, y + 40,4210752);
+                this.font.drawString("river nor pound will be enough.", x + 5, y - 1800,4210752);
+                this.font.drawString("Simply place and watch Neptune's", x + 5, y + 60,4210752);
+                this.font.drawString("blessing, flow into your nets.", x + 5, y + 70,4210752);
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x +5 , y + 140, 0,0,130,50);
 
-            }else if(pageNumber ==8){
+                gridX = x + 5;
+                if(tick<160){
 
-            }else if(pageNumber ==9){
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.FISHING_ROD.getDefaultInstance(), gridX + 18, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.FISHING_NET.getDefaultInstance(), gridX + 105, gridY + 16);
+                }
 
-            }else if(pageNumber ==10){
+            }
+            else if(pageNumber ==5){
+
+            }
+            else if(pageNumber ==6){
+
+            }
+            else if(pageNumber ==7){
+
+            }
+            else if(pageNumber ==8){
+
+            }
+            else if(pageNumber ==9){
+
+            }
+            else if(pageNumber ==10){
 
             }
             nextButton.visible = true;
@@ -131,6 +280,8 @@ public class OurBookScreen extends Screen {
         super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
+
+
 
     private void PageTurn(String direction) {
         if(direction == "Next"){

@@ -65,4 +65,17 @@ public class ItemInitNew {
 
 	@ObjectHolder("ourmod:airmana")
 	public static final Item WIND_ESSENCE = null;
+
+	@ObjectHolder("ourmod:mcmchest")
+	public static final Item MCM_CHEST = null;
+
+	@ObjectHolder("ourmod:fishingnet")
+	public static final Item FISHING_NET = null;
+
+	@ObjectHolder("ourmod:essencecollector")
+	public static final Item ESSENCE_COLLECTOR = null;
+
+	@ObjectHolder("ourmod:quarry")
+	public static final Item QUARRY = null;
+
 }

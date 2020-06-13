@@ -22,7 +22,7 @@
 			"item": "minecraft:sand"
 		},
 		"4" : {
-			"tag": "minecraft:planks"
+			"item": "minecraft:oak_planks"
 		}
 	},
 	"result": {
