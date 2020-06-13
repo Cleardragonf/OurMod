@@ -15,10 +15,17 @@ public class MCMValues {
 
     public Map<Item, Integer> Map(){
         mcmList.put(Items.IRON_BLOCK, 9000);
+        mcmList.put(Items.GOLD_INGOT,1000);
+        mcmList.put(Items.GOLD_BLOCK, 9000);
+        mcmList.put(Items.GOLD_NUGGET, 500);
+        mcmList.put(Items.GOLD_ORE, 3000);
         mcmList.put(Items.IRON_ORE, 3000);
         mcmList.put(Items.IRON_NUGGET, 500);
         mcmList.put(Items.IRON_INGOT, 1000);
         mcmList.put(Items.DIAMOND_ORE, 3000);
+        mcmList.put(Items.LAPIS_LAZULI, 1000);
+        mcmList.put(Items.LAPIS_ORE, 3000);
+        mcmList.put(Items.LAPIS_BLOCK, 9000);
         mcmList.put(Items.COBBLESTONE, 1);
         mcmList.put(Items.STONE, 1);
         mcmList.put(Items.STONE_BRICKS, 1);
