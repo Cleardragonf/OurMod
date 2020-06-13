@@ -35,6 +35,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class FishingNetTileEntity extends LockableLootTileEntity implements ITickableTileEntity {
@@ -190,14 +191,24 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 		}
 	}
 
-	public ItemStack getFishList(){
+	public Item getFishList(){
 		List<Item> map = new ArrayList<>();
 		map.add(Items.COD);
 		map.add(Items.SALMON);
 		map.add(Items.TROPICAL_FISH);
 		map.add(Items.PUFFERFISH);
-		ItemStack result = map.get(ThreadLocalRandom.current().nextInt(1,4)).getDefaultInstance();
+		int ran = getRandomInt(0,3);
+		Item result = map.get(ran).getItem();
+		//ItemStack result = map.get(ThreadLocalRandom.current().nextInt(1,4)).getDefaultInstance();
 		return result;
+	}
+
+	private int getRandomInt(int min, int max) {
+		if(min >= max){
+			throw new IllegalArgumentException("max must be greater than min");
+		}
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
 	}
 
 	@Override
