@@ -102,7 +102,6 @@ public class MCMChest extends Block {
 			ItemEntity entity = new ItemEntity(worldIn, pos.getX() + .5, pos.getY(), pos.getZ() + .5, item);
 			worldIn.addEntity(entity);
 		}
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 
 	public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity) {
