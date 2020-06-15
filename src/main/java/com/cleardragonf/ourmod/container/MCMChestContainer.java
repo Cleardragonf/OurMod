@@ -66,12 +66,24 @@ public class MCMChestContainer extends Container {
 		trackInt(new IntReferenceHolder() {
 			@Override
 			public int get() {
-				return getEnergy();
+				return getFire().getEnergyStored();
 			}
 
 			@Override
 			public void set(int value) {
-				tileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> ((CustomEnergyStorage)h).setEnergy(value));
+				tileEntity.FireEnergy.setEnergy(value);
+			}
+		});
+
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getFire().getEnergyStored();
+			}
+
+			@Override
+			public void set(int value) {
+				tileEntity.FireEnergy.setEnergy(value);
 			}
 		});
 	}
@@ -92,9 +104,6 @@ public class MCMChestContainer extends Container {
 	}
 
 
-	public int getEnergy() {
-		return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
-	}
 	public CustomEnergyStorage getFire(){
 		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
 		return tile.FireEnergy;

@@ -88,6 +88,23 @@ public class MCMChest extends Block {
 		return ActionResultType.FAIL;
 	}
 
+	@Override
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		if(tileEntity instanceof MCMChestTileEntity) {
+			MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+			ItemStack item = new ItemStack(this);
+			CompoundNBT tag = new CompoundNBT();
+			((MCMChestTileEntity)tileEntity).write(tag);
+
+			item.setTag(tag);
+
+			ItemEntity entity = new ItemEntity(worldIn, pos.getX() + .5, pos.getY(), pos.getZ() + .5, item);
+			worldIn.addEntity(entity);
+		}
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
+	}
+
 	public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity) {
 		Vec3d vec = entity.getPositionVec();
 		return Direction.getFacingFromVector((float) (vec.x - clickedBlock.getX()), (float) (vec.y - clickedBlock.getY()), (float) (vec.z - clickedBlock.getZ()));

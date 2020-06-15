@@ -60,9 +60,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class MCMChestTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
-	public  CompoundNBT tag2 = new CompoundNBT();
-
-	protected int numPlayersUsing;
 
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
 	//public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
@@ -107,7 +104,6 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 			markDirty();
 		}
-		System.out.println(this.FireEnergy.getEnergyStored());
 
 		if (counter <= 0) {
 			executeEnergySearch();
@@ -149,8 +145,6 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 						Item inputstack = inventory.getStackInSlot(i).getStack().getItem();
 						inventory.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
 							this.FireEnergy.addEnergy(MCMREader(inputstack, a));
-							markDirty();
-							write(tag2);
 						});
 						inventory.extractItem(i,1,false);
 						markDirty();
@@ -250,6 +244,8 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 */
 	@Override
 	public void read(CompoundNBT tag) {
+		CompoundNBT invTag = tag.getCompound("inv");
+		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
 		super.read(tag);
 		readRestorableNBT(tag);
 	}
@@ -261,6 +257,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 			CompoundNBT compound = ((INBTSerializable<CompoundNBT>) inventory).serializeNBT();
 			tag.put("inv", compound);
 		});
+		tag.put("inv", inventory.serializeNBT());
 		tag.putInt("fireenergy", this.FireEnergy.getEnergyStored());
 		return tag;
 	}
@@ -322,44 +319,8 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		this.read(pkt.getNbtCompound());
 	}
 
-	@Override
-	public boolean receiveClientEvent(int id, int type) {
-		if (id == 1) {
-			this.numPlayersUsing = type;
-			return true;
-		} else {
-			return super.receiveClientEvent(id, type);
-		}
-	}
-
 	public void readRestorableNBT(CompoundNBT tag){
-		CompoundNBT invTag = tag.getCompound("inv");
-		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
+		this.inventory.deserializeNBT(tag.getCompound("inv"));
 		this.FireEnergy.setEnergy(tag.getInt("fireenergy"));
 	}
-
-	protected void onOpenOrClose() {
-		Block block = this.getBlockState().getBlock();
-		if (block instanceof MCMChest) {
-			this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
-			this.world.notifyNeighborsOfStateChange(this.pos, block);
-		}
-	}
-
-	public static int getPlayersUsing(IBlockReader reader, BlockPos pos) {
-		BlockState blockstate = reader.getBlockState(pos);
-		if (blockstate.hasTileEntity()) {
-			TileEntity tileentity = reader.getTileEntity(pos);
-			if (tileentity instanceof MCMChestTileEntity) {
-				return ((MCMChestTileEntity) tileentity).numPlayersUsing;
-			}
-		}
-		return 0;
-	}
-	@Override
-	public void updateContainingBlockInfo() {
-		super.updateContainingBlockInfo();
-	}
-
-
 }
