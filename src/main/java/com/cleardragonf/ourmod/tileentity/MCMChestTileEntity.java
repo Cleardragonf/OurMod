@@ -177,39 +177,45 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	private void executeMCMEnergyConvert() {
 		if(this.MCMEnergy.getEnergyStored() < 6000000){
-			if(this.FireEnergy.getEnergyStored() > 10){
-				this.MCMEnergy.addEnergy(10);
-				this.FireEnergy.consumeEnergy(10);
+			if(this.FireEnergy.getEnergyStored() > 0){
+				int transfer = this.FireEnergy.getEnergyStored();
+				this.MCMEnergy.addEnergy(transfer);
+				this.FireEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
-			if(this.WaterEnergy.getEnergyStored() > 10){
-				this.MCMEnergy.addEnergy(10);
-				this.WaterEnergy.consumeEnergy(10);
+			if(this.WaterEnergy.getEnergyStored() > 0){
+				int transfer = this.WaterEnergy.getEnergyStored();
+				this.MCMEnergy.addEnergy(transfer);
+				this.WaterEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
-			if(this.AirEnergy.getEnergyStored() > 10){
-				this.MCMEnergy.addEnergy(10);
-				this.AirEnergy.consumeEnergy(10);
+			if(this.AirEnergy.getEnergyStored() > 0){
+				int transfer = this.AirEnergy.getEnergyStored();
+				this.MCMEnergy.addEnergy(transfer/100);
+				this.AirEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
-			if(this.EarthEnergy.getEnergyStored() > 10){
-				this.MCMEnergy.addEnergy(10);
-				this.EarthEnergy.consumeEnergy(10);
+			if(this.EarthEnergy.getEnergyStored() > 0){
+				int transfer = this.EarthEnergy.getEnergyStored();
+				this.MCMEnergy.addEnergy(transfer);
+				this.EarthEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
-			if(this.DarkEnergy.getEnergyStored() > 10){
-				this.MCMEnergy.addEnergy(10);
-				this.DarkEnergy.consumeEnergy(10);
+			if(this.DarkEnergy.getEnergyStored() > 0){
+				int transfer = this.DarkEnergy.getEnergyStored();
+				this.MCMEnergy.addEnergy(transfer);
+				this.DarkEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
-			if(this.LightEnergy.getEnergyStored() > 10){
-				this.MCMEnergy.addEnergy(10);
-				this.LightEnergy.consumeEnergy(10);
+			if(this.LightEnergy.getEnergyStored() > 0){
+				int transfer = this.LightEnergy.getEnergyStored();
+				this.MCMEnergy.addEnergy(transfer);
+				this.LightEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
@@ -246,38 +252,44 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 							EssenceCollectorTileEntity tileTarget = (EssenceCollectorTileEntity) tileEntity;
 
 							if(tileTarget.FireEnergy.getEnergyStored() > 0 && this.FireEnergy.getEnergyStored() < 1000000){
-								tileTarget.FireEnergy.consumeEnergy(10);
-								this.FireEnergy.addEnergy(10);
+								int transfer = tileTarget.FireEnergy.getEnergyStored();
+								tileTarget.FireEnergy.consumeEnergy(transfer);
+								this.FireEnergy.addEnergy(transfer);
 								write(tag);
 								markDirty();
 							}
 							if(tileTarget.WaterEnergy.getEnergyStored() > 0 && this.WaterEnergy.getEnergyStored() < 1000000){
-								tileTarget.WaterEnergy.consumeEnergy(10);
-								this.WaterEnergy.addEnergy(10);
+								int transfer = tileTarget.WaterEnergy.getEnergyStored();
+								tileTarget.WaterEnergy.consumeEnergy(transfer);
+								this.WaterEnergy.addEnergy(transfer);
 								write(tag);
 								markDirty();
 							}
 							if(tileTarget.AirEnergy.getEnergyStored() > 0 && this.AirEnergy.getEnergyStored() < 1000000){
-								tileTarget.AirEnergy.consumeEnergy(10);
-								this.AirEnergy.addEnergy(10);
+								int transfer = tileTarget.AirEnergy.getEnergyStored();
+								tileTarget.AirEnergy.consumeEnergy(transfer);
+								this.AirEnergy.addEnergy(transfer);
 								write(tag);
 								markDirty();
 							}
 							if(tileTarget.EarthEnergy.getEnergyStored() > 0 && this.EarthEnergy.getEnergyStored() < 1000000){
-								tileTarget.EarthEnergy.consumeEnergy(10);
-								this.EarthEnergy.addEnergy(10);
+								int transfer = tileTarget.EarthEnergy.getEnergyStored();
+								tileTarget.EarthEnergy.consumeEnergy(transfer);
+								this.EarthEnergy.addEnergy(transfer);
 								write(tag);
 								markDirty();
 							}
 							if(tileTarget.DarkEnergy.getEnergyStored() > 0 && this.DarkEnergy.getEnergyStored() < 1000000){
-								tileTarget.DarkEnergy.consumeEnergy(10);
-								this.DarkEnergy.addEnergy(10);
+								int transfer = tileTarget.DarkEnergy.getEnergyStored();
+								tileTarget.DarkEnergy.consumeEnergy(transfer);
+								this.DarkEnergy.addEnergy(transfer);
 								write(tag);
 								markDirty();
 							}
 							if(tileTarget.LightEnergy.getEnergyStored() > 0 && this.LightEnergy.getEnergyStored() < 1000000){
-								tileTarget.LightEnergy.consumeEnergy(10);
-								this.LightEnergy.addEnergy(10);
+								int transfer = tileTarget.LightEnergy.getEnergyStored();
+								tileTarget.LightEnergy.consumeEnergy(transfer);
+								this.LightEnergy.addEnergy(transfer);
 								write(tag);
 								markDirty();
 							}

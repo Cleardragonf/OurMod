@@ -10,6 +10,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.IntReferenceHolder;
 
 import java.util.Objects;
 
@@ -23,6 +24,73 @@ public class EssenceCollectorContainer extends Container {
 		super(ModContainerTypes.ESSENCE_COLLECTOR.get(), windowId);
 		this.tileEntity = tileEntity;
 		this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
+
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getFire().getEnergyStored();
+			}
+
+			@Override
+			public void set(int value) {
+				tileEntity.FireEnergy.setEnergy(value);
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getWater().getEnergyStored();
+			}
+
+			@Override
+			public void set(int value) {
+				tileEntity.WaterEnergy.setEnergy(value);
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getAir().getEnergyStored();
+			}
+
+			@Override
+			public void set(int value) {
+				tileEntity.AirEnergy.setEnergy(value);
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getEarth().getEnergyStored();
+			}
+
+			@Override
+			public void set(int value) {
+				tileEntity.EarthEnergy.setEnergy(value);
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getDark().getEnergyStored();
+			}
+
+			@Override
+			public void set(int value) {
+				tileEntity.DarkEnergy.setEnergy(value);
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getLight().getEnergyStored();
+			}
+
+			@Override
+			public void set(int value) {
+				tileEntity.LightEnergy.setEnergy(value);
+			}
+		});
 
 
 	}
