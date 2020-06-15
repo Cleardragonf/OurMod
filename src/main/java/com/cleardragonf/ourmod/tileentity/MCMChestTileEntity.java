@@ -61,9 +61,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MCMChestTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
+	public CompoundNBT tag = new CompoundNBT();
+
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
 	//public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
+	public final CustomEnergyStorage MCMEnergy = new CustomEnergyStorage(6000000,0);
 	public final CustomEnergyStorage FireEnergy = new CustomEnergyStorage(1000000,0);
+	public final CustomEnergyStorage AirEnergy = new CustomEnergyStorage(1000000,0);
+	public final CustomEnergyStorage EarthEnergy = new CustomEnergyStorage(1000000,0);
+	public final CustomEnergyStorage WaterEnergy = new CustomEnergyStorage(1000000,0);
+	public final CustomEnergyStorage LightEnergy = new CustomEnergyStorage(1000000,0);
+	public final CustomEnergyStorage DarkEnergy = new CustomEnergyStorage(1000000,0);
 
 	public final ItemStackHandler inventory = new ItemStackHandler(120){
 
@@ -107,11 +115,12 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 		if (counter <= 0) {
 			executeEnergySearch();
+			executeMCMEnergyConvert();
 			ItemStack stack = new ItemStack(inventory.getStackInSlot(0).getStack().getItem());
 			Item mcmValueItem = stack.getItem();
 				//Takes the Clone slot and Existing MCM value and Begins Duplicating the Item.
 					inventory.getStackInSlot(0).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a -> {
-							if(this.FireEnergy.getEnergyStored() >= MCMREader(mcmValueItem, a)){
+							if(this.MCMEnergy.getEnergyStored() >= MCMREader(mcmValueItem, a)){
 								ItemStack stack2;
 								for (int i = 5; i < 59; i++) {
 									if(inventory.getStackInSlot(i).isEmpty()){
@@ -129,7 +138,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 								}
 
-								this.FireEnergy.consumeEnergy(MCMREader(mcmValueItem, a));
+								this.MCMEnergy.consumeEnergy(MCMREader(mcmValueItem, a));
 							}
 
 
@@ -144,7 +153,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 						markDirty();
 						Item inputstack = inventory.getStackInSlot(i).getStack().getItem();
 						inventory.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
-							this.FireEnergy.addEnergy(MCMREader(inputstack, a));
+							this.MCMEnergy.addEnergy(MCMREader(inputstack, a));
 						});
 						inventory.extractItem(i,1,false);
 						markDirty();
@@ -164,6 +173,47 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		}
 
 		//sendOutPower();
+	}
+
+	private void executeMCMEnergyConvert() {
+		if(this.MCMEnergy.getEnergyStored() < 6000000){
+			if(this.FireEnergy.getEnergyStored() > 10){
+				this.MCMEnergy.addEnergy(10);
+				this.FireEnergy.consumeEnergy(10);
+				write(tag);
+				markDirty();
+			}
+			if(this.WaterEnergy.getEnergyStored() > 10){
+				this.MCMEnergy.addEnergy(10);
+				this.WaterEnergy.consumeEnergy(10);
+				write(tag);
+				markDirty();
+			}
+			if(this.AirEnergy.getEnergyStored() > 10){
+				this.MCMEnergy.addEnergy(10);
+				this.AirEnergy.consumeEnergy(10);
+				write(tag);
+				markDirty();
+			}
+			if(this.EarthEnergy.getEnergyStored() > 10){
+				this.MCMEnergy.addEnergy(10);
+				this.EarthEnergy.consumeEnergy(10);
+				write(tag);
+				markDirty();
+			}
+			if(this.DarkEnergy.getEnergyStored() > 10){
+				this.MCMEnergy.addEnergy(10);
+				this.DarkEnergy.consumeEnergy(10);
+				write(tag);
+				markDirty();
+			}
+			if(this.LightEnergy.getEnergyStored() > 10){
+				this.MCMEnergy.addEnergy(10);
+				this.LightEnergy.consumeEnergy(10);
+				write(tag);
+				markDirty();
+			}
+		}
 	}
 
 	private void executeEnergySearch() {
@@ -195,10 +245,42 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 							TileEntity tileEntity = world.getTileEntity(pooledMutable);
 							EssenceCollectorTileEntity tileTarget = (EssenceCollectorTileEntity) tileEntity;
 
-							if(tileTarget.FireEnergy.getEnergyStored() > 0 && this.FireEnergy.getEnergyStored() < 100000){
-
+							if(tileTarget.FireEnergy.getEnergyStored() > 0 && this.FireEnergy.getEnergyStored() < 1000000){
+								tileTarget.FireEnergy.consumeEnergy(10);
+								this.FireEnergy.addEnergy(10);
+								write(tag);
+								markDirty();
 							}
-
+							if(tileTarget.WaterEnergy.getEnergyStored() > 0 && this.WaterEnergy.getEnergyStored() < 1000000){
+								tileTarget.WaterEnergy.consumeEnergy(10);
+								this.WaterEnergy.addEnergy(10);
+								write(tag);
+								markDirty();
+							}
+							if(tileTarget.AirEnergy.getEnergyStored() > 0 && this.AirEnergy.getEnergyStored() < 1000000){
+								tileTarget.AirEnergy.consumeEnergy(10);
+								this.AirEnergy.addEnergy(10);
+								write(tag);
+								markDirty();
+							}
+							if(tileTarget.EarthEnergy.getEnergyStored() > 0 && this.EarthEnergy.getEnergyStored() < 1000000){
+								tileTarget.EarthEnergy.consumeEnergy(10);
+								this.EarthEnergy.addEnergy(10);
+								write(tag);
+								markDirty();
+							}
+							if(tileTarget.DarkEnergy.getEnergyStored() > 0 && this.DarkEnergy.getEnergyStored() < 1000000){
+								tileTarget.DarkEnergy.consumeEnergy(10);
+								this.DarkEnergy.addEnergy(10);
+								write(tag);
+								markDirty();
+							}
+							if(tileTarget.LightEnergy.getEnergyStored() > 0 && this.LightEnergy.getEnergyStored() < 1000000){
+								tileTarget.LightEnergy.consumeEnergy(10);
+								this.LightEnergy.addEnergy(10);
+								write(tag);
+								markDirty();
+							}
 						}
 					}
 				}
@@ -258,7 +340,13 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 			tag.put("inv", compound);
 		});
 		tag.put("inv", inventory.serializeNBT());
+		tag.putInt("mcmenergy", this.MCMEnergy.getEnergyStored());
 		tag.putInt("fireenergy", this.FireEnergy.getEnergyStored());
+		tag.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
+		tag.putInt("airenergy", this.AirEnergy.getEnergyStored());
+		tag.putInt("earthenergy", this.EarthEnergy.getEnergyStored());
+		tag.putInt("darkenergy", this.DarkEnergy.getEnergyStored());
+		tag.putInt("lightenergy", this.LightEnergy.getEnergyStored());
 		return tag;
 	}
 
@@ -322,5 +410,11 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	public void readRestorableNBT(CompoundNBT tag){
 		this.inventory.deserializeNBT(tag.getCompound("inv"));
 		this.FireEnergy.setEnergy(tag.getInt("fireenergy"));
+		this.WaterEnergy.setEnergy(tag.getInt("waterenergy"));
+		this.AirEnergy.setEnergy(tag.getInt("airenergy"));
+		this.EarthEnergy.setEnergy(tag.getInt("earthenergy"));
+		this.LightEnergy.setEnergy(tag.getInt("lightenergy"));
+		this.DarkEnergy.setEnergy(tag.getInt("darkenergy"));
+		this.MCMEnergy.setEnergy(tag.getInt("mcmenergy"));
 	}
 }

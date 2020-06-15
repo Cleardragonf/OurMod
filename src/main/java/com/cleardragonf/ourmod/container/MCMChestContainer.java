@@ -78,12 +78,12 @@ public class MCMChestContainer extends Container {
 		trackInt(new IntReferenceHolder() {
 			@Override
 			public int get() {
-				return getFire().getEnergyStored();
+				return getMCM().getEnergyStored();
 			}
 
 			@Override
 			public void set(int value) {
-				tileEntity.FireEnergy.setEnergy(value);
+				tileEntity.MCMEnergy.setEnergy(value);
 			}
 		});
 	}
@@ -107,6 +107,30 @@ public class MCMChestContainer extends Container {
 	public CustomEnergyStorage getFire(){
 		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
 		return tile.FireEnergy;
+	}
+	public CustomEnergyStorage getWater(){
+		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+		return tile.WaterEnergy;
+	}
+	public CustomEnergyStorage getAir(){
+		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+		return tile.AirEnergy;
+	}
+	public CustomEnergyStorage getEarth(){
+		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+		return tile.EarthEnergy;
+	}
+	public CustomEnergyStorage getLight(){
+		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+		return tile.LightEnergy;
+	}
+	public CustomEnergyStorage getDark(){
+		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+		return tile.DarkEnergy;
+	}
+	public CustomEnergyStorage getMCM(){
+		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+		return tile.MCMEnergy;
 	}
 
 	@Override
