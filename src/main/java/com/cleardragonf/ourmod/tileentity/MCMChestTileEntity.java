@@ -7,11 +7,13 @@ import com.cleardragonf.ourmod.MCM.MCMValues;
 import com.cleardragonf.ourmod.container.MCMChestContainer;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
+import com.cleardragonf.ourmod.objects.blocks.EssenceCollector;
 import com.cleardragonf.ourmod.objects.blocks.MCMChest;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -42,6 +44,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -60,7 +63,6 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
 	public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
-	//temporary testing
 	public final ItemStackHandler inventory = new ItemStackHandler(120){
 
 		@Override
@@ -91,8 +93,6 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	@Override
 	public void tick() {
-		energy.ifPresent(h ->{
-		});
 		if (world.isRemote) {
 			return;
 		}
@@ -104,6 +104,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		}
 
 		if (counter <= 0) {
+			executeEnergySearch();
 			ItemStack stack = new ItemStack(inventory.getStackInSlot(0).getStack().getItem());
 			Item mcmValueItem = stack.getItem();
 				//Takes the Clone slot and Existing MCM value and Begins Duplicating the Item.
@@ -163,6 +164,47 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		}
 
 		sendOutPower();
+	}
+
+	private void executeEnergySearch() {
+
+		try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+			final BlockPos tilePos = this.pos;
+			final int posX = tilePos.getX();
+			final int posY = tilePos.getY();
+			final int posZ = tilePos.getZ();
+
+			for(int z = -5; z<= 10; ++z){
+				for(int x = -5; x<=10; ++x){
+					for(int y = -5; y <=10; ++y){
+						final int dist = (x*x) + (y*y) + (z*z);
+						if (dist > 25){
+							continue;
+						}
+
+						if(dist <1){
+							continue;
+						}
+
+						pooledMutable.setPos(posX +x, posY + y, posZ + z);
+						final BlockState blockState = world.getBlockState(pooledMutable);
+						final IFluidState fluidState = world.getFluidState(pooledMutable);
+						final Block block = blockState.getBlock();
+
+						if(block instanceof EssenceCollector){
+							TileEntity tileEntity = world.getTileEntity(pooledMutable);
+							EssenceCollectorTileEntity tileTarget = (EssenceCollectorTileEntity) tileEntity;
+
+							if(tileTarget.FireEnergy.getEnergyStored() > 0 && this.FireEnergy.getEnergyStored() < 100000){
+
+							}
+
+						}
+					}
+				}
+			}
+		}
+
 	}
 
 	private int MCMREader(Item a, IMCMValueCapability b) {
