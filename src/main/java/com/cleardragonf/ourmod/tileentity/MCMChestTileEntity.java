@@ -60,9 +60,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class MCMChestTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+	public  CompoundNBT tag2 = new CompoundNBT();
+
+	protected int numPlayersUsing;
 
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
-	public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
+	//public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
+	public final CustomEnergyStorage FireEnergy = new CustomEnergyStorage(1000000,0);
+
 	public final ItemStackHandler inventory = new ItemStackHandler(120){
 
 		@Override
@@ -102,6 +107,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 			markDirty();
 		}
+		System.out.println(this.FireEnergy.getEnergyStored());
 
 		if (counter <= 0) {
 			executeEnergySearch();
@@ -109,8 +115,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 			Item mcmValueItem = stack.getItem();
 				//Takes the Clone slot and Existing MCM value and Begins Duplicating the Item.
 					inventory.getStackInSlot(0).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a -> {
-						energy.ifPresent(b -> {
-							if(((CustomEnergyStorage)b).getEnergyStored() >= MCMREader(mcmValueItem, a)){
+							if(this.FireEnergy.getEnergyStored() >= MCMREader(mcmValueItem, a)){
 								ItemStack stack2;
 								for (int i = 5; i < 59; i++) {
 									if(inventory.getStackInSlot(i).isEmpty()){
@@ -128,10 +133,9 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 								}
 
-								((CustomEnergyStorage) b).consumeEnergy(MCMREader(mcmValueItem, a));
+								this.FireEnergy.consumeEnergy(MCMREader(mcmValueItem, a));
 							}
 
-						});
 
 					});
 
@@ -144,7 +148,9 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 						markDirty();
 						Item inputstack = inventory.getStackInSlot(i).getStack().getItem();
 						inventory.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
-							energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(MCMREader(inputstack, a)));
+							this.FireEnergy.addEnergy(MCMREader(inputstack, a));
+							markDirty();
+							write(tag2);
 						});
 						inventory.extractItem(i,1,false);
 						markDirty();
@@ -163,7 +169,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 			world.setBlockState(pos, blockState.with(BlockStateProperties.POWERED, counter > 0), 3);
 		}
 
-		sendOutPower();
+		//sendOutPower();
 	}
 
 	private void executeEnergySearch() {
@@ -215,10 +221,9 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 			return 1;
 		}
 	}
-
+/*
 	private void sendOutPower() {
-		energy.ifPresent(energy -> {
-			AtomicInteger capacity = new AtomicInteger(energy.getEnergyStored());
+			AtomicInteger capacity = new AtomicInteger(this.FireEnergy.getEnergyStored());
 			if (capacity.get() > 0) {
 				for (Direction direction : Direction.values()) {
 					TileEntity te = world.getTileEntity(pos.offset(direction));
@@ -241,33 +246,23 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 					}
 				}
 			}
-		});
 	}
-
+*/
 	@Override
 	public void read(CompoundNBT tag) {
-		CompoundNBT invTag = tag.getCompound("inv");
-		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
-		CompoundNBT energyTag = tag.getCompound("energy");
-		energy.ifPresent(h -> ((CustomEnergyStorage)h).setEnergy(tag.getInt("energy")));
-
-		counter = tag.getInt("counter");
 		super.read(tag);
+		readRestorableNBT(tag);
 	}
 
 	@Override
 	public CompoundNBT write(CompoundNBT tag) {
+		super.write(tag);
 		handler.ifPresent(h -> {
 			CompoundNBT compound = ((INBTSerializable<CompoundNBT>) inventory).serializeNBT();
 			tag.put("inv", compound);
 		});
-		energy.ifPresent(h -> {
-			int place = h.getEnergyStored();
-			tag.putInt("energy", place);
-		});
-
-		tag.putInt("counter", counter);
-		return super.write(tag);
+		tag.putInt("fireenergy", this.FireEnergy.getEnergyStored());
+		return tag;
 	}
 
 	private IItemHandler createHandler() {
@@ -283,9 +278,6 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 		if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return handler.cast();
-		}
-		if (cap == CapabilityEnergy.ENERGY) {
-			return energy.cast();
 		}
 		return super.getCapability(cap, side);
 	}
@@ -329,4 +321,45 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		this.read(pkt.getNbtCompound());
 	}
+
+	@Override
+	public boolean receiveClientEvent(int id, int type) {
+		if (id == 1) {
+			this.numPlayersUsing = type;
+			return true;
+		} else {
+			return super.receiveClientEvent(id, type);
+		}
+	}
+
+	public void readRestorableNBT(CompoundNBT tag){
+		CompoundNBT invTag = tag.getCompound("inv");
+		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
+		this.FireEnergy.setEnergy(tag.getInt("fireenergy"));
+	}
+
+	protected void onOpenOrClose() {
+		Block block = this.getBlockState().getBlock();
+		if (block instanceof MCMChest) {
+			this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
+			this.world.notifyNeighborsOfStateChange(this.pos, block);
+		}
+	}
+
+	public static int getPlayersUsing(IBlockReader reader, BlockPos pos) {
+		BlockState blockstate = reader.getBlockState(pos);
+		if (blockstate.hasTileEntity()) {
+			TileEntity tileentity = reader.getTileEntity(pos);
+			if (tileentity instanceof MCMChestTileEntity) {
+				return ((MCMChestTileEntity) tileentity).numPlayersUsing;
+			}
+		}
+		return 0;
+	}
+	@Override
+	public void updateContainingBlockInfo() {
+		super.updateContainingBlockInfo();
+	}
+
+
 }

@@ -63,8 +63,15 @@ public class MCMChest extends Block {
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-		if (entity != null) {
-			world.setBlockState(pos, state.with(BlockStateProperties.FACING, getFacingFromEntity(pos, entity)), 2);
+		super.onBlockPlacedBy(world, pos, state, entity, stack);
+
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity instanceof MCMChestTileEntity) {
+			CompoundNBT tag = stack.getTag();
+			if(tag != null) {
+				((MCMChestTileEntity)tileEntity).readRestorableNBT(tag);
+				world.notifyBlockUpdate(pos, getDefaultState(), getDefaultState(), Constants.BlockFlags.DEFAULT);
+			}
 		}
 	}
 

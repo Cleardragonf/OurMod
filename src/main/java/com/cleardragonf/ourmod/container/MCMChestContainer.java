@@ -95,6 +95,10 @@ public class MCMChestContainer extends Container {
 	public int getEnergy() {
 		return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
 	}
+	public CustomEnergyStorage getFire(){
+		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+		return tile.FireEnergy;
+	}
 
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {

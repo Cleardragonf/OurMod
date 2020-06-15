@@ -27,11 +27,12 @@ public class MCMChestScreen extends ContainerScreen<MCMChestContainer> {
 		this.renderBackground();
 		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
+		drawString(Minecraft.getInstance().fontRenderer, "Energy: " + this.container.getEnergy(), 10, 10, 0xffffff);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		//drawString(Minecraft.getInstance().fontRenderer, "Energy: " + container.getEnergy(), 10, 10, 0xffffff);
+		//drawString(Minecraft.getInstance().fontRenderer, "Energy: " + this.container.getFire().getEnergyStored(), 10, 10, 0xffffff);
 	}
 
 	@Override
@@ -41,7 +42,29 @@ public class MCMChestScreen extends ContainerScreen<MCMChestContainer> {
 		int relX = (this.width - this.xSize) / 2;
 		int relY = (this.height - this.ySize) / 2;
 		this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
-		drawString(Minecraft.getInstance().fontRenderer, "Energy: " + container.getEnergy(), 10, 10, 0xffffff);
+		//drawString(Minecraft.getInstance().fontRenderer, "Energy: " + this.container.getFire().getEnergyStored(), 10, 10, 0xffffff);
 
+	}
+	protected void renderHoveredToolTip(int x, int y){
+		int relX = (this.width - this.xSize) /2;
+		int relY = (this.height - this.ySize) /2;
+		if(trueZone(relX + 148, relY + 34, 8,100,x,y)) {
+			tooltipText("Fire: ", x, y);
+		}
+		super.renderHoveredToolTip(x, y);
+	}
+	private boolean trueZone(int OffsX, int OffsY, int Width, int Height, double MouseX, double MouseY){
+		if(OffsX <= MouseX && MouseX <= OffsX + Width && OffsY <= MouseY && MouseY <= OffsY + Height){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	public void tooltipText(String string, int x, int y) {
+		switch (string) {
+			case "Fire: ":
+				this.renderTooltip("Fire: '" + this.container.getFire().getEnergyStored() + "'", x, y);
+				break;
+		}
 	}
 }
