@@ -21,8 +21,8 @@ import java.util.Map;
 public class anvilEnchantmetCombine {
 
 
-    public static int applyCost = 35;
-    public static int mergeCost = 35;
+    public static int applyCost = 10;
+    public static int mergeCost = 10;
 
     @SubscribeEvent
     public static void onEnchanting(AnvilUpdateEvent event){
@@ -39,7 +39,6 @@ public class anvilEnchantmetCombine {
     }
 
     private static void handleEnchant(ItemStack item, ItemStack book, AnvilUpdateEvent event) {
-        System.out.println("step 1");
 
         Map<Enchantment, Integer> enchantsItem= EnchantmentHelper.getEnchantments(item);
         Map<Enchantment, Integer> enchantsTome = EnchantmentHelper.getEnchantments(book);
@@ -49,9 +48,6 @@ public class anvilEnchantmetCombine {
         }
 
         for (Map.Entry<Enchantment, Integer> entry : enchantsTome.entrySet()) {
-            System.out.println("step 2");
-
-                System.out.println("step 3");
             enchantsItem.put(entry.getKey(), entry.getValue() + 1);
         }
 
