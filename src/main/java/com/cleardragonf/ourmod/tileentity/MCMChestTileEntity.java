@@ -143,7 +143,6 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 						markDirty();
 						Item inputstack = inventory.getStackInSlot(i).getStack().getItem();
 						inventory.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
-							System.out.println(MCMREader(inputstack, a));
 							energy.ifPresent(e -> ((CustomEnergyStorage) e).addEnergy(MCMREader(inputstack, a)));
 						});
 						inventory.extractItem(i,1,false);
