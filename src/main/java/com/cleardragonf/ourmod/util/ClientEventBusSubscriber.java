@@ -1,10 +1,7 @@
 package com.cleardragonf.ourmod.util;
 
 import com.cleardragonf.ourmod.OurMod;
-import com.cleardragonf.ourmod.client.gui.EssenceCollectorScreen;
-import com.cleardragonf.ourmod.client.gui.FishingNetScreen;
-import com.cleardragonf.ourmod.client.gui.MCMChestScreen;
-import com.cleardragonf.ourmod.client.gui.PortableChestScreen;
+import com.cleardragonf.ourmod.client.gui.*;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModContainerTypes;
 
@@ -29,6 +26,7 @@ public class ClientEventBusSubscriber {
 		ScreenManager.registerFactory(ModContainerTypes.FISHING_NET.get(), FishingNetScreen::new);
 		ScreenManager.registerFactory(ModContainerTypes.ESSENCE_COLLECTOR.get(), EssenceCollectorScreen::new);
 		ScreenManager.registerFactory(ModContainerTypes.MCM_CHEST.get(), MCMChestScreen::new);
+		ScreenManager.registerFactory(ModContainerTypes.XP_STORAGE.get(), XPStorageScreen::new);
 		RenderTypeLookup.setRenderLayer(BlockInitNew.TOMATO_CROP.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(BlockInitNew.RICE_CROP.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(BlockInitNew.ONION_CROP.get(), RenderType.getCutout());

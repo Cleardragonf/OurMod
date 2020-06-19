@@ -6,11 +6,9 @@ import com.cleardragonf.ourmod.objects.blocks.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
 
 public class BlockInitNew {
 
@@ -26,6 +24,7 @@ public class BlockInitNew {
 	public static final RegistryObject<Block> ESSENCE_COLLECTOR = BLOCKS.register("essencecollector", ()-> new EssenceCollector(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	public static final RegistryObject<Block> FISHING_NET = BLOCKS.register("fishingnet", ()-> new FishingNet(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	public static final RegistryObject<MCMChest> MCM_CHEST = BLOCKS.register("mcmchest", MCMChest::new);
+	public static final RegistryObject<Block> XP_STORAGE_BLOCK = BLOCKS.register("xpstorageblock", () -> new XPStorageBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	
 	//CROPS
 	public static final RegistryObject<Block> TOMATO_CROP = BLOCKS.register("tomatocrop", () -> new TomatoCrop(Block.Properties.from(Blocks.WHEAT)));

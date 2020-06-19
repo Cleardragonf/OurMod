@@ -6,6 +6,7 @@ import com.cleardragonf.ourmod.objects.items.OurBook;
 import com.cleardragonf.ourmod.objects.items.PowerEnscriber;
 import com.cleardragonf.ourmod.objects.items.Sickle;
 
+import com.cleardragonf.ourmod.objects.items.XPBottle;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
@@ -19,6 +20,8 @@ public class ItemInitNew {
 	
 	public static final RegistryObject<Item> SICKLE = ITEMS.register("sickle", () -> new Sickle(new Item.Properties().defaultMaxDamage(100).group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> OUR_BOOK = ITEMS.register("ourbook", () -> new OurBook(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> XP_BOTTLE = ITEMS.register("xpbottle", () -> new XPBottle(new Item.Properties().group(OurModItemGroup.instance)));
+
 	//FOOD
 	public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
 	public static final RegistryObject<Item> RICE = ITEMS.register("rice", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
