@@ -2,6 +2,7 @@ package com.cleardragonf.ourmod.objects.blocks;
 
 import com.cleardragonf.ourmod.init.ItemInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
+import com.cleardragonf.ourmod.objects.items.PowerEnscriber;
 import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import net.minecraft.block.Block;
@@ -13,6 +14,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.StateContainer;
@@ -24,6 +26,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -81,6 +85,7 @@ public class MCMChest extends Block {
 		if (!world.isRemote) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof MCMChestTileEntity) {
+
 				NetworkHooks.openGui((ServerPlayerEntity) player, (MCMChestTileEntity) tile, pos);
 				return ActionResultType.SUCCESS;
 			}
@@ -112,5 +117,28 @@ public class MCMChest extends Block {
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(BlockStateProperties.FACING, BlockStateProperties.POWERED);
+	}
+
+	@Override
+	public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
+		Item item = player.getHeldItem(player.getActiveHand()).getItem();
+		if(item instanceof PowerEnscriber){
+			MCMChestTileEntity tile = (MCMChestTileEntity) worldIn.getTileEntity(pos);
+			PowerEnscriber itemTags = (PowerEnscriber) item;
+			CompoundNBT tag;
+			ItemStack itemStack = item.getDefaultInstance();
+			if(itemStack.hasTag()){
+				tag = itemStack.getTag();
+			}else{
+				tag = new CompoundNBT();
+			}
+
+			if(tag.contains("energypos")){
+				tile.energyblocks = "Testing";
+
+			}else{
+
+			}
+		}
 	}
 }

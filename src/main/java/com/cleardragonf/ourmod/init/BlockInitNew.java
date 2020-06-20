@@ -24,8 +24,7 @@ public class BlockInitNew {
 	public static final RegistryObject<Block> ESSENCE_COLLECTOR = BLOCKS.register("essencecollector", ()-> new EssenceCollector(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	public static final RegistryObject<Block> FISHING_NET = BLOCKS.register("fishingnet", ()-> new FishingNet(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	public static final RegistryObject<MCMChest> MCM_CHEST = BLOCKS.register("mcmchest", MCMChest::new);
-	public static final RegistryObject<Block> XP_STORAGE_BLOCK = BLOCKS.register("xpstorageblock", () -> new XPStorageBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
-	
+
 	//CROPS
 	public static final RegistryObject<Block> TOMATO_CROP = BLOCKS.register("tomatocrop", () -> new TomatoCrop(Block.Properties.from(Blocks.WHEAT)));
 	public static final RegistryObject<Block> RICE_CROP = BLOCKS.register("ricecrop", () -> new RiceCrop(Block.Properties.from(Blocks.WHEAT)));

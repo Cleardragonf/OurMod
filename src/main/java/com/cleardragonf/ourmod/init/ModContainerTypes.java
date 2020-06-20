@@ -19,5 +19,4 @@ public class ModContainerTypes {
 	public static final RegistryObject<ContainerType<FishingNetContainer>> FISHING_NET = CONTAINER_TYPES.register("fishingnet", () -> IForgeContainerType.create(FishingNetContainer::new ));
 	public static final RegistryObject<ContainerType<EssenceCollectorContainer>> ESSENCE_COLLECTOR = CONTAINER_TYPES.register("essencecollector", () -> IForgeContainerType.create(EssenceCollectorContainer::new ));
 	public static final RegistryObject<ContainerType<MCMChestContainer>> MCM_CHEST = CONTAINER_TYPES.register("mcmchest", () -> IForgeContainerType.create(MCMChestContainer::new ));
-	public static final RegistryObject<ContainerType<XPStorageContainer>> XP_STORAGE = CONTAINER_TYPES.register("xpstorageblock", () -> IForgeContainerType.create(XPStorageContainer::new));
 }

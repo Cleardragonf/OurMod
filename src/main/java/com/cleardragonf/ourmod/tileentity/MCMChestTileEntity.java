@@ -63,6 +63,9 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	public CompoundNBT tag = new CompoundNBT();
 
+	public String energyblocks;
+
+
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
 	//public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
 	public final CustomEnergyStorage MCMEnergy = new CustomEnergyStorage(6000000,0);
@@ -103,6 +106,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	@Override
 	public void tick() {
+		System.out.println(this.energyblocks);
 		if (world.isRemote) {
 			return;
 		}
@@ -221,6 +225,8 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 			}
 		}
 	}
+
+
 
 	private void executeEnergySearch() {
 

@@ -6,6 +6,7 @@ import com.cleardragonf.ourmod.init.ModContainerTypes;
 import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import com.cleardragonf.ourmod.tileentity.PortableChestTileEntity;
+import jdk.nashorn.internal.ir.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -36,14 +37,13 @@ public class MCMChestContainer extends Container {
 	private final IWorldPosCallable canInteractWithCallable;
 
 
+
 	public MCMChestContainer(final int windowId, final PlayerInventory playerInventory,
 							 final MCMChestTileEntity tileEntity) {
 		super(ModContainerTypes.MCM_CHEST.get(), windowId);
 		this.playerInventory = new InvWrapper(playerInventory);
 		this.tileEntity = tileEntity;
 		this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
-
-
 		/*Depressiated
 		tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
 			addSlot(new SlotItemHandler(h, 0, 134, 31));
@@ -104,6 +104,7 @@ public class MCMChestContainer extends Container {
 	}
 
 
+
 	public CustomEnergyStorage getFire(){
 		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
 		return tile.FireEnergy;
@@ -131,6 +132,11 @@ public class MCMChestContainer extends Container {
 	public CustomEnergyStorage getMCM(){
 		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
 		return tile.MCMEnergy;
+	}
+
+	public String getBlockEnergy(){
+		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+		return tile.energyblocks;
 	}
 
 	@Override
