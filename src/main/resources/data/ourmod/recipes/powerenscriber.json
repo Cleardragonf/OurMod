@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"111",
+		"131",
+		"111"
+	],
+	"key": {
+		"1" : {
+			"item": "minecraft:stone"
+		},
+		"3" : {
+			"tag": "ourmod:essence"
+		}
+	},
+	"result": {
+		"item": "ourmod:powerenscriber"
+	}
+}

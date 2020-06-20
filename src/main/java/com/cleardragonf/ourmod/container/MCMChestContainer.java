@@ -87,6 +87,7 @@ public class MCMChestContainer extends Container {
 				tileEntity.MCMEnergy.setEnergy(value);
 			}
 		});
+
 	}
 
 	public MCMChestContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {

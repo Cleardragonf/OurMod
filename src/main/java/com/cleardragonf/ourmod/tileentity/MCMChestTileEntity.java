@@ -107,10 +107,12 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		super(ModTileEntityTypes.MCM_Chest.get());
 	}
 
+	public void updateBlock(){
+		world.notifyBlockUpdate(pos, this.getBlockState(), this.getBlockState(), 1);
+	}
+
 	@Override
 	public void tick() {
-
-		System.out.println(this.energyblocks);
 		write(tag);
 		markDirty();
 		if (world.isRemote) {
@@ -435,6 +437,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		this.read(pkt.getNbtCompound());
 	}
+
 
 	public void readRestorableNBT(CompoundNBT tag){
 		this.energyblocks = tag.get("energypos");

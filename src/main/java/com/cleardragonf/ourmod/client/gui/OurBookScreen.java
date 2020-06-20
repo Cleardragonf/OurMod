@@ -91,9 +91,9 @@ public class OurBookScreen extends Screen {
                 //left side
                 this.font.drawString("Chapter 1: Essence", (x -180 ) + ((this.xSize/2) - (font.getStringWidth("Chapter 1: Essence")/2)), y + 10, 4210752);
                 this.font.drawString("Just like our universe has ", x - 180, y + 20, 4210752);
-                this.font.drawString("essence so too does the mystic. ", x - 180, y + 30, 4210752);
+                this.font.drawString("essence.json so too does the mystic. ", x - 180, y + 30, 4210752);
                 this.font.drawString("Each part of our world has a ", x - 180, y + 40,4210752);
-                this.font.drawString("different essence to it.  The ", x - 180, y - 1800,4210752);
+                this.font.drawString("different essence.json to it.  The ", x - 180, y - 1800,4210752);
                 this.font.drawString("Elements are: Fire, Wind, Water,", x - 180, y + 60,4210752);
                 this.font.drawString("Earth, Light and Darkness.  Fire", x - 180, y + 70,4210752);
                 this.font.drawString("dwells in the hottest of plac, ", x - 180, y + 80,4210752);
@@ -189,7 +189,8 @@ public class OurBookScreen extends Screen {
                     this.itemRenderer.renderItemIntoGUI(ItemInitNew.QUARRY.getDefaultInstance(), gridX + 105, gridY + 16);
                 }
 
-            }else if(pageNumber ==4){
+            }
+            else if(pageNumber ==4){
                 //x,y,texturex,texturey,width,height @RyuShiTenshiKage
                 //left side
 
@@ -256,7 +257,64 @@ public class OurBookScreen extends Screen {
                 }
 
             }
-            else if(pageNumber ==5){
+            else if(pageNumber ==5){                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //left side
+
+                this.font.drawString("Chapter 6: Power Enscriber...", (x - 180) + ((this.xSize/2) - (font.getStringWidth("Chapter 4: Matter Conversion Basics")/2)), y + 10, 4210752);
+                this.font.drawString("Tool used to link MCM to Energy", x - 180, y + 30, 4210752);
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x -180, y + 140, 0,0,130,50);
+                int gridX = x - 180;
+                int gridY = y + 140;
+                if(tick<120){
+
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 18, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 35, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.FIRE_ESSENCE.getDefaultInstance(), gridX + 18, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 35, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 18, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.MCM_CHEST.getDefaultInstance(), gridX + 105, gridY + 16);
+                }
+
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //right side
+                this.font.drawString("Chapter 5: Fishing Nets", x + ((this.xSize/2) - (font.getStringWidth("Chapter 5: Fishing Nets")/2)), y + 10, 4210752);
+                this.font.drawString("Fishing Nets are powered by the", x + 5, y + 30, 4210752);
+                this.font.drawString("Seas and Oceanic Tides. Neither", x + 5, y + 40,4210752);
+                this.font.drawString("river nor pound will be enough.", x + 5, y - 1800,4210752);
+                this.font.drawString("Simply place and watch Neptune's", x + 5, y + 60,4210752);
+                this.font.drawString("blessing, flow into your nets.", x + 5, y + 70,4210752);
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x +5 , y + 140, 0,0,130,50);
+
+                gridX = x + 5;
+                if(tick<160){
+
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.FISHING_ROD.getDefaultInstance(), gridX + 18, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.FISHING_NET.getDefaultInstance(), gridX + 105, gridY + 16);
+                }
+
+
 
             }
             else if(pageNumber ==6){

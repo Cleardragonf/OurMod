@@ -97,6 +97,7 @@ public class MCMChest extends Block {
 					MCMChestTileEntity tileEntity = (MCMChestTileEntity) world.getTileEntity(pos);
 					tileEntity.energyblocks = tag.get("energypos");
 					tileEntity.markDirty();
+					tileEntity.updateBlock();
 				}
 
 

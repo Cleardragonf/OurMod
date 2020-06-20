@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "ourmod:airmana",
+    "ourmod:darkmana",
+    "ourmod:earthmana",
+    "ourmod:firemana",
+    "ourmod:watermana",
+    "ourmod:lightmana"
+  ]
+}
