@@ -86,6 +86,20 @@ public class MCMChest extends Block {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof MCMChestTileEntity) {
 
+				CompoundNBT tag;
+				ItemStack item = player.getHeldItem(hand);
+				if(item.hasTag()){
+					tag = item.getTag();
+				}else{
+					tag = new CompoundNBT();
+				}
+				if(tag.contains("energypos")){
+					MCMChestTileEntity tileEntity = (MCMChestTileEntity) world.getTileEntity(pos);
+					tileEntity.energyblocks = (BlockPos) tag.get("energypos");
+				}
+
+
+
 				NetworkHooks.openGui((ServerPlayerEntity) player, (MCMChestTileEntity) tile, pos);
 				return ActionResultType.SUCCESS;
 			}
@@ -117,28 +131,5 @@ public class MCMChest extends Block {
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(BlockStateProperties.FACING, BlockStateProperties.POWERED);
-	}
-
-	@Override
-	public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
-		Item item = player.getHeldItem(player.getActiveHand()).getItem();
-		if(item instanceof PowerEnscriber){
-			MCMChestTileEntity tile = (MCMChestTileEntity) worldIn.getTileEntity(pos);
-			PowerEnscriber itemTags = (PowerEnscriber) item;
-			CompoundNBT tag;
-			ItemStack itemStack = item.getDefaultInstance();
-			if(itemStack.hasTag()){
-				tag = itemStack.getTag();
-			}else{
-				tag = new CompoundNBT();
-			}
-
-			if(tag.contains("energypos")){
-				tile.energyblocks = "Testing";
-
-			}else{
-
-			}
-		}
 	}
 }

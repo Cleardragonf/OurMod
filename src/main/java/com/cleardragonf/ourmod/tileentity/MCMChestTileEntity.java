@@ -63,7 +63,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	public CompoundNBT tag = new CompoundNBT();
 
-	public String energyblocks;
+	public BlockPos energyblocks;
 
 
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);

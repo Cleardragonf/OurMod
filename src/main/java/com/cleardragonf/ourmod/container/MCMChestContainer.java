@@ -134,7 +134,7 @@ public class MCMChestContainer extends Container {
 		return tile.MCMEnergy;
 	}
 
-	public String getBlockEnergy(){
+	public BlockPos getBlockEnergy(){
 		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
 		return tile.energyblocks;
 	}
