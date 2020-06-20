@@ -13,6 +13,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.INBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
@@ -134,7 +135,7 @@ public class MCMChestContainer extends Container {
 		return tile.MCMEnergy;
 	}
 
-	public BlockPos getBlockEnergy(){
+	public INBT getBlockEnergy(){
 		MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
 		return tile.energyblocks;
 	}

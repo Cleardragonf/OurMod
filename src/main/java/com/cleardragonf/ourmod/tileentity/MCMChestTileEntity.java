@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -63,7 +64,9 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	public CompoundNBT tag = new CompoundNBT();
 
-	public BlockPos energyblocks;
+	public INBT energyblocks;
+
+
 
 
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
@@ -106,7 +109,10 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 	@Override
 	public void tick() {
+
 		System.out.println(this.energyblocks);
+		write(tag);
+		markDirty();
 		if (world.isRemote) {
 			return;
 		}
@@ -357,7 +363,12 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 			CompoundNBT compound = ((INBTSerializable<CompoundNBT>) inventory).serializeNBT();
 			tag.put("inv", compound);
 		});
+
 		tag.put("inv", inventory.serializeNBT());
+		if (energyblocks != null){
+
+			tag.put("energypos", this.energyblocks);
+		}
 		tag.putInt("mcmenergy", this.MCMEnergy.getEnergyStored());
 		tag.putInt("fireenergy", this.FireEnergy.getEnergyStored());
 		tag.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
@@ -426,6 +437,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	}
 
 	public void readRestorableNBT(CompoundNBT tag){
+		this.energyblocks = tag.get("energypos");
 		this.inventory.deserializeNBT(tag.getCompound("inv"));
 		this.FireEnergy.setEnergy(tag.getInt("fireenergy"));
 		this.WaterEnergy.setEnergy(tag.getInt("waterenergy"));
