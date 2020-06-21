@@ -69,6 +69,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 
 
+
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
 	//public LazyOptional<IEnergyStorage> energy = LazyOptional.of(this::createEnergy);
 	public final CustomEnergyStorage MCMEnergy = new CustomEnergyStorage(6000000,0);
@@ -237,83 +238,66 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 
 	private void executeEnergySearch() {
+		if(energyblocks!= null){
 
-		try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-			final BlockPos tilePos = this.pos;
-			final int posX = tilePos.getX();
-			final int posY = tilePos.getY();
-			final int posZ = tilePos.getZ();
+			CompoundNBT tagger = (CompoundNBT) energyblocks;
 
-			for(int z = -5; z<= 10; ++z){
-				for(int x = -5; x<=10; ++x){
-					for(int y = -5; y <=10; ++y){
-						final int dist = (x*x) + (y*y) + (z*z);
-						if (dist > 25){
-							continue;
-						}
+				BlockPos pos = new BlockPos(tagger.getInt("x"),tagger.getInt("y"),tagger.getInt("z"));
+				TileEntity tileEntity = world.getTileEntity(pos);
+				if(tileEntity instanceof EssenceCollectorTileEntity){
+					EssenceCollectorTileEntity tileTarget = (EssenceCollectorTileEntity) tileEntity;
 
-						if(dist <1){
-							continue;
-						}
 
-						pooledMutable.setPos(posX +x, posY + y, posZ + z);
-						final BlockState blockState = world.getBlockState(pooledMutable);
-						final IFluidState fluidState = world.getFluidState(pooledMutable);
-						final Block block = blockState.getBlock();
-
-						if(block instanceof EssenceCollector){
-							TileEntity tileEntity = world.getTileEntity(pooledMutable);
-							EssenceCollectorTileEntity tileTarget = (EssenceCollectorTileEntity) tileEntity;
-
-							if(tileTarget.FireEnergy.getEnergyStored() > 0 && this.FireEnergy.getEnergyStored() < 1000000){
-								int transfer = tileTarget.FireEnergy.getEnergyStored();
-								tileTarget.FireEnergy.consumeEnergy(transfer);
-								this.FireEnergy.addEnergy(transfer);
-								write(tag);
-								markDirty();
-							}
-							if(tileTarget.WaterEnergy.getEnergyStored() > 0 && this.WaterEnergy.getEnergyStored() < 1000000){
-								int transfer = tileTarget.WaterEnergy.getEnergyStored();
-								tileTarget.WaterEnergy.consumeEnergy(transfer);
-								this.WaterEnergy.addEnergy(transfer);
-								write(tag);
-								markDirty();
-							}
-							if(tileTarget.AirEnergy.getEnergyStored() > 0 && this.AirEnergy.getEnergyStored() < 1000000){
-								int transfer = tileTarget.AirEnergy.getEnergyStored();
-								tileTarget.AirEnergy.consumeEnergy(transfer);
-								this.AirEnergy.addEnergy(transfer);
-								write(tag);
-								markDirty();
-							}
-							if(tileTarget.EarthEnergy.getEnergyStored() > 0 && this.EarthEnergy.getEnergyStored() < 1000000){
-								int transfer = tileTarget.EarthEnergy.getEnergyStored();
-								tileTarget.EarthEnergy.consumeEnergy(transfer);
-								this.EarthEnergy.addEnergy(transfer);
-								write(tag);
-								markDirty();
-							}
-							if(tileTarget.DarkEnergy.getEnergyStored() > 0 && this.DarkEnergy.getEnergyStored() < 1000000){
-								int transfer = tileTarget.DarkEnergy.getEnergyStored();
-								tileTarget.DarkEnergy.consumeEnergy(transfer);
-								this.DarkEnergy.addEnergy(transfer);
-								write(tag);
-								markDirty();
-							}
-							if(tileTarget.LightEnergy.getEnergyStored() > 0 && this.LightEnergy.getEnergyStored() < 1000000){
-								int transfer = tileTarget.LightEnergy.getEnergyStored();
-								tileTarget.LightEnergy.consumeEnergy(transfer);
-								this.LightEnergy.addEnergy(transfer);
-								write(tag);
-								markDirty();
-							}
-						}
+					if(tileTarget.FireEnergy.getEnergyStored() > 0 && this.FireEnergy.getEnergyStored() < 1000000){
+						int transfer = tileTarget.FireEnergy.getEnergyStored();
+						tileTarget.FireEnergy.consumeEnergy(transfer);
+						this.FireEnergy.addEnergy(transfer);
+						write(tag);
+						markDirty();
 					}
+					if(tileTarget.WaterEnergy.getEnergyStored() > 0 && this.WaterEnergy.getEnergyStored() < 1000000){
+						int transfer = tileTarget.WaterEnergy.getEnergyStored();
+						tileTarget.WaterEnergy.consumeEnergy(transfer);
+						this.WaterEnergy.addEnergy(transfer);
+						write(tag);
+						markDirty();
+					}
+					if(tileTarget.AirEnergy.getEnergyStored() > 0 && this.AirEnergy.getEnergyStored() < 1000000){
+						int transfer = tileTarget.AirEnergy.getEnergyStored();
+						tileTarget.AirEnergy.consumeEnergy(transfer);
+						this.AirEnergy.addEnergy(transfer);
+						write(tag);
+						markDirty();
+					}
+					if(tileTarget.EarthEnergy.getEnergyStored() > 0 && this.EarthEnergy.getEnergyStored() < 1000000){
+						int transfer = tileTarget.EarthEnergy.getEnergyStored();
+						tileTarget.EarthEnergy.consumeEnergy(transfer);
+						this.EarthEnergy.addEnergy(transfer);
+						write(tag);
+						markDirty();
+					}
+					if(tileTarget.DarkEnergy.getEnergyStored() > 0 && this.DarkEnergy.getEnergyStored() < 1000000){
+						int transfer = tileTarget.DarkEnergy.getEnergyStored();
+						tileTarget.DarkEnergy.consumeEnergy(transfer);
+						this.DarkEnergy.addEnergy(transfer);
+						write(tag);
+						markDirty();
+					}
+					if(tileTarget.LightEnergy.getEnergyStored() > 0 && this.LightEnergy.getEnergyStored() < 1000000){
+						int transfer = tileTarget.LightEnergy.getEnergyStored();
+						tileTarget.LightEnergy.consumeEnergy(transfer);
+						this.LightEnergy.addEnergy(transfer);
+						write(tag);
+						markDirty();
+					}
+				}else{
+					energyblocks = null;
 				}
-			}
-		}
 
-	}
+			}
+
+
+		}
 
 	private int MCMREader(Item a, IMCMValueCapability b) {
 		MCMValues itemValue = new MCMValues();
@@ -385,6 +369,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 		return inventory;
 	}
 
+
 	private IEnergyStorage createEnergy() {
 		return new CustomEnergyStorage(100000, 0);
 	}
@@ -440,7 +425,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 
 	public void readRestorableNBT(CompoundNBT tag){
-		this.energyblocks = tag.get("energypos");
+		energyblocks = tag.get("energypos");
 		this.inventory.deserializeNBT(tag.getCompound("inv"));
 		this.FireEnergy.setEnergy(tag.getInt("fireenergy"));
 		this.WaterEnergy.setEnergy(tag.getInt("waterenergy"));
