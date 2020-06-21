@@ -41,7 +41,8 @@ public class MCMChestScreen extends ContainerScreen<MCMChestContainer> {
 		int relX = (this.width - this.xSize) / 2;
 		int relY = (this.height - this.ySize) / 2;
 		this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
-		drawString(Minecraft.getInstance().fontRenderer, "Energy: " + this.container.getMCM().getEnergyStored(), 10, 10, 0xffffff);
+		int display = (int) this.container.getMCM().getEnergyStored();
+		drawString(Minecraft.getInstance().fontRenderer, "Energy: " + display, 10, 10, 0xffffff);
 
 	}
 }
