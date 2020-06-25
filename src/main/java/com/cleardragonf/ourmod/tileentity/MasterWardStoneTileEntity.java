@@ -1,9 +1,11 @@
 package com.cleardragonf.ourmod.tileentity;
 
+import com.cleardragonf.ourmod.Data.Wards;
 import com.cleardragonf.ourmod.container.MasterWardStoneContainer;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
+import com.cleardragonf.ourmod.objects.blocks.BoundaryWardStoneBlock;
 import com.cleardragonf.ourmod.objects.blocks.MasterWardStoneBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -16,12 +18,16 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -29,9 +35,16 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class MasterWardStoneTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+
+	public List<BlockPos> boundaryWardStones = new LinkedList<>();
+	public List<Wards> activeWardList;
+	public int wardHeight = 5;
+
 
 	protected int numPlayersUsing;
 	private boolean initialized = false;
@@ -151,116 +164,61 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	}
 
 	private void execute() {
-		final BlockPos tilePos = this.pos;
-		final World world = this.world;
-		if (world == null){
-			return;
-		}
-		int fireBlocksFound = 0;
-		int waterBlocksFound = 0;
-		int airBlocksFound = 0;
-		int earthBlocksFound = 0;
-		int darkBlocksFound = 0;
-		int lightBlocksFound = 0;
-		int multiplierBlocksFound = 0;
+		boundaryWardStones.clear();
+		BlockPos test1 = new BlockPos(0,0,1);
+		BlockPos test2 = new BlockPos(0,0,-1);
+		BlockPos test3 = new BlockPos(1,0,0);
+		BlockPos test4 = new BlockPos(-1,0,0);
+		boundaryWardStones.add(test1);
+		boundaryWardStones.add(test2);
+		boundaryWardStones.add(test3);
+		boundaryWardStones.add(test4);
+		boolean needsSave = false;
+			if(boundaryWardStones != null){
 
-		try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-			final int posX = tilePos.getX();
-			final int posY = tilePos.getY();
-			final int posZ = tilePos.getZ();
-
-			for(int z = -5; z <= 10; ++z){
-				for(int x = -5; x <= 10; ++x){
-					for(int y = -5; y <=10; y++){
-						final int dist = (x*x) + (y*y) + (z*z);
-						if (dist > 25){
-							continue;
-						}
-
-						if (dist < 1){
-							continue;
-						}
-
-						pooledMutable.setPos(posX + x,posY + y, posZ + z);
-						final BlockState blockState = world.getBlockState(pooledMutable);
-						final IFluidState fluidState = world.getFluidState(pooledMutable);
-						final Block block = blockState.getBlock();
-
-						if(block instanceof FireBlock || block == BlockInitNew.FIRE_MANA.get() || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || block==Blocks.CAMPFIRE){
-							++fireBlocksFound;
-						}else if(block == Blocks.WATER || block == BlockInitNew.WATER_MANA.get()|| (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
-							++waterBlocksFound;
-						}else if(block == Blocks.AIR|| block == BlockInitNew.AIR_MANA.get()){
-							++airBlocksFound;
-						}else if(block == Blocks.DIRT || block == BlockInitNew.EARTH_MANA.get()|| block ==  Blocks.GRASS ||block ==  Blocks.GRANITE ||block ==  Blocks.STONE ||block ==  Blocks.ANDESITE
-								|| block == Blocks.CLAY || block == Blocks.DIORITE || block == Blocks.GRAVEL|| block == Blocks.ICE || block == Blocks.MOSSY_COBBLESTONE
-								|| block == Blocks.NETHERRACK || block == Blocks.OBSIDIAN || block == Blocks.PODZOL || block == Blocks.PRISMARINE ||block ==  Blocks.QUARTZ_BLOCK
-						|| block == Blocks.SAND){
-							++earthBlocksFound;
-						}else if(block == BlockInitNew.DARK_MANA.get()) {
-							++darkBlocksFound;
-						}
-						else if(block == BlockInitNew.LIGHT_MANA.get()) {
-							++lightBlocksFound;
+				if(boundaryWardStones.size() == 4){
+					System.out.println("mmmm");
+					//4 * pie * r * r
+					boolean stonePlacementAccurate = false;
+					TileEntity tileEntity = world.getTileEntity(pos);
+					//sqrt((x1-x2)^2 + (y1-y2) ^2+( z1 - z1)^2)
+					int x1 = tileEntity.getPos().getX();
+					int y1 = tileEntity.getPos().getY();
+					int z1 = tileEntity.getPos().getZ();
+					int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(0).getX() , x1 - boundaryWardStones.get(0).getX()) + Math.pow(y1 - boundaryWardStones.get(0).getY() , y1 - boundaryWardStones.get(0).getY()) + Math.pow(z1 - boundaryWardStones.get(0).getZ() , z1 - boundaryWardStones.get(0).getZ()));
+					System.out.println(radius1);
+					int radius2 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(1).getX(),x1 - boundaryWardStones.get(1).getX()) + Math.pow(y1 - boundaryWardStones.get(1).getY(),y1 - boundaryWardStones.get(1).getY())  + Math.pow(z1 - boundaryWardStones.get(1).getZ(),z1 - boundaryWardStones.get(1).getZ()));
+					System.out.println(radius2);
+					int radius3 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(2).getX(),x1 - boundaryWardStones.get(2).getX()) + Math.pow(y1 - boundaryWardStones.get(2).getY(),y1 - boundaryWardStones.get(2).getY())  + Math.pow(z1 - boundaryWardStones.get(2).getZ(),z1 - boundaryWardStones.get(2).getZ()));
+					System.out.println(radius3);
+					int radius4 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(3).getX(),x1 - boundaryWardStones.get(3).getX()) + Math.pow(y1 - boundaryWardStones.get(3).getY(),y1 - boundaryWardStones.get(3).getY())  + Math.pow(z1 - boundaryWardStones.get(3).getZ(),z1 - boundaryWardStones.get(3).getZ()));
+					System.out.println(radius4);
+					if(radius1 == radius2 && radius1 == radius3 && radius1 == radius4) {
+						System.out.println("radius's are correct");
+						if(world.getTileEntity(boundaryWardStones.get(0)) instanceof BoundaryWardStoneTileEntity && world.getTileEntity(boundaryWardStones.get(1)) instanceof BoundaryWardStoneTileEntity
+						&&world.getTileEntity(boundaryWardStones.get(2)) instanceof BoundaryWardStoneTileEntity&&world.getTileEntity(boundaryWardStones.get(3)) instanceof BoundaryWardStoneTileEntity) {
+							stonePlacementAccurate = true;
+							System.out.println("all are correct");
+						}else{
+							stonePlacementAccurate = false;
+							System.out.println("none are");
 						}
 					}
+					if(stonePlacementAccurate == true){
+						double d0 = (double)(1 * 10 + 10);
+						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(d0).expand(0.0D, (double)this.world.getHeight(), 0.0D);
+						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
+
+						for(PlayerEntity playerentity : list) {
+							playerentity.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 50, 1, true, true));
+						}
+					}
+
+				}
+				else{
+					System.out.println(boundaryWardStones.size());
 				}
 			}
-		}
-
-		if(multiplierBlocksFound > 0){
-			fireBlocksFound *= multiplierBlocksFound;
-			waterBlocksFound *= multiplierBlocksFound;
-			airBlocksFound *= multiplierBlocksFound;
-			earthBlocksFound *= multiplierBlocksFound;
-			darkBlocksFound *= multiplierBlocksFound;
-			lightBlocksFound *= multiplierBlocksFound;
-		}
-		boolean needsSave = false;
-
-		if(this.FireEnergy.getEnergyStored() >= 100000){
-
-		}else{
-			FireEnergy.addEnergy(fireBlocksFound * 1);
-			needsSave = true;
-			write(tag);
-		}
-
-		if(this.WaterEnergy.getEnergyStored() >= 100000){
-
-		}else{
-			WaterEnergy.addEnergy(waterBlocksFound * 1);
-			needsSave = true;
-			write(tag);
-		}
-		if(this.AirEnergy.getEnergyStored() >= 100000){
-
-		}else{
-			AirEnergy.addEnergy(airBlocksFound * 1);
-			needsSave = true;
-			write(tag);
-		}
-		if(this.DarkEnergy.getEnergyStored() >= 100000){
-
-		}else{
-			DarkEnergy.addEnergy(darkBlocksFound * 1);
-			needsSave = true;
-			write(tag);
-		}
-		if(this.EarthEnergy.getEnergyStored() >= 100000){
-
-		}else{
-			EarthEnergy.addEnergy(earthBlocksFound * 1);
-			needsSave = true;
-			write(tag);
-		}
-		if(this.LightEnergy.getEnergyStored() >= 100000){
-
-		}else{
-			LightEnergy.addEnergy(lightBlocksFound * 1);
-			needsSave = true;
-			write(tag);
-		}
 		if(needsSave){
 			this.markDirty();
 		}

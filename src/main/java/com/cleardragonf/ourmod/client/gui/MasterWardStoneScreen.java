@@ -3,12 +3,18 @@ package com.cleardragonf.ourmod.client.gui;
 import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.container.MasterWardStoneContainer;
 import com.mojang.blaze3d.systems.RenderSystem;
+import javafx.scene.control.ScrollPane;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.swing.*;
+import java.awt.*;
+
+//TODO: add Scroll bar, scroll pane etc.
 
 @OnlyIn(Dist.CLIENT)
 public class MasterWardStoneScreen extends ContainerScreen<MasterWardStoneContainer> {
@@ -28,6 +34,8 @@ public class MasterWardStoneScreen extends ContainerScreen<MasterWardStoneContai
 		this.renderBackground();
 		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
+
+
 	}
 	
 	@Override
@@ -44,6 +52,8 @@ public class MasterWardStoneScreen extends ContainerScreen<MasterWardStoneContai
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
 		this.blit(x, y, 0, 0, this.xSize, this.ySize);
+		///this.blit((x + 17),y + 34, 179,33,8, this.container.getAir().getEnergyStored()/ 1000);
+
 		//x,y,texturex,texturey,width,height @RyuShiTenshiKage
 		//Air Essence GUI
 		///this.blit((x + 17),y + 34, 179,33,8, this.container.getAir().getEnergyStored()/ 1000);

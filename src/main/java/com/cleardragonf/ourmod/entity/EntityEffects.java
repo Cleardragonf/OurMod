@@ -27,6 +27,7 @@ public class EntityEffects {
 
     public static final Effect HEATED = register("heated", new EntityEffect(EffectType.BENEFICIAL, 16750592));
 
+
     public static void registerAll(IForgeRegistry<Effect> registry) {
         for (Effect effect : EFFECT) {
             registry.register(effect);
