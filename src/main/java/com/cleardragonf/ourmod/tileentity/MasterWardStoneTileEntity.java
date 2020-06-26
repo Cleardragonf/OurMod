@@ -242,7 +242,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 										final Block block = blockState.getBlock();
 
 										if(block == Blocks.AIR){
-											world.setBlockState(pooledMutable, Blocks.GLASS.getDefaultState(), 1);
+											world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 1);
 										}
 									}
 								}

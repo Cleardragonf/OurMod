@@ -28,6 +28,7 @@ public class ClientEventBusSubscriber {
 		ScreenManager.registerFactory(ModContainerTypes.MCM_CHEST.get(), MCMChestScreen::new);
 		ScreenManager.registerFactory(ModContainerTypes.MASTER_WARD_STONE.get(), MasterWardStoneScreen::new);
 		ScreenManager.registerFactory(ModContainerTypes.BOUNDARY_WARD_STONE.get(), BoundaryWardStoneScreen::new);
+		RenderTypeLookup.setRenderLayer(BlockInitNew.WARDBARRIER.get(), RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(BlockInitNew.TOMATO_CROP.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(BlockInitNew.RICE_CROP.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(BlockInitNew.ONION_CROP.get(), RenderType.getCutout());
