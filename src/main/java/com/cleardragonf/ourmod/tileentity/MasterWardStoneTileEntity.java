@@ -11,11 +11,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.potion.Effect;
@@ -165,10 +167,10 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 	private void execute() {
 		boundaryWardStones.clear();
-		BlockPos test1 = new BlockPos(0,0,1);
-		BlockPos test2 = new BlockPos(0,0,-1);
-		BlockPos test3 = new BlockPos(1,0,0);
-		BlockPos test4 = new BlockPos(-1,0,0);
+		BlockPos test1 = new BlockPos(0,0,5);
+		BlockPos test2 = new BlockPos(0,0,-5);
+		BlockPos test3 = new BlockPos(5,0,0);
+		BlockPos test4 = new BlockPos(-5,0,0);
 		boundaryWardStones.add(test1);
 		boundaryWardStones.add(test2);
 		boundaryWardStones.add(test3);
@@ -185,13 +187,14 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					int x1 = tileEntity.getPos().getX();
 					int y1 = tileEntity.getPos().getY();
 					int z1 = tileEntity.getPos().getZ();
-					int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(0).getX() , x1 - boundaryWardStones.get(0).getX()) + Math.pow(y1 - boundaryWardStones.get(0).getY() , y1 - boundaryWardStones.get(0).getY()) + Math.pow(z1 - boundaryWardStones.get(0).getZ() , z1 - boundaryWardStones.get(0).getZ()));
+					//
+					int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(0).getX() , 2) + Math.pow(y1 - boundaryWardStones.get(0).getY() , 2) + Math.pow(z1 - boundaryWardStones.get(0).getZ() , 2));
 					System.out.println(radius1);
-					int radius2 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(1).getX(),x1 - boundaryWardStones.get(1).getX()) + Math.pow(y1 - boundaryWardStones.get(1).getY(),y1 - boundaryWardStones.get(1).getY())  + Math.pow(z1 - boundaryWardStones.get(1).getZ(),z1 - boundaryWardStones.get(1).getZ()));
+					int radius2 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(1).getX(),2) + Math.pow(y1 - boundaryWardStones.get(1).getY(),2)  + Math.pow(z1 - boundaryWardStones.get(1).getZ(),2));
 					System.out.println(radius2);
-					int radius3 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(2).getX(),x1 - boundaryWardStones.get(2).getX()) + Math.pow(y1 - boundaryWardStones.get(2).getY(),y1 - boundaryWardStones.get(2).getY())  + Math.pow(z1 - boundaryWardStones.get(2).getZ(),z1 - boundaryWardStones.get(2).getZ()));
+					int radius3 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(2).getX(),2) + Math.pow(y1 - boundaryWardStones.get(2).getY(),2)  + Math.pow(z1 - boundaryWardStones.get(2).getZ(),2));
 					System.out.println(radius3);
-					int radius4 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(3).getX(),x1 - boundaryWardStones.get(3).getX()) + Math.pow(y1 - boundaryWardStones.get(3).getY(),y1 - boundaryWardStones.get(3).getY())  + Math.pow(z1 - boundaryWardStones.get(3).getZ(),z1 - boundaryWardStones.get(3).getZ()));
+					int radius4 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(3).getX(),2) + Math.pow(y1 - boundaryWardStones.get(3).getY(),2)  + Math.pow(z1 - boundaryWardStones.get(3).getZ(),2));
 					System.out.println(radius4);
 					if(radius1 == radius2 && radius1 == radius3 && radius1 == radius4) {
 						System.out.println("radius's are correct");
@@ -204,6 +207,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 							System.out.println("none are");
 						}
 					}
+					//TODO: start adding a list view here that'll cycle through all wards attatched to this TE
 					if(stonePlacementAccurate == true){
 						double d0 = (double)(1 * 10 + 10);
 						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(d0).expand(0.0D, (double)this.world.getHeight(), 0.0D);
@@ -211,6 +215,38 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 						for(PlayerEntity playerentity : list) {
 							playerentity.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 50, 1, true, true));
+						}
+						//set with a border right now it works for replacing air with glass
+						//TODO: set to WardBarrier
+						try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+							final int posX = this.getPos().getX();
+							final int posY = this.getPos().getY();
+							final int posZ = this.getPos().getZ();
+
+							for(int z = -50; z <= 50; ++z){
+								for(int x = -50; x <= 50; ++x){
+									for(int y = -50; y <=50; y++){
+										final int dist = (x*x) + (y*y) + (z*z);
+										//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
+										if (dist > ((radius1 + 1) * radius1)){
+											continue;
+										}
+
+										if (dist < ((radius1-1) * radius1)){
+											continue;
+										}
+
+										pooledMutable.setPos(posX + x,posY + y, posZ + z);
+										final BlockState blockState = world.getBlockState(pooledMutable);
+										final IFluidState fluidState = world.getFluidState(pooledMutable);
+										final Block block = blockState.getBlock();
+
+										if(block == Blocks.AIR){
+											world.setBlockState(pooledMutable, Blocks.GLASS.getDefaultState(), 1);
+										}
+									}
+								}
+							}
 						}
 					}
 
@@ -222,6 +258,21 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		if(needsSave){
 			this.markDirty();
 		}
+	}
+
+	private boolean destroyBlock(BlockPos pos, boolean dropBlock, @Nullable Entity entity) {
+		BlockState blockstate = world.getBlockState(pos);
+		if(blockstate.isAir(world, pos))return false;
+		else {
+			IFluidState ifluidstate = world.getFluidState(pos);
+			world.playEvent(2001, pos, Block.getStateId(blockstate));
+			if(dropBlock) {
+				TileEntity tileentity= blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
+				Block.spawnDrops(blockstate, world, this.pos.add(0, 1.5, 0), tileentity, entity, ItemStack.EMPTY);
+			}
+			return world.setBlockState(pos, ifluidstate.getBlockState(), 3);
+		}
+
 	}
 
 	@Nullable
