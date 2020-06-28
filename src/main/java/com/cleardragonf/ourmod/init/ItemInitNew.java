@@ -6,6 +6,7 @@ import com.cleardragonf.ourmod.objects.items.OurBook;
 import com.cleardragonf.ourmod.objects.items.PowerEnscriber;
 import com.cleardragonf.ourmod.objects.items.Sickle;
 
+import com.cleardragonf.ourmod.objects.items.WardEnscriber;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
@@ -46,6 +47,7 @@ public class ItemInitNew {
 	public static final RegistryObject<Item> EGGPLANT_SEED= ITEMS.register("eggplantseed", () -> new BlockItem(BlockInitNew.EGGPLANT_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
 
 	public static final RegistryObject<Item> POWER_ENSCRIBER = ITEMS.register("powerenscriber", () -> new PowerEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_ENSCRIBER = ITEMS.register("wardenscriber", () -> new WardEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
 
 	//Blocks
 

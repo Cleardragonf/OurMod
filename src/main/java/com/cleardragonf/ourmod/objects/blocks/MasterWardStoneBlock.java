@@ -1,7 +1,6 @@
 package com.cleardragonf.ourmod.objects.blocks;
 
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
-import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import com.cleardragonf.ourmod.tileentity.MasterWardStoneTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class MasterWardStoneBlock extends Block{
 
@@ -41,11 +42,28 @@ public class MasterWardStoneBlock extends Block{
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
-											 Hand handIn, BlockRayTraceResult result) {
-		if (!worldIn.isRemote) {
-			TileEntity tile = worldIn.getTileEntity(pos);
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
+											 Hand hand, BlockRayTraceResult result) {
+		if (!world.isRemote) {
+			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof MasterWardStoneTileEntity) {
+
+				CompoundNBT tag;
+				ItemStack item = player.getHeldItem(hand);
+				if(item.hasTag()){
+					tag = item.getTag();
+				}else{
+					tag = new CompoundNBT();
+				}
+				if(tag.contains("wardshape")){
+					MasterWardStoneTileEntity tileEntity = (MasterWardStoneTileEntity) world.getTileEntity(pos);
+					tileEntity.addWardStone(tag.get("wardshape"));
+					tileEntity.markDirty();
+					tileEntity.updateBlock();
+				}
+
+
+
 				NetworkHooks.openGui((ServerPlayerEntity) player, (MasterWardStoneTileEntity) tile, pos);
 				return ActionResultType.SUCCESS;
 			}

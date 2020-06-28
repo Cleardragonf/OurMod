@@ -19,6 +19,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -39,14 +40,19 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 public class MasterWardStoneTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-	public List<BlockPos> boundaryWardStones = new LinkedList<>();
+	public INBT wardStone;
+	public List<INBT> boundaryWardStones = new LinkedList<>();
 	public List<Wards> activeWardList;
 	public int wardHeight = 5;
 
+	public void addWardStone(INBT target){
+		boundaryWardStones.add(target);
+	}
 
 	protected int numPlayersUsing;
 	private boolean initialized = false;
@@ -166,40 +172,37 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	}
 
 	private void execute() {
-		boundaryWardStones.clear();
-		BlockPos test1 = new BlockPos(0,0,5);
-		BlockPos test2 = new BlockPos(0,0,-5);
-		BlockPos test3 = new BlockPos(5,0,0);
-		BlockPos test4 = new BlockPos(-5,0,0);
-		boundaryWardStones.add(test1);
-		boundaryWardStones.add(test2);
-		boundaryWardStones.add(test3);
-		boundaryWardStones.add(test4);
+		List<BlockPos> boundaryList = new LinkedList<>();
 		boolean needsSave = false;
-			if(boundaryWardStones != null){
+		if(boundaryWardStones != null){
+			TileEntity tileEntity = world.getTileEntity(pos);
+			for (INBT entry: boundaryWardStones) {
+				CompoundNBT tagger = (CompoundNBT) entry;
+				BlockPos pos = new BlockPos(tagger.getInt("x"),tagger.getInt("y"),tagger.getInt("z"));
+				boundaryList.add(pos);
+			}
 
 				if(boundaryWardStones.size() == 4){
 					System.out.println("mmmm");
 					//4 * pie * r * r
 					boolean stonePlacementAccurate = false;
-					TileEntity tileEntity = world.getTileEntity(pos);
 					//sqrt((x1-x2)^2 + (y1-y2) ^2+( z1 - z1)^2)
 					int x1 = tileEntity.getPos().getX();
 					int y1 = tileEntity.getPos().getY();
 					int z1 = tileEntity.getPos().getZ();
 					//
-					int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(0).getX() , 2) + Math.pow(y1 - boundaryWardStones.get(0).getY() , 2) + Math.pow(z1 - boundaryWardStones.get(0).getZ() , 2));
+					int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(0).getX() , 2) + Math.pow(y1 - boundaryList.get(0).getY() , 2) + Math.pow(z1 - boundaryList.get(0).getZ() , 2));
 					System.out.println(radius1);
-					int radius2 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(1).getX(),2) + Math.pow(y1 - boundaryWardStones.get(1).getY(),2)  + Math.pow(z1 - boundaryWardStones.get(1).getZ(),2));
+					int radius2 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(1).getX(),2) + Math.pow(y1 - boundaryList.get(1).getY(),2)  + Math.pow(z1 - boundaryList.get(1).getZ(),2));
 					System.out.println(radius2);
-					int radius3 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(2).getX(),2) + Math.pow(y1 - boundaryWardStones.get(2).getY(),2)  + Math.pow(z1 - boundaryWardStones.get(2).getZ(),2));
+					int radius3 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(2).getX(),2) + Math.pow(y1 - boundaryList.get(2).getY(),2)  + Math.pow(z1 - boundaryList.get(2).getZ(),2));
 					System.out.println(radius3);
-					int radius4 = (int) Math.sqrt(Math.pow(x1 - boundaryWardStones.get(3).getX(),2) + Math.pow(y1 - boundaryWardStones.get(3).getY(),2)  + Math.pow(z1 - boundaryWardStones.get(3).getZ(),2));
+					int radius4 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(3).getX(),2) + Math.pow(y1 - boundaryList.get(3).getY(),2)  + Math.pow(z1 - boundaryList.get(3).getZ(),2));
 					System.out.println(radius4);
 					if(radius1 == radius2 && radius1 == radius3 && radius1 == radius4) {
 						System.out.println("radius's are correct");
-						if(world.getTileEntity(boundaryWardStones.get(0)) instanceof BoundaryWardStoneTileEntity && world.getTileEntity(boundaryWardStones.get(1)) instanceof BoundaryWardStoneTileEntity
-						&&world.getTileEntity(boundaryWardStones.get(2)) instanceof BoundaryWardStoneTileEntity&&world.getTileEntity(boundaryWardStones.get(3)) instanceof BoundaryWardStoneTileEntity) {
+						if(world.getTileEntity(boundaryList.get(0)) instanceof BoundaryWardStoneTileEntity && world.getTileEntity(boundaryList.get(1)) instanceof BoundaryWardStoneTileEntity
+								&&world.getTileEntity(boundaryList.get(2)) instanceof BoundaryWardStoneTileEntity&&world.getTileEntity(boundaryList.get(3)) instanceof BoundaryWardStoneTileEntity) {
 							stonePlacementAccurate = true;
 							System.out.println("all are correct");
 						}else{
@@ -249,11 +252,12 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 							}
 						}
 					}
-
-				}
 				else{
 					System.out.println(boundaryWardStones.size());
 				}
+			}
+		}else{
+				System.out.println("boundarywardstones list is null");
 			}
 		if(needsSave){
 			this.markDirty();
@@ -312,5 +316,8 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		this.EarthEnergy.setEnergy(tag.getInt("earthenergy"));
 		this.DarkEnergy.setEnergy(tag.getInt("darkenergy"));
 		this.LightEnergy.setEnergy(tag.getInt("lightenergy"));
+	}
+	public void updateBlock(){
+		world.notifyBlockUpdate(pos, this.getBlockState(), this.getBlockState(), 1);
 	}
 }
