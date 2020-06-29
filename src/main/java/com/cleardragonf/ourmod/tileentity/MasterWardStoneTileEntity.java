@@ -51,6 +51,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public ListNBT boundaryWardStones = new ListNBT();
 	public List<Wards> activeWardList;
 	public int wardHeight = 5;
+	private ListNBT wards = new ListNBT();
 
 	public void addWardStone(INBT target){
 		boundaryWardStones.add(target);
@@ -60,6 +61,13 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	private boolean initialized = false;
 	private CompoundNBT tag = new CompoundNBT();
 	public int tick, y;
+	public boolean healTeam = false;
+	public boolean antiThirst = false;
+	public boolean antiHunger = false;
+	public int healLevel = 0;
+	public int antiThirstLevel = 0;
+	public int antiHungerLevel = 0;
+
 
 
 	public MasterWardStoneTileEntity(TileEntityType<?> typeIn) {
@@ -106,6 +114,20 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
 		super.write(compound);
+		CompoundNBT wards = new CompoundNBT();
+		CompoundNBT healtag = new CompoundNBT();
+			tag.putBoolean("status", healTeam);
+			tag.putInt("level", healLevel);
+		CompoundNBT antiHungerTag = new CompoundNBT();
+			antiHungerTag.putBoolean("status", antiHunger);
+			antiHungerTag.putInt("level",antiHungerLevel);
+		CompoundNBT antiThirstTag = new CompoundNBT();
+			antiThirstTag.putBoolean("status", antiThirst);
+			antiThirstTag.putInt("level", antiThirstLevel);
+		wards.put("healteam",healtag);
+		wards.put("antihunger",antiHungerTag);
+		wards.put("antithirst",antiThirstTag);
+		compound.put("wards", wards);
 		compound.put("wardshape", this.boundaryWardStones);
 		compound.putInt("fireenergy", this.FireEnergy.getEnergyStored());
 		compound.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
@@ -198,11 +220,19 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		boolean needsSave = false;
 		if(boundaryWardStones != null){
 			TileEntity tileEntity = world.getTileEntity(pos);
-			for (INBT entry: boundaryWardStones) {
+			int size = boundaryWardStones.size();
+			for (int i = 0; i < size; i++) {
+				CompoundNBT tagger = (CompoundNBT)boundaryWardStones.get(i);
+				BlockPos pos = new BlockPos(tagger.getInt("x"), tagger.getInt("y"), tagger.getInt("z"));
+				boundaryList.add(pos);
+			}
+/*			for (INBT entry: boundaryWardStones) {
 				CompoundNBT tagger = (CompoundNBT) entry;
 				BlockPos pos = new BlockPos(tagger.getInt("x"),tagger.getInt("y"),tagger.getInt("z"));
 				boundaryList.add(pos);
 			}
+
+ */
 
 				if(boundaryWardStones.size() == 4){
 					System.out.println("mmmm");
@@ -235,7 +265,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					//TODO: start adding a list view here that'll cycle through all wards attatched to this TE
 					if(stonePlacementAccurate == true){
 						//double d0 = (double)(1 * 10 + 10);
-						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(radius1).expand(0.0D, radius1, 0.0D);
+						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(radius1).expand(0.0D, 0.0D, 0.0D);
 						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
 
 						for(PlayerEntity playerentity : list) {
@@ -332,6 +362,16 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 
 	public void readRestorableNBT(CompoundNBT tag) {
+		CompoundNBT wards = (CompoundNBT) tag.getCompound("wards");
+			CompoundNBT antiThirstTag = (CompoundNBT) wards.getCompound("antithirst");
+				this.antiThirst = antiThirstTag.getBoolean("status");
+				this.antiThirstLevel = antiThirstTag.getInt("level");
+			CompoundNBT antiHungerTag = (CompoundNBT) wards.getCompound("antihunger");
+				this.antiHunger = antiHungerTag.getBoolean("status");
+				this.antiHungerLevel = antiHungerTag.getInt("level");
+			CompoundNBT healTeamTag = (CompoundNBT) wards.getCompound("healteam");
+				this.healTeam = healTeamTag.getBoolean("status");
+				this.healLevel = healTeamTag.getInt("level");
 		this.boundaryWardStones = tag.getList("wardshape", Constants.NBT.TAG_COMPOUND);
 		this.FireEnergy.setEnergy(tag.getInt("fireenergy"));
 		this.WaterEnergy.setEnergy(tag.getInt("waterenergy"));
@@ -340,6 +380,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		this.DarkEnergy.setEnergy(tag.getInt("darkenergy"));
 		this.LightEnergy.setEnergy(tag.getInt("lightenergy"));
 	}
+
 	public void updateBlock(){
 		world.notifyBlockUpdate(pos, this.getBlockState(), this.getBlockState(), 1);
 	}
