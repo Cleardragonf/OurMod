@@ -20,6 +20,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -36,6 +37,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -46,7 +48,7 @@ import java.util.Map;
 public class MasterWardStoneTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
 	public INBT wardStone;
-	public List<INBT> boundaryWardStones = new LinkedList<>();
+	public ListNBT boundaryWardStones = new ListNBT();
 	public List<Wards> activeWardList;
 	public int wardHeight = 5;
 
@@ -80,11 +82,31 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 	public final CustomEnergyStorage LightEnergy = new CustomEnergyStorage(100000, 0);
 
+	/*
+	public CompoundNBT serializeWard(){
+		ListNBT nbtTagList = new ListNBT();
+		for (int i = 0; i < stacks.size(); i++)
+		{
+			if (!stacks.get(i).isEmpty())
+			{
+				CompoundNBT itemTag = new CompoundNBT();
+				itemTag.putInt("Slot", i);
+				stacks.get(i).write(itemTag);
+				nbtTagList.add(itemTag);
+			}
+		}
+		CompoundNBT nbt = new CompoundNBT();
+		nbt.put("Items", nbtTagList);
+		nbt.putInt("Size", stacks.size());
+		return nbt;
+	}
 
+	 */
 
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
 		super.write(compound);
+		compound.put("wardshape", this.boundaryWardStones);
 		compound.putInt("fireenergy", this.FireEnergy.getEnergyStored());
 		compound.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
 		compound.putInt("airenergy", this.AirEnergy.getEnergyStored());
@@ -212,12 +234,12 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					}
 					//TODO: start adding a list view here that'll cycle through all wards attatched to this TE
 					if(stonePlacementAccurate == true){
-						double d0 = (double)(1 * 10 + 10);
-						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(d0).expand(0.0D, (double)this.world.getHeight(), 0.0D);
+						//double d0 = (double)(1 * 10 + 10);
+						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(radius1).expand(0.0D, radius1, 0.0D);
 						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
 
 						for(PlayerEntity playerentity : list) {
-							playerentity.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 50, 1, true, true));
+							playerentity.addPotionEffect(new EffectInstance(Effects.HEALTH_BOOST, 50, 1, true, true));
 						}
 						//set with a border right now it works for replacing air with glass
 						//TODO: set to WardBarrier
@@ -310,6 +332,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 
 	public void readRestorableNBT(CompoundNBT tag) {
+		this.boundaryWardStones = tag.getList("wardshape", Constants.NBT.TAG_COMPOUND);
 		this.FireEnergy.setEnergy(tag.getInt("fireenergy"));
 		this.WaterEnergy.setEnergy(tag.getInt("waterenergy"));
 		this.AirEnergy.setEnergy(tag.getInt("airenergy"));
