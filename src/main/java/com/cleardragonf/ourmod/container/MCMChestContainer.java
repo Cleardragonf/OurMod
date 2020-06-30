@@ -63,57 +63,6 @@ public class MCMChestContainer extends Container {
 
 		layoutPlayerInventorySlots(8, 70);
 
-		/*
-		trackInt(new IntReferenceHolder() {
-			@Override
-			public int get() {
-				return getFire().getEnergyStored();
-			}
-
-			@Override
-			public void set(int value) {
-				tileEntity.FireEnergy.setEnergy(value);
-			}
-		});
-
-		trackInt(new IntReferenceHolder() {
-			@Override
-			public int get() {
-				return getMCM().getEnergyStored();
-			}
-
-			@Override
-			public void set(int value) {
-				tileEntity.MCMEnergy.setEnergy(value);
-			}
-		});
-		 */
-
-		trackInt(new IntReferenceHolder() {
-			@Override
-			public int get() {
-				return getFire().getEnergyStored() & 0xffff;
-			}
-
-			@Override
-			public void set(int value) {
-				int energyStored = tileEntity.FireEnergy.getEnergyStored() & 0xffff0000;
-				tileEntity.FireEnergy.setEnergy(energyStored + (value & 0xffff));
-
-			}
-		});
-		trackInt(new IntReferenceHolder() {
-			@Override
-			public int get() {
-				return (getFire().getEnergyStored() >> 16) & 0xffff;
-			}
-
-			@Override
-			public void set(int value) {
-					int energyStored = tileEntity.FireEnergy.getEnergyStored() & 0x0000ffff;
-					tileEntity.FireEnergy.setEnergy(energyStored | (value << 16));
-			}
-		});
 		trackInt(new IntReferenceHolder() {
 			@Override
 			public int get() {
@@ -139,7 +88,156 @@ public class MCMChestContainer extends Container {
 				tileEntity.MCMEnergy.setEnergy(energyStored | (value << 16));
 			}
 		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getAir().getEnergyStored() & 0xffff;
+			}
 
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.AirEnergy.getEnergyStored() & 0xffff0000;
+				tileEntity.AirEnergy.setEnergy(energyStored + (value & 0xffff));
+
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (getAir().getEnergyStored() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.AirEnergy.getEnergyStored() & 0x0000ffff;
+				tileEntity.AirEnergy.setEnergy(energyStored | (value << 16));
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getDark().getEnergyStored() & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.DarkEnergy.getEnergyStored() & 0xffff0000;
+				tileEntity.DarkEnergy.setEnergy(energyStored + (value & 0xffff));
+
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (getDark().getEnergyStored() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.DarkEnergy.getEnergyStored() & 0x0000ffff;
+				tileEntity.DarkEnergy.setEnergy(energyStored | (value << 16));
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getEarth().getEnergyStored() & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.EarthEnergy.getEnergyStored() & 0xffff0000;
+				tileEntity.EarthEnergy.setEnergy(energyStored + (value & 0xffff));
+
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (getEarth().getEnergyStored() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.EarthEnergy.getEnergyStored() & 0x0000ffff;
+				tileEntity.EarthEnergy.setEnergy(energyStored | (value << 16));
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getFire().getEnergyStored() & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.FireEnergy.getEnergyStored() & 0xffff0000;
+				tileEntity.FireEnergy.setEnergy(energyStored + (value & 0xffff));
+
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (getFire().getEnergyStored() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.FireEnergy.getEnergyStored() & 0x0000ffff;
+				tileEntity.FireEnergy.setEnergy(energyStored | (value << 16));
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getLight().getEnergyStored() & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.LightEnergy.getEnergyStored() & 0xffff0000;
+				tileEntity.LightEnergy.setEnergy(energyStored + (value & 0xffff));
+
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (getLight().getEnergyStored() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.LightEnergy.getEnergyStored() & 0x0000ffff;
+				tileEntity.LightEnergy.setEnergy(energyStored | (value << 16));
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getWater().getEnergyStored() & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.WaterEnergy.getEnergyStored() & 0xffff0000;
+				tileEntity.WaterEnergy.setEnergy(energyStored + (value & 0xffff));
+
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (getWater().getEnergyStored() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.WaterEnergy.getEnergyStored() & 0x0000ffff;
+				tileEntity.WaterEnergy.setEnergy(energyStored | (value << 16));
+			}
+		});
 
 	}
 
