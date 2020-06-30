@@ -63,7 +63,7 @@ public class MCMChestContainer extends Container {
 
 		layoutPlayerInventorySlots(8, 70);
 
-
+		/*
 		trackInt(new IntReferenceHolder() {
 			@Override
 			public int get() {
@@ -87,6 +87,59 @@ public class MCMChestContainer extends Container {
 				tileEntity.MCMEnergy.setEnergy(value);
 			}
 		});
+		 */
+
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getFire().getEnergyStored() & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.FireEnergy.getEnergyStored() & 0xffff0000;
+				tileEntity.FireEnergy.setEnergy(energyStored + (value & 0xffff));
+
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (getFire().getEnergyStored() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+					int energyStored = tileEntity.FireEnergy.getEnergyStored() & 0x0000ffff;
+					tileEntity.FireEnergy.setEnergy(energyStored | (value << 16));
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return getMCM().getEnergyStored() & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.MCMEnergy.getEnergyStored() & 0xffff0000;
+				tileEntity.MCMEnergy.setEnergy(energyStored + (value & 0xffff));
+
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (getMCM().getEnergyStored() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int energyStored = tileEntity.MCMEnergy.getEnergyStored() & 0x0000ffff;
+				tileEntity.MCMEnergy.setEnergy(energyStored | (value << 16));
+			}
+		});
+
 
 	}
 
@@ -105,6 +158,9 @@ public class MCMChestContainer extends Container {
 		throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
 	}
 
+	public int getEnergy(){
+		return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
+	}
 
 
 	public CustomEnergyStorage getFire(){
