@@ -347,6 +347,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						}
 
 						//set with a border right now it works for replacing air with glass
+						int wardBarrier = 0;
 						//TODO: set to WardBarrier
 						try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
 							final int posX = this.getPos().getX();
@@ -372,16 +373,25 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 										final Block block = blockState.getBlock();
 
 										if(block == Blocks.AIR){
-											world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 1);
+											if(EarthEnergy.getEnergyStored() >= 6){
+												world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 2);
+												EarthEnergy.consumeEnergy(6);
+											}
 										}
 										if(block == BlockInitNew.WARDBARRIER.get()){
-
+											if(EarthEnergy.getEnergyStored() >= 1){
+												EarthEnergy.consumeEnergy(1);
+											}else{
+												world.setBlockState(pooledMutable,Blocks.AIR.getDefaultState(), 1);
+											}
 										}
 
 									}
 								}
 							}
+							markDirty();
 						}
+
 					}
 
 
