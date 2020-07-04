@@ -27,6 +27,15 @@ public class EntityEffects {
 
     public static final Effect HEATED = register("heated", new EntityEffect(EffectType.BENEFICIAL, 16750592));
 
+    public  static final Effect TEMPERATURE_WARD = register("temperatureward", new EntityEffect(EffectType.BENEFICIAL, 5750248));
+
+    public static final Effect THIRST_WARD = register("thirstward", new EntityEffect(EffectType.BENEFICIAL, 5750248));
+
+    public static final Effect HUNGER_WARD = register("hungerward", new EntityEffect(EffectType.BENEFICIAL, 5750248));
+
+
+
+
     public static void registerAll(IForgeRegistry<Effect> registry) {
         for (Effect effect : EFFECT) {
             registry.register(effect);

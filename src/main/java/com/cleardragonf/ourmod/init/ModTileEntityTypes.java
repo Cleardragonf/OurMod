@@ -18,6 +18,8 @@ public class ModTileEntityTypes {
 	public static final RegistryObject<TileEntityType<FishingNetTileEntity>> FISHING_NET = TILE_ENTITY_TYPES.register("fishingnet", () -> TileEntityType.Builder.create(FishingNetTileEntity::new, BlockInitNew.FISHING_NET.get()).build(null));
 	public static final RegistryObject<TileEntityType<EssenceCollectorTileEntity>> ESSENCE_COLLECTOR = TILE_ENTITY_TYPES.register("essencecollector", () -> TileEntityType.Builder.create(EssenceCollectorTileEntity::new, BlockInitNew.ESSENCE_COLLECTOR.get()).build(null));
 	public static final RegistryObject<TileEntityType<MCMChestTileEntity>> MCM_Chest = TILE_ENTITY_TYPES.register("mcmchest", () -> TileEntityType.Builder.create(MCMChestTileEntity::new, BlockInitNew.MCM_CHEST.get()).build(null));
+	public static final RegistryObject<TileEntityType<MasterWardStoneTileEntity>> MASTER_WARD_STONE = TILE_ENTITY_TYPES.register("masterwardstone", () -> TileEntityType.Builder.create(MasterWardStoneTileEntity::new, BlockInitNew.MASTER_WARD_STONE.get()).build(null));
+	public static final RegistryObject<TileEntityType<BoundaryWardStoneTileEntity>> BOUNDARY_WARD_STONE = TILE_ENTITY_TYPES.register("boundarywardstone", () -> TileEntityType.Builder.create(BoundaryWardStoneTileEntity::new, BlockInitNew.BOUNDARY_WARD_STONE.get()).build(null));
 
 
 }

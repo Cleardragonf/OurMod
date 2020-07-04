@@ -44,6 +44,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("ourmod")
@@ -52,6 +53,8 @@ public class OurMod
 {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
+
+    public static Optional<Boolean> Debug = Optional.of(false);
     
     //Communication of Server vs Client
     public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
@@ -160,6 +163,6 @@ public class OurMod
     }
 
     private void testing(){
-        System.out.println();
+
     }
 }

@@ -39,6 +39,7 @@
 	"block.ourmod.earthmana": "Earth Essence",
 	"block.ourmod.darkmana": "Dark Essence",
 	"block.ourmod.lightmana": "Light Essence",
+	"block.ourmod.wardbarrier": "Ward Barrier",
 	
 	"block.ourmod.forcefield": "Force Field",
 	"block.ourmod.quarry": "Quarry",
@@ -46,6 +47,8 @@
 	"block.ourmod.fishingnet": "Fishing Net",
 	"block.ourmod.essencecollector": "Essence Collector",
 	"block.ourmod.mcmchest": "MCM Chest",
+	"block.ourmod.masterwardstone": "Master Warding Stone",
+	"block.ourmod.boundarywardstone": "Boundary Ward Stone",
 	
 	"itemGroup.ourmodtab": "Our Mod",
 	

@@ -16,6 +16,7 @@ public class BlockInitNew {
 	public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, OurMod.MOD_ID);
 	
 	public static final RegistryObject<Block> FORCEFIELD = BLOCKS.register("forcefield", ()-> new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
+	public static final RegistryObject<Block> WARDBARRIER = BLOCKS.register("wardbarrier", ()-> new WardBarrier(Block.Properties.create(Material.IRON).hardnessAndResistance(5000.0f, 5000.0f)));
 	
 	
 	//TileEntities
@@ -24,6 +25,8 @@ public class BlockInitNew {
 	public static final RegistryObject<Block> ESSENCE_COLLECTOR = BLOCKS.register("essencecollector", ()-> new EssenceCollector(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	public static final RegistryObject<Block> FISHING_NET = BLOCKS.register("fishingnet", ()-> new FishingNet(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	public static final RegistryObject<MCMChest> MCM_CHEST = BLOCKS.register("mcmchest", MCMChest::new);
+	public static final RegistryObject<Block> MASTER_WARD_STONE = BLOCKS.register("masterwardstone", ()-> new MasterWardStoneBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
+	public static final RegistryObject<Block> BOUNDARY_WARD_STONE = BLOCKS.register("boundarywardstone", ()-> new BoundaryWardStoneBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 
 	//CROPS
 	public static final RegistryObject<Block> TOMATO_CROP = BLOCKS.register("tomatocrop", () -> new TomatoCrop(Block.Properties.from(Blocks.WHEAT)));
