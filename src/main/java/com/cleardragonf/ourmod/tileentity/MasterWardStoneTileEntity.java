@@ -1,7 +1,9 @@
 package com.cleardragonf.ourmod.tileentity;
 
 import com.cleardragonf.ourmod.Data.Wards;
+import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.container.MasterWardStoneContainer;
+import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
@@ -43,6 +45,7 @@ import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public class MasterWardStoneTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
@@ -52,6 +55,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public List<Wards> activeWardList;
 	public int wardHeight = 5;
 	private ListNBT wards = new ListNBT();
+    public INBT energyblocks;
 
 	public void addWardStone(INBT target){
 		boundaryWardStones.add(target);
@@ -67,7 +71,15 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public int healLevel = 0;
 	public int antiThirstLevel = 0;
 	public int antiHungerLevel = 0;
+    public int entitiesThatRequireEnergy = 0;
+    public int blocksNeedingEnergy = 0;
 
+    public boolean enoughFire = true;
+    public boolean enoughWater = true;
+    public boolean enoughEarth = true;
+    public boolean enoughAir = true;
+    public boolean enoughLight = true;
+    public boolean enoughDark = true;
 
 
 	public MasterWardStoneTileEntity(TileEntityType<?> typeIn) {
@@ -129,6 +141,10 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		wards.put("antithirst",antiThirstTag);
 		compound.put("wards", wards);
 		compound.put("wardshape", this.boundaryWardStones);
+		if (energyblocks != null){
+
+			tag.put("energypos", this.energyblocks);
+		}
 		compound.putInt("fireenergy", this.FireEnergy.getEnergyStored());
 		compound.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
 		compound.putInt("airenergy", this.AirEnergy.getEnergyStored());
@@ -209,13 +225,74 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		if (tick == 40) {
 			tick = 0;
 			if (y > 2)
+                executeEnergyUsage();
 				execute();
 		}
 
 
 	}
 
-	private void execute() {
+	//TODO: beginning work on Energy Finding, Consumtion and Requirements.
+    private void executeEnergyUsage() {
+		if(energyblocks != null){
+			CompoundNBT tagger = (CompoundNBT) energyblocks;
+
+			BlockPos pos = new BlockPos(tagger.getInt("x"),tagger.getInt("y"),tagger.getInt("z"));
+			TileEntity tileEntity = world.getTileEntity(pos);
+			if(tileEntity instanceof EssenceCollectorTileEntity){
+				EssenceCollectorTileEntity tileTarget = (EssenceCollectorTileEntity) tileEntity;
+
+
+				if(tileTarget.FireEnergy.getEnergyStored() > 0 && this.FireEnergy.getEnergyStored() < 1000000){
+					int transfer = tileTarget.FireEnergy.getEnergyStored();
+					tileTarget.FireEnergy.consumeEnergy(transfer);
+					this.FireEnergy.addEnergy(transfer);
+					write(tag);
+					markDirty();
+				}
+				if(tileTarget.WaterEnergy.getEnergyStored() > 0 && this.WaterEnergy.getEnergyStored() < 1000000){
+					int transfer = tileTarget.WaterEnergy.getEnergyStored();
+					tileTarget.WaterEnergy.consumeEnergy(transfer);
+					this.WaterEnergy.addEnergy(transfer);
+					write(tag);
+					markDirty();
+				}
+				if(tileTarget.AirEnergy.getEnergyStored() > 0 && this.AirEnergy.getEnergyStored() < 1000000){
+					int transfer = tileTarget.AirEnergy.getEnergyStored();
+					tileTarget.AirEnergy.consumeEnergy(transfer);
+					this.AirEnergy.addEnergy(transfer);
+					write(tag);
+					markDirty();
+				}
+				if(tileTarget.EarthEnergy.getEnergyStored() > 0 && this.EarthEnergy.getEnergyStored() < 1000000){
+					int transfer = tileTarget.EarthEnergy.getEnergyStored();
+					tileTarget.EarthEnergy.consumeEnergy(transfer);
+					this.EarthEnergy.addEnergy(transfer);
+					write(tag);
+					markDirty();
+				}
+				if(tileTarget.DarkEnergy.getEnergyStored() > 0 && this.DarkEnergy.getEnergyStored() < 1000000){
+					int transfer = tileTarget.DarkEnergy.getEnergyStored();
+					tileTarget.DarkEnergy.consumeEnergy(transfer);
+					this.DarkEnergy.addEnergy(transfer);
+					write(tag);
+					markDirty();
+				}
+				if(tileTarget.LightEnergy.getEnergyStored() > 0 && this.LightEnergy.getEnergyStored() < 1000000){
+					int transfer = tileTarget.LightEnergy.getEnergyStored();
+					tileTarget.LightEnergy.consumeEnergy(transfer);
+					this.LightEnergy.addEnergy(transfer);
+					write(tag);
+					markDirty();
+				}
+			}else{
+				energyblocks = null;
+			}
+
+		}
+    }
+
+    private void execute() {
 		List<BlockPos> boundaryList = new LinkedList<>();
 		boolean needsSave = false;
 		if(boundaryWardStones != null){
@@ -226,16 +303,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				BlockPos pos = new BlockPos(tagger.getInt("x"), tagger.getInt("y"), tagger.getInt("z"));
 				boundaryList.add(pos);
 			}
-/*			for (INBT entry: boundaryWardStones) {
-				CompoundNBT tagger = (CompoundNBT) entry;
-				BlockPos pos = new BlockPos(tagger.getInt("x"),tagger.getInt("y"),tagger.getInt("z"));
-				boundaryList.add(pos);
-			}
-
- */
-
 				if(boundaryWardStones.size() == 4){
-					System.out.println("mmmm");
 					//4 * pie * r * r
 					boolean stonePlacementAccurate = false;
 					//sqrt((x1-x2)^2 + (y1-y2) ^2+( z1 - z1)^2)
@@ -244,33 +312,40 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					int z1 = tileEntity.getPos().getZ();
 					//
 					int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(0).getX() , 2) + Math.pow(y1 - boundaryList.get(0).getY() , 2) + Math.pow(z1 - boundaryList.get(0).getZ() , 2));
-					System.out.println(radius1);
+
 					int radius2 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(1).getX(),2) + Math.pow(y1 - boundaryList.get(1).getY(),2)  + Math.pow(z1 - boundaryList.get(1).getZ(),2));
-					System.out.println(radius2);
+
 					int radius3 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(2).getX(),2) + Math.pow(y1 - boundaryList.get(2).getY(),2)  + Math.pow(z1 - boundaryList.get(2).getZ(),2));
-					System.out.println(radius3);
+
 					int radius4 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(3).getX(),2) + Math.pow(y1 - boundaryList.get(3).getY(),2)  + Math.pow(z1 - boundaryList.get(3).getZ(),2));
-					System.out.println(radius4);
+
 					if(radius1 == radius2 && radius1 == radius3 && radius1 == radius4) {
-						System.out.println("radius's are correct");
+
 						if(world.getTileEntity(boundaryList.get(0)) instanceof BoundaryWardStoneTileEntity && world.getTileEntity(boundaryList.get(1)) instanceof BoundaryWardStoneTileEntity
 								&&world.getTileEntity(boundaryList.get(2)) instanceof BoundaryWardStoneTileEntity&&world.getTileEntity(boundaryList.get(3)) instanceof BoundaryWardStoneTileEntity) {
 							stonePlacementAccurate = true;
-							System.out.println("all are correct");
+
 						}else{
 							stonePlacementAccurate = false;
-							System.out.println("none are");
+
 						}
 					}
 					//TODO: start adding a list view here that'll cycle through all wards attatched to this TE
 					if(stonePlacementAccurate == true){
 						//double d0 = (double)(1 * 10 + 10);
+
 						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(radius1).expand(0.0D, 0.0D, 0.0D);
 						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
-
-						for(PlayerEntity playerentity : list) {
-							playerentity.addPotionEffect(new EffectInstance(Effects.HEALTH_BOOST, 50, 1, true, true));
+						if(this.AirEnergy.getEnergyStored() >= (10*list.size())){
+							for(PlayerEntity playerentity : list) {
+								playerentity.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 20, 1, true, true));
+								playerentity.addPotionEffect(new EffectInstance(EntityEffects.TEMPERATURE_WARD, 20, 1, true, true));
+								playerentity.addPotionEffect(new EffectInstance(EntityEffects.THIRST_WARD, 20, 1, true, true));
+							}
+						}else{
+							System.out.println("Not activiating Effect...because Air Storage only at " + AirEnergy.getEnergyStored());
 						}
+
 						//set with a border right now it works for replacing air with glass
 						//TODO: set to WardBarrier
 						try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
@@ -299,18 +374,25 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 										if(block == Blocks.AIR){
 											world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 1);
 										}
+										if(block == BlockInitNew.WARDBARRIER.get()){
+
+										}
+
 									}
 								}
 							}
 						}
 					}
+
+
 				else{
-					System.out.println(boundaryWardStones.size());
+
 				}
 			}
 		}else{
-				System.out.println("boundarywardstones list is null");
+
 			}
+
 		if(needsSave){
 			this.markDirty();
 		}
@@ -362,6 +444,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 
 	public void readRestorableNBT(CompoundNBT tag) {
+		energyblocks = tag.get("energypos");
 		CompoundNBT wards = (CompoundNBT) tag.getCompound("wards");
 			CompoundNBT antiThirstTag = (CompoundNBT) wards.getCompound("antithirst");
 				this.antiThirst = antiThirstTag.getBoolean("status");

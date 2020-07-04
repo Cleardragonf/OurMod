@@ -58,11 +58,9 @@ public class OurBookScreen extends Screen {
         int x = (this.width) / 2;
         int y = (this.height - this.ySize) / 2;
         Button nextButton = new Button(x + 100, y + 200, 50, 20, "Next Page", (button) -> {
-            System.out.println("button testing");
             PageTurn("Next");
         });
         Button prevButton = new Button (x - 100, y + 200, 50, 20, "Prev Page", (button) -> {
-            System.out.println("button testing");
             PageTurn("Prev");
         });
         this.addButton(nextButton);
@@ -345,12 +343,10 @@ public class OurBookScreen extends Screen {
         if(direction == "Next"){
             if (pageNumber < 10){
                 pageNumber++;
-                System.out.println(pageNumber);
             }
         }else{
             if(pageNumber > 1){
                 pageNumber--;
-                System.out.println(pageNumber);
             }
         }
     }

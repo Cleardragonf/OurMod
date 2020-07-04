@@ -1,6 +1,7 @@
 package com.cleardragonf.ourmod.objects.blocks;
 
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
+import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import com.cleardragonf.ourmod.tileentity.MasterWardStoneTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -61,9 +62,12 @@ public class MasterWardStoneBlock extends Block{
 					tileEntity.markDirty();
 					tileEntity.updateBlock();
 				}
-
-
-
+				if(tag.contains("energypos")){
+					MasterWardStoneTileEntity tileEntity = (MasterWardStoneTileEntity) world.getTileEntity(pos);
+					tileEntity.energyblocks = tag.get("energypos");
+					tileEntity.markDirty();
+					tileEntity.updateBlock();
+				}
 				NetworkHooks.openGui((ServerPlayerEntity) player, (MasterWardStoneTileEntity) tile, pos);
 				return ActionResultType.SUCCESS;
 			}

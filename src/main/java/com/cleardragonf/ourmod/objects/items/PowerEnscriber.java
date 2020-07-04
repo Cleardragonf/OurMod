@@ -4,6 +4,7 @@ import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.objects.blocks.EssenceCollector;
 import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
+import com.cleardragonf.ourmod.tileentity.MasterWardStoneTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
@@ -47,6 +48,16 @@ public class PowerEnscriber extends Item{
         BlockState blockstate = world.getBlockState(blockpos);
         TileEntity tileEntity = world.getTileEntity(blockpos);
         if(tileEntity instanceof MCMChestTileEntity){
+            if(tag.contains("energypos")){
+                ITextComponent text = new TranslationTextComponent("Connecting to: " + tag.get("energypos"));
+                context.getPlayer().sendMessage(text);
+            }else{
+                ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
+                context.getPlayer().sendMessage(text);
+            }
+            return ActionResultType.SUCCESS;
+        }
+        else if(tileEntity instanceof MasterWardStoneTileEntity){
             if(tag.contains("energypos")){
                 ITextComponent text = new TranslationTextComponent("Connecting to: " + tag.get("energypos"));
                 context.getPlayer().sendMessage(text);
