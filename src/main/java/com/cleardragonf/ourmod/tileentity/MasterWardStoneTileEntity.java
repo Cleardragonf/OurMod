@@ -327,7 +327,6 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 						}else{
 							stonePlacementAccurate = false;
-
 						}
 					}
 					//TODO: start adding a list view here that'll cycle through all wards attatched to this TE
@@ -341,6 +340,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 								playerentity.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 20, 1, true, true));
 								playerentity.addPotionEffect(new EffectInstance(EntityEffects.TEMPERATURE_WARD, 20, 1, true, true));
 								playerentity.addPotionEffect(new EffectInstance(EntityEffects.THIRST_WARD, 20, 1, true, true));
+								AirEnergy.consumeEnergy(10);
 							}
 						}else{
 							System.out.println("Not activiating Effect...because Air Storage only at " + AirEnergy.getEnergyStored());
