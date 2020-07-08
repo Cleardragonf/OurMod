@@ -3,14 +3,19 @@ package com.cleardragonf.ourmod.container;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModContainerTypes;
+import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import com.cleardragonf.ourmod.tileentity.MasterWardStoneTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import java.util.Objects;
 
@@ -18,12 +23,15 @@ public class MasterWardStoneContainer extends Container {
 
 	public final MasterWardStoneTileEntity tileEntity;
 	private final IWorldPosCallable canInteractWithCallable;
+	private IItemHandler playerInventory;
 
 	public MasterWardStoneContainer(final int windowId, final PlayerInventory playerInventory,
                                     final MasterWardStoneTileEntity tileEntity) {
 		super(ModContainerTypes.MASTER_WARD_STONE.get(), windowId);
 		this.tileEntity = tileEntity;
 		this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
+
+		this.playerInventory = new InvWrapper(playerInventory);
 
 		trackInt(new IntReferenceHolder() {
 			@Override
@@ -93,6 +101,43 @@ public class MasterWardStoneContainer extends Container {
 		});
 
 
+		int startX = 8;
+		int startY = 173;
+		int slotSizePlus2 = 18;
+
+		//MainSlots
+		addSlot(new SlotItemHandler(((MasterWardStoneTileEntity) tileEntity).inventory, 0,80,12));
+		addSlot(new SlotItemHandler(((MasterWardStoneTileEntity) tileEntity).inventory, 1,134,66));
+		addSlot(new SlotItemHandler(((MasterWardStoneTileEntity) tileEntity).inventory, 2,80,120));
+		addSlot(new SlotItemHandler(((MasterWardStoneTileEntity) tileEntity).inventory, 3,26,66));
+		addSlot(new SlotItemHandler(((MasterWardStoneTileEntity) tileEntity).inventory, 4,80,66));
+
+		layoutPlayerInventorySlots(8,173);
+	}
+	private int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
+		for (int i = 0 ; i < amount ; i++) {
+			addSlot(new SlotItemHandler(handler, index, x, y));
+			x += dx;
+			index++;
+		}
+		return index;
+	}
+
+	private int addSlotBox(IItemHandler handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
+		for (int j = 0 ; j < verAmount ; j++) {
+			index = addSlotRange(handler, index, x, y, horAmount, dx);
+			y += dy;
+		}
+		return index;
+	}
+
+	private void layoutPlayerInventorySlots(int leftCol, int topRow) {
+		// Player inventory
+		addSlotBox(playerInventory, 9, leftCol, 174, 9, 18, 3, 18);
+
+		// Hotbar
+		topRow += 58;
+		addSlotRange(playerInventory, 0, leftCol, 232, 9, 18);
 	}
 
 	private static MasterWardStoneTileEntity getTileEntity(final PlayerInventory playerInventory,
@@ -140,4 +185,6 @@ public class MasterWardStoneContainer extends Container {
 		MasterWardStoneTileEntity tile = (MasterWardStoneTileEntity) tileEntity;
 		return tile.LightEnergy;
 	}
+
+
 }

@@ -2,6 +2,7 @@ package com.cleardragonf.ourmod.tileentity;
 
 import com.cleardragonf.ourmod.Data.Wards;
 import com.cleardragonf.ourmod.OurMod;
+import com.cleardragonf.ourmod.container.FishingNetContainer;
 import com.cleardragonf.ourmod.container.MasterWardStoneContainer;
 import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
@@ -17,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.IFluidState;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -29,17 +31,21 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -48,7 +54,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public class MasterWardStoneTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class MasterWardStoneTileEntity extends LockableLootTileEntity implements ITickableTileEntity, INamedContainerProvider {
 
 	public INBT wardStone;
 	public ListNBT boundaryWardStones = new ListNBT();
@@ -60,6 +66,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public void addWardStone(INBT target){
 		boundaryWardStones.add(target);
 	}
+	private NonNullList<ItemStack> chestContents = NonNullList.withSize(36, ItemStack.EMPTY);
 
 	protected int numPlayersUsing;
 	private boolean initialized = false;
@@ -101,6 +108,53 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public final CustomEnergyStorage DarkEnergy = new CustomEnergyStorage(100000, 0);
 
 	public final CustomEnergyStorage LightEnergy = new CustomEnergyStorage(100000, 0);
+
+	//Inventory Portion of MasterWardStone
+	@Override
+	public int getSizeInventory() {
+		return 36;
+	}
+
+	@Override
+	public NonNullList<ItemStack> getItems() {
+		return this.chestContents;
+	}
+
+	@Override
+	public void setItems(NonNullList<ItemStack> itemsIn) {
+		this.chestContents = itemsIn;
+	}
+	@Override
+	protected ITextComponent getDefaultName() {
+		return new TranslationTextComponent("Master Ward Array");
+	}
+
+	@Override
+	protected Container createMenu(int id, PlayerInventory player) {
+		return new MasterWardStoneContainer(id, player, this);
+	}
+
+	public final ItemStackHandler inventory = new ItemStackHandler(5){
+
+		@Override
+		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+			if (stack.getItem() == null) {
+				return stack;
+			}
+			return super.insertItem(slot, stack, simulate);
+		}
+
+		@Override
+		public boolean isItemValid(int slot, ItemStack stack) {
+			return stack.getItem() != null;
+		}
+
+		@Override
+		protected void onContentsChanged(int slot) {
+			MasterWardStoneTileEntity.this.markDirty();
+		}
+	};
+
 
 	/*
 	public CompoundNBT serializeWard(){

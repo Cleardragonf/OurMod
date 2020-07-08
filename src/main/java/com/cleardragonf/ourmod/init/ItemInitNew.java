@@ -2,18 +2,20 @@ package com.cleardragonf.ourmod.init;
 
 import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.OurMod.OurModItemGroup;
-import com.cleardragonf.ourmod.objects.items.OurBook;
-import com.cleardragonf.ourmod.objects.items.PowerEnscriber;
-import com.cleardragonf.ourmod.objects.items.Sickle;
+import com.cleardragonf.ourmod.objects.items.*;
 
-import com.cleardragonf.ourmod.objects.items.WardEnscriber;
+import com.google.common.collect.Maps;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
+import net.minecraft.util.Direction;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
+
+import java.util.EnumSet;
+import java.util.Map;
 
 public class ItemInitNew {
 	public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, OurMod.MOD_ID);
@@ -49,6 +51,10 @@ public class ItemInitNew {
 	public static final RegistryObject<Item> POWER_ENSCRIBER = ITEMS.register("powerenscriber", () -> new PowerEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_ENSCRIBER = ITEMS.register("wardenscriber", () -> new WardEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
 
+	//Wards
+
+	public static final Map<Direction, RegistryObject<Item>> WARD_STONES = Maps.asMap(EnumSet.allOf(Direction.class),
+			dir -> ITEMS.register(dir.name(), () -> new WardTablets(new Item.Properties().group(OurModItemGroup.instance))));
 	//Blocks
 
 	@ObjectHolder("ourmod:lightmana")
