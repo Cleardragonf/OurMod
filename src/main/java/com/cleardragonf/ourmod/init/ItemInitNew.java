@@ -4,18 +4,17 @@ import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.OurMod.OurModItemGroup;
 import com.cleardragonf.ourmod.objects.items.*;
 
-import com.google.common.collect.Maps;
+import com.cleardragonf.ourmod.objects.items.wards.DaytimeWardTablet;
+import com.cleardragonf.ourmod.objects.items.wards.HealingWardTablet;
+import com.cleardragonf.ourmod.objects.items.wards.HungerWardTablet;
+import com.cleardragonf.ourmod.objects.items.wards.ThirstWardTablet;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
-import net.minecraft.util.Direction;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
-
-import java.util.EnumSet;
-import java.util.Map;
 
 public class ItemInitNew {
 	public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, OurMod.MOD_ID);
@@ -52,9 +51,25 @@ public class ItemInitNew {
 	public static final RegistryObject<Item> WARD_ENSCRIBER = ITEMS.register("wardenscriber", () -> new WardEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
 
 	//Wards
+	public static final RegistryObject<Item> WARD_STONES_HEALING = ITEMS.register("healingward", () -> new HealingWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_HUNGER = ITEMS.register("hungerward", () -> new HungerWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_THIRST = ITEMS.register("thirstward", () -> new ThirstWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_DAYTIME = ITEMS.register("daytimeward", () -> new DaytimeWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	/*
+	public static <K, R extends IForgeRegistryEntry<R>, V extends R> Map<K, RegistryObject<V>> registerManyObjects(Iterable<K> keys, DeferredRegister<R> register, Function<K, String> nameGetter, Function<K, V> factory)
+	{
+		Map<K, RegistryObject<V>> map = new HashMap<>();
 
-	public static final Map<Direction, RegistryObject<Item>> WARD_STONES = Maps.asMap(EnumSet.allOf(Direction.class),
-			dir -> ITEMS.register(dir.name(), () -> new WardTablets(new Item.Properties().group(OurModItemGroup.instance))));
+		for (K key : keys)
+		{
+			register.register(nameGetter.apply(key), () -> factory.apply(key));
+		}
+
+		return map;
+	}
+
+	 */
+
 	//Blocks
 
 	@ObjectHolder("ourmod:lightmana")

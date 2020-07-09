@@ -7,6 +7,7 @@ import com.cleardragonf.ourmod.container.MasterWardStoneContainer;
 import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
+import com.cleardragonf.ourmod.init.ItemInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import com.cleardragonf.ourmod.objects.blocks.BoundaryWardStoneBlock;
 import com.cleardragonf.ourmod.objects.blocks.MasterWardStoneBlock;
@@ -19,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -66,7 +68,7 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 	public void addWardStone(INBT target){
 		boundaryWardStones.add(target);
 	}
-	private NonNullList<ItemStack> chestContents = NonNullList.withSize(36, ItemStack.EMPTY);
+	private NonNullList<ItemStack> chestContents = NonNullList.withSize(5, ItemStack.EMPTY);
 
 	protected int numPlayersUsing;
 	private boolean initialized = false;
@@ -112,7 +114,7 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 	//Inventory Portion of MasterWardStone
 	@Override
 	public int getSizeInventory() {
-		return 36;
+		return 5;
 	}
 
 	@Override
@@ -180,6 +182,9 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
 		super.write(compound);
+		if (!this.checkLootAndWrite(compound)) {
+			ItemStackHelper.saveAllItems(compound, this.chestContents);
+		}
 		CompoundNBT wards = new CompoundNBT();
 		CompoundNBT healtag = new CompoundNBT();
 			tag.putBoolean("status", healTeam);
@@ -358,6 +363,7 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 				boundaryList.add(pos);
 			}
 				if(boundaryWardStones.size() == 4){
+
 					//4 * pie * r * r
 					boolean stonePlacementAccurate = false;
 					//sqrt((x1-x2)^2 + (y1-y2) ^2+( z1 - z1)^2)
@@ -391,9 +397,13 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
 						if(this.AirEnergy.getEnergyStored() >= (10*list.size())){
 							for(PlayerEntity playerentity : list) {
-								playerentity.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 20, 1, true, true));
-								playerentity.addPotionEffect(new EffectInstance(EntityEffects.TEMPERATURE_WARD, 20, 1, true, true));
-								playerentity.addPotionEffect(new EffectInstance(EntityEffects.THIRST_WARD, 20, 1, true, true));
+								if(this.WaterEnergy.getEnergyStored() >= (10*list.size()) && this.EarthEnergy.getEnergyStored() >= (10*list.size())){
+									if(this.chestContents.contains(ItemInitNew.WARD_STONES_HUNGER)){
+										playerentity.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 20, 1, true, true));
+										EarthEnergy.consumeEnergy(10);
+										WaterEnergy.consumeEnergy(10);
+									}
+								}
 								AirEnergy.consumeEnergy(10);
 							}
 						}else{
@@ -508,6 +518,10 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 
 
 	public void readRestorableNBT(CompoundNBT tag) {
+		this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+		if (!this.checkLootAndRead(tag)) {
+			ItemStackHelper.loadAllItems(tag, this.chestContents);
+		}
 		energyblocks = tag.get("energypos");
 		CompoundNBT wards = (CompoundNBT) tag.getCompound("wards");
 			CompoundNBT antiThirstTag = (CompoundNBT) wards.getCompound("antithirst");
