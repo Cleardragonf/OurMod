@@ -350,20 +350,22 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 											ItemStack item = e.getStackInSlot(i);
 											int level = e.getStackInSlot(i).getCount();
 											switch (item.getItem().getClass().getName()){
-												case "HungerWardTablet":
+												case "com.cleardragonf.ourmod.objects.items.wards.HungerWardTablet":
 													checkWardRequirements("Hunger", level, playerentity);
+													System.out.println(level + " " + "Hunger");
 													break;
-												case "ThirstWardTablet":
+												case "com.cleardragonf.ourmod.objects.items.wards.ThirstWardTablet":
 													checkWardRequirements("Thirst", level, playerentity);
 													break;
-												case "HealingWardTablet":
+												case "com.cleardragonf.ourmod.objects.items.wards.HealingWardTablet":
 													checkWardRequirements("Healing", level, playerentity);
 													break;
-												case "TemperatureWardTablet":
+												case "com.cleardragonf.ourmod.objects.items.wards.TemperatureWardTablet":
 													checkWardRequirements("Temperature", level, playerentity);
 													break;
 												default:
 													checkWardRequirements("None", level, playerentity);
+													System.out.println(item.getItem().getClass().getName());
 													break;
 											}
 										}
@@ -456,8 +458,11 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 			case "Hunger":
 				earthReq = 10;
 				waterReq = 10;
+				System.out.println("made it to this point");
 				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && WaterEnergy.getEnergyStored() >= (waterReq * level)){
 					player.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 30, 1,true, true));
+					EarthEnergy.consumeEnergy(earthReq * level);
+					WaterEnergy.consumeEnergy(waterReq * level);
 				}
 				break;
 			case "Healing":
