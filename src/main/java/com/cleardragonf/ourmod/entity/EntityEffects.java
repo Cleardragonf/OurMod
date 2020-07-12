@@ -33,6 +33,8 @@ public class EntityEffects {
 
     public static final Effect HUNGER_WARD = register("hungerward", new EntityEffect(EffectType.BENEFICIAL, 5750248));
 
+    public static final Effect HEALING_WARD = register("healingward", new EntityEffect(EffectType.BENEFICIAL, 5750248));
+
 
 
 

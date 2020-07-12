@@ -11,6 +11,10 @@ import com.cleardragonf.ourmod.init.ItemInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import com.cleardragonf.ourmod.objects.blocks.BoundaryWardStoneBlock;
 import com.cleardragonf.ourmod.objects.blocks.MasterWardStoneBlock;
+import com.cleardragonf.ourmod.objects.items.wards.HealingWardTablet;
+import com.cleardragonf.ourmod.objects.items.wards.HungerWardTablet;
+import com.cleardragonf.ourmod.objects.items.wards.TemperatureWardTablet;
+import com.cleardragonf.ourmod.objects.items.wards.ThirstWardTablet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -47,6 +51,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -56,7 +63,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public class MasterWardStoneTileEntity extends LockableLootTileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class MasterWardStoneTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
 	public INBT wardStone;
 	public ListNBT boundaryWardStones = new ListNBT();
@@ -65,10 +72,11 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 	private ListNBT wards = new ListNBT();
     public INBT energyblocks;
 
+    public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
+
 	public void addWardStone(INBT target){
 		boundaryWardStones.add(target);
 	}
-	private NonNullList<ItemStack> chestContents = NonNullList.withSize(5, ItemStack.EMPTY);
 
 	protected int numPlayersUsing;
 	private boolean initialized = false;
@@ -112,30 +120,6 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 	public final CustomEnergyStorage LightEnergy = new CustomEnergyStorage(100000, 0);
 
 	//Inventory Portion of MasterWardStone
-	@Override
-	public int getSizeInventory() {
-		return 5;
-	}
-
-	@Override
-	public NonNullList<ItemStack> getItems() {
-		return this.chestContents;
-	}
-
-	@Override
-	public void setItems(NonNullList<ItemStack> itemsIn) {
-		this.chestContents = itemsIn;
-	}
-	@Override
-	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent("Master Ward Array");
-	}
-
-	@Override
-	protected Container createMenu(int id, PlayerInventory player) {
-		return new MasterWardStoneContainer(id, player, this);
-	}
-
 	public final ItemStackHandler inventory = new ItemStackHandler(5){
 
 		@Override
@@ -156,6 +140,10 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 			MasterWardStoneTileEntity.this.markDirty();
 		}
 	};
+
+    private IItemHandler createHandler() {
+        return inventory;
+    }
 
 
 	/*
@@ -178,46 +166,6 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 	}
 
 	 */
-
-	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
-		if (!this.checkLootAndWrite(compound)) {
-			ItemStackHelper.saveAllItems(compound, this.chestContents);
-		}
-		CompoundNBT wards = new CompoundNBT();
-		CompoundNBT healtag = new CompoundNBT();
-			tag.putBoolean("status", healTeam);
-			tag.putInt("level", healLevel);
-		CompoundNBT antiHungerTag = new CompoundNBT();
-			antiHungerTag.putBoolean("status", antiHunger);
-			antiHungerTag.putInt("level",antiHungerLevel);
-		CompoundNBT antiThirstTag = new CompoundNBT();
-			antiThirstTag.putBoolean("status", antiThirst);
-			antiThirstTag.putInt("level", antiThirstLevel);
-		wards.put("healteam",healtag);
-		wards.put("antihunger",antiHungerTag);
-		wards.put("antithirst",antiThirstTag);
-		compound.put("wards", wards);
-		compound.put("wardshape", this.boundaryWardStones);
-		if (energyblocks != null){
-
-			tag.put("energypos", this.energyblocks);
-		}
-		compound.putInt("fireenergy", this.FireEnergy.getEnergyStored());
-		compound.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
-		compound.putInt("airenergy", this.AirEnergy.getEnergyStored());
-		compound.putInt("earthenergy", this.EarthEnergy.getEnergyStored());
-		compound.putInt("darkenergy", this.DarkEnergy.getEnergyStored());
-		compound.putInt("lightenergy", this.LightEnergy.getEnergyStored());
-		return compound;
-	}
-
-	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
-		readRestorableNBT(compound);
-	}
 
 	@Override
 
@@ -397,13 +345,37 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
 						if(this.AirEnergy.getEnergyStored() >= (10*list.size())){
 							for(PlayerEntity playerentity : list) {
-								if(this.WaterEnergy.getEnergyStored() >= (10*list.size()) && this.EarthEnergy.getEnergyStored() >= (10*list.size())){
+									handler.ifPresent(e ->{
+										for (int i = 0; i < 5; i++) {
+											ItemStack item = e.getStackInSlot(i);
+											int level = e.getStackInSlot(i).getCount();
+											switch (item.getItem().getClass().getName()){
+												case "HungerWardTablet":
+													checkWardRequirements("Hunger", level, playerentity);
+													break;
+												case "ThirstWardTablet":
+													checkWardRequirements("Thirst", level, playerentity);
+													break;
+												case "HealingWardTablet":
+													checkWardRequirements("Healing", level, playerentity);
+													break;
+												case "TemperatureWardTablet":
+													checkWardRequirements("Temperature", level, playerentity);
+													break;
+												default:
+													checkWardRequirements("None", level, playerentity);
+													break;
+											}
+										}
+									});
+									/*
 									if(this.chestContents.contains(ItemInitNew.WARD_STONES_HUNGER)){
 										playerentity.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 20, 1, true, true));
 										EarthEnergy.consumeEnergy(10);
 										WaterEnergy.consumeEnergy(10);
 									}
-								}
+
+									 */
 								AirEnergy.consumeEnergy(10);
 							}
 						}else{
@@ -472,6 +444,56 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 		}
 	}
 
+	private void checkWardRequirements(String ward, int level, PlayerEntity player) {
+		int waterReq = 0;
+		int fireReq = 0;
+		int earthReq = 0;
+		int airReq = 0;
+		int lightReq = 0;
+		int darkReq = 0;
+
+		switch (ward){
+			case "Hunger":
+				earthReq = 10;
+				waterReq = 10;
+				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && WaterEnergy.getEnergyStored() >= (waterReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 30, 1,true, true));
+				}
+				break;
+			case "Healing":
+				earthReq = 10;
+				fireReq = 10;
+				lightReq = 10;
+				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.HEALING_WARD, 30, 1,true, true));
+					FireEnergy.consumeEnergy(fireReq * level);
+					EarthEnergy.consumeEnergy(earthReq * level);
+					LightEnergy.consumeEnergy(lightReq * level);
+
+				}
+				break;
+			case "Thirst":
+				waterReq = 20;
+				if(WaterEnergy.getEnergyStored() >= (waterReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.THIRST_WARD, 30, 1,true, true));
+					WaterEnergy.consumeEnergy(waterReq * level);
+				}
+				break;
+			case "Temperature":
+				fireReq = 10;
+				lightReq = 10;
+				earthReq = 10;
+				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.TEMPERATURE_WARD, 30, 1,true, true));
+					FireEnergy.consumeEnergy(fireReq * level);
+					LightEnergy.consumeEnergy(lightReq * level);
+					EarthEnergy.consumeEnergy(earthReq * level);
+				}
+				break;
+
+		}
+	}
+
 	private boolean destroyBlock(BlockPos pos, boolean dropBlock, @Nullable Entity entity) {
 		BlockState blockstate = world.getBlockState(pos);
 		if(blockstate.isAir(world, pos))return false;
@@ -511,17 +533,62 @@ public class MasterWardStoneTileEntity extends LockableLootTileEntity implements
 		return tag;
 	}
 
-	@Override
+
+    @Override
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
+        //TODO:: add a write method
+        handler.ifPresent(h -> {
+            CompoundNBT tag2 = ((INBTSerializable<CompoundNBT>) inventory).serializeNBT();
+            compound.put("inv", tag2);
+        });
+
+        compound.put("inv", inventory.serializeNBT());
+        CompoundNBT wards = new CompoundNBT();
+        CompoundNBT healtag = new CompoundNBT();
+        tag.putBoolean("status", healTeam);
+        tag.putInt("level", healLevel);
+        CompoundNBT antiHungerTag = new CompoundNBT();
+        antiHungerTag.putBoolean("status", antiHunger);
+        antiHungerTag.putInt("level",antiHungerLevel);
+        CompoundNBT antiThirstTag = new CompoundNBT();
+        antiThirstTag.putBoolean("status", antiThirst);
+        antiThirstTag.putInt("level", antiThirstLevel);
+        wards.put("healteam",healtag);
+        wards.put("antihunger",antiHungerTag);
+        wards.put("antithirst",antiThirstTag);
+        compound.put("wards", wards);
+        compound.put("wardshape", this.boundaryWardStones);
+        if (energyblocks != null){
+
+            tag.put("energypos", this.energyblocks);
+        }
+        compound.putInt("fireenergy", this.FireEnergy.getEnergyStored());
+        compound.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
+        compound.putInt("airenergy", this.AirEnergy.getEnergyStored());
+        compound.putInt("earthenergy", this.EarthEnergy.getEnergyStored());
+        compound.putInt("darkenergy", this.DarkEnergy.getEnergyStored());
+        compound.putInt("lightenergy", this.LightEnergy.getEnergyStored());
+        return compound;
+    }
+
+    @Override
+    public void read(CompoundNBT compound) {
+        super.read(compound);
+        readRestorableNBT(compound);
+    }
+
+
+    @Override
 	public void handleUpdateTag(CompoundNBT tag) {
 		this.read(tag);
 	}
 
 
 	public void readRestorableNBT(CompoundNBT tag) {
-		this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
-		if (!this.checkLootAndRead(tag)) {
-			ItemStackHelper.loadAllItems(tag, this.chestContents);
-		}
+		//TODO::Add a inv read
+        CompoundNBT invTag = tag.getCompound("inv");
+        handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
 		energyblocks = tag.get("energypos");
 		CompoundNBT wards = (CompoundNBT) tag.getCompound("wards");
 			CompoundNBT antiThirstTag = (CompoundNBT) wards.getCompound("antithirst");
