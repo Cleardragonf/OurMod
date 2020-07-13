@@ -460,7 +460,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				waterReq = 10;
 				System.out.println("made it to this point");
 				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && WaterEnergy.getEnergyStored() >= (waterReq * level)){
-					player.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 30, 1,true, true));
+					player.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 30, level,true, true));
 					EarthEnergy.consumeEnergy(earthReq * level);
 					WaterEnergy.consumeEnergy(waterReq * level);
 				}
@@ -470,7 +470,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				fireReq = 10;
 				lightReq = 10;
 				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
-					player.addPotionEffect(new EffectInstance(EntityEffects.HEALING_WARD, 30, 1,true, true));
+					player.addPotionEffect(new EffectInstance(EntityEffects.HEALING_WARD, 30, level,true, true));
 					FireEnergy.consumeEnergy(fireReq * level);
 					EarthEnergy.consumeEnergy(earthReq * level);
 					LightEnergy.consumeEnergy(lightReq * level);

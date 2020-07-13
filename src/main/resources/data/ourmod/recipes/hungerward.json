@@ -1,0 +1,22 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" a ",
+		" 2 ",
+		" b "
+	],
+	"key": {
+		"a" : {
+			"item": "ourmod:watermana"
+		},
+		"b" :{
+			"item": "ourmod:earthmana"
+		},
+		"2" : {
+			"item": "minecraft:paper"
+		}
+	},
+	"result": {
+		"item": "ourmod:hungerward"
+	}
+}

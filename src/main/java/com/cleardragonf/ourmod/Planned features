@@ -2,8 +2,9 @@ TODO: WardStones - Began Work 1.3.1
     TODO: MasterWardStone - Start creating the GUI, and the indards of the Block
         •  Working on trhe Energy consumtion, storage and caluculations next
          • Make the GUI the Ward Schematic....Make a 4 Point Inventory GUI that'll take the wardEnscriptions and turn them into wards
-            Start working on wardEnscriptions....and how they're made...
-            Start working on taking the effects from wardEnscriptions and applying them to the WardStone
+            • S tart working on wardEnscriptions....and how they're made...
+            • Start working on taking the effects from wardEnscriptions and applying them to the WardStone
+            Start working on the Recipes for the Ward Enscirptions
 
     •  TODO: BoundaryWardStone - Start creating the GUI, and the indards of the Block
     •  TODO: Ward - block, registries, images, texture, model, blockstate
