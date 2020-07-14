@@ -298,9 +298,11 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 		}
     }
+	public static List<BlockPos> wardLoc = new LinkedList<>();
 
-    private void execute() {
+    public void execute() {
 		List<BlockPos> boundaryList = new LinkedList<>();
+
 		boolean needsSave = false;
 		if(boundaryWardStones != null){
 			TileEntity tileEntity = world.getTileEntity(pos);
@@ -387,49 +389,45 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						//set with a border right now it works for replacing air with glass
 						int wardBarrier = 0;
 						//TODO: set to WardBarrier
-						try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-							final int posX = this.getPos().getX();
-							final int posY = this.getPos().getY();
-							final int posZ = this.getPos().getZ();
 
-							for(int z = -50; z <= 50; ++z){
-								for(int x = -50; x <= 50; ++x){
-									for(int y = -50; y <=50; y++){
-										final int dist = (x*x) + (y*y) + (z*z);
-										//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
-										if (dist > ((radius1 + 1) * radius1)){
-											continue;
-										}
+							try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+								final int posX = this.getPos().getX();
+								final int posY = this.getPos().getY();
+								final int posZ = this.getPos().getZ();
 
-										if (dist < ((radius1-1) * radius1)){
-											continue;
-										}
+								for(int z = -50; z <= 50; ++z){
+									for(int x = -50; x <= 50; ++x){
+										for(int y = -50; y <=50; y++){
+											final int dist = (x*x) + (y*y) + (z*z);
+											//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
+											if (dist > ((radius1 + 1) * radius1)){
+												continue;
+											}
 
-										pooledMutable.setPos(posX + x,posY + y, posZ + z);
-										final BlockState blockState = world.getBlockState(pooledMutable);
-										final IFluidState fluidState = world.getFluidState(pooledMutable);
-										final Block block = blockState.getBlock();
+											if (dist < ((radius1-1) * radius1)){
+												continue;
+											}
 
-										if(block == Blocks.AIR){
-											if(EarthEnergy.getEnergyStored() >= 6){
-												world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 2);
-												EarthEnergy.consumeEnergy(6);
+											pooledMutable.setPos(posX + x,posY + y, posZ + z);
+											final BlockState blockState = world.getBlockState(pooledMutable);
+											final IFluidState fluidState = world.getFluidState(pooledMutable);
+											final Block block = blockState.getBlock();
+
+											if(block == Blocks.AIR){
+												wardLoc.add(pooledMutable);
+												if(EarthEnergy.getEnergyStored() >= 6){
+													world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 2);
+													EarthEnergy.consumeEnergy(6);
+												}
+											}
+											if(block == BlockInitNew.WARDBARRIER.get()){
+												wardLoc.add(pooledMutable);
 											}
 										}
-										if(block == BlockInitNew.WARDBARRIER.get()){
-											if(EarthEnergy.getEnergyStored() >= 1){
-												EarthEnergy.consumeEnergy(1);
-											}else{
-												world.setBlockState(pooledMutable,Blocks.AIR.getDefaultState(), 1);
-											}
-										}
-
 									}
 								}
+								markDirty();
 							}
-							markDirty();
-						}
-
 					}
 
 
@@ -443,6 +441,14 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 		if(needsSave){
 			this.markDirty();
+		}
+	}
+
+	public void rescendWard() {
+		for (BlockPos pos :
+				wardLoc) {
+			System.out.println(pos);
+			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		}
 	}
 
@@ -486,13 +492,11 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				break;
 			case "Temperature":
 				fireReq = 10;
-				lightReq = 10;
-				earthReq = 10;
-				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
+				waterReq = 10;
+				if(WaterEnergy.getEnergyStored() >= (waterReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
 					player.addPotionEffect(new EffectInstance(EntityEffects.TEMPERATURE_WARD, 30, 1,true, true));
 					FireEnergy.consumeEnergy(fireReq * level);
-					LightEnergy.consumeEnergy(lightReq * level);
-					EarthEnergy.consumeEnergy(earthReq * level);
+					WaterEnergy.consumeEnergy(waterReq * level);
 				}
 				break;
 
@@ -617,4 +621,6 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public void updateBlock(){
 		world.notifyBlockUpdate(pos, this.getBlockState(), this.getBlockState(), 1);
 	}
+
+
 }

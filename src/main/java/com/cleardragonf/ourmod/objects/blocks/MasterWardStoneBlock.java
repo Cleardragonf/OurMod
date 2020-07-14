@@ -79,13 +79,14 @@ public class MasterWardStoneBlock extends Block{
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if(tileEntity instanceof MasterWardStoneTileEntity) {
+
+			((MasterWardStoneTileEntity)tileEntity).rescendWard();
 			MasterWardStoneTileEntity tile = (MasterWardStoneTileEntity) tileEntity;
 			ItemStack item = new ItemStack(this);
 			CompoundNBT tag = new CompoundNBT();
 			((MasterWardStoneTileEntity)tileEntity).write(tag);
 
 			item.setTag(tag);
-
 			ItemEntity entity = new ItemEntity(worldIn, pos.getX() + .5, pos.getY(), pos.getZ() + .5, item);
 			worldIn.addEntity(entity);
 		}
