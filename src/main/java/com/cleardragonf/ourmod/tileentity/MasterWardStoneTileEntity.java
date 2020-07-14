@@ -444,11 +444,84 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		}
 	}
 
+
 	public void rescendWard() {
-		for (BlockPos pos :
-				wardLoc) {
-			System.out.println(pos);
-			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+		List<BlockPos> boundaryList = new LinkedList<>();
+
+		boolean needsSave = false;
+		if(boundaryWardStones != null){
+			TileEntity tileEntity = world.getTileEntity(pos);
+			int size = boundaryWardStones.size();
+			for (int i = 0; i < size; i++) {
+				CompoundNBT tagger = (CompoundNBT)boundaryWardStones.get(i);
+				BlockPos pos = new BlockPos(tagger.getInt("x"), tagger.getInt("y"), tagger.getInt("z"));
+				boundaryList.add(pos);
+			}
+			if(boundaryWardStones.size() > 0){
+
+				//4 * pie * r * r
+				boolean stonePlacementAccurate = true;
+				//sqrt((x1-x2)^2 + (y1-y2) ^2+( z1 - z1)^2)
+				int x1 = tileEntity.getPos().getX();
+				int y1 = tileEntity.getPos().getY();
+				int z1 = tileEntity.getPos().getZ();
+				//
+				int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(0).getX() , 2) + Math.pow(y1 - boundaryList.get(0).getY() , 2) + Math.pow(z1 - boundaryList.get(0).getZ() , 2));
+
+				//TODO: start adding a list view here that'll cycle through all wards attatched to this TE
+				if(stonePlacementAccurate == true){
+					int wardBarrier = 0;
+					//TODO: set to WardBarrier
+
+					try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+						final int posX = this.getPos().getX();
+						final int posY = this.getPos().getY();
+						final int posZ = this.getPos().getZ();
+
+						for(int z = -50; z <= 50; ++z){
+							for(int x = -50; x <= 50; ++x){
+								for(int y = -50; y <=50; y++){
+									final int dist = (x*x) + (y*y) + (z*z);
+									//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
+									if (dist > ((radius1 + 1) * radius1)){
+										continue;
+									}
+
+									if (dist < ((radius1-1) * radius1)){
+										continue;
+									}
+
+									pooledMutable.setPos(posX + x,posY + y, posZ + z);
+									final BlockState blockState = world.getBlockState(pooledMutable);
+									final IFluidState fluidState = world.getFluidState(pooledMutable);
+									final Block block = blockState.getBlock();
+
+									if(block == Blocks.AIR){
+
+									}
+									else if(block == BlockInitNew.WARDBARRIER.get()){
+										world.setBlockState(pooledMutable, Blocks.AIR.getDefaultState(), 1);
+									}else{
+										System.out.println(block);
+									}
+								}
+							}
+						}
+						markDirty();
+					}
+				}
+
+
+				else{
+
+				}
+			}
+		}else{
+
+		}
+
+		if(needsSave){
+			this.markDirty();
 		}
 	}
 
