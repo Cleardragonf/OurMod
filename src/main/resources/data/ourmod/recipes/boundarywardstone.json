@@ -1,0 +1,28 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" a ",
+		"b2c",
+		" d "
+	],
+	"key": {
+		"a" : {
+			"item": "ourmod:watermana"
+		},
+		"b" :{
+			"item": "ourmod:firemana"
+		},
+		"c" : {
+			"item": "ourmod:airmana"
+		},
+		"d" : {
+			"item": "ourmod:earthmana"
+		},
+		"2" : {
+			"item": "minecraft:stone"
+		}
+	},
+	"result": {
+		"item": "ourmod:masterwardstone"
+	}
+}

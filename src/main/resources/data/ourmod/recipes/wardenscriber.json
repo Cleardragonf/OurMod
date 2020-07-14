@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"  1",
+		" 2 ",
+		"2  "
+	],
+	"key": {
+		"1" : {
+			"item": "ourmod:boundarywardstone"
+		},
+		"2" : {
+			"item": "minecraft:stone"
+		}
+	},
+	"result": {
+		"item": "ourmod:wardenscriber"
+	}
+}

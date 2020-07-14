@@ -1,16 +1,16 @@
 {
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
-		"111",
-		"131",
-		"111"
+		"  2",
+		" 1 ",
+		"1  "
 	],
 	"key": {
 		"1" : {
 			"item": "minecraft:stone"
 		},
-		"3" : {
-			"tag": "ourmod:essence"
+		"2" : {
+			"item": "ourmod:essencecollector"
 		}
 	},
 	"result": {

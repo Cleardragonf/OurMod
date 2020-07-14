@@ -1,0 +1,31 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"2a2",
+		"b1c",
+		"2d2"
+	],
+	"key": {
+		"a" : {
+			"item": "ourmod:watermana"
+		},
+		"b" :{
+			"item": "ourmod:firemana"
+		},
+		"c" : {
+			"item": "ourmod:airmana"
+		},
+		"d" : {
+			"item": "ourmod:earthmana"
+		},
+		"1" : {
+			"item": "ourmod:boundarywardstone"
+		},
+		"2" : {
+			"item": "minecraft:stone"
+		}
+	},
+	"result": {
+		"item": "ourmod:masterwardstone"
+	}
+}

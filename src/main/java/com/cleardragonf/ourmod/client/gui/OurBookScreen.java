@@ -316,9 +316,147 @@ public class OurBookScreen extends Screen {
 
             }
             else if(pageNumber ==6){
+                this.font.drawString("Welcome Mage, to the Mystical Arts", x + 5, y + 20, 4210752);
+
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //left side
+                this.font.drawString("Chapter 7: Wards and their Use", (x-180)+ ((this.xSize/2) - (font.getStringWidth("Chapter 7: Wards and their Use")/2)), y + 10, 4210752);
+                this.font.drawString("Wards are used for a multitude of ", x - 180, y + 20, 4210752);
+                this.font.drawString("things from protecting ones land, ", x - 180, y + 30, 4210752);
+                this.font.drawString("to keepingone fed.  There are ", x - 180, y + 40,4210752);
+                this.font.drawString("dozens of wayswards can be ", x - 180, y + 50,4210752);
+                this.font.drawString("utilized.  But first like many ", x - 180, y + 60,4210752);
+                this.font.drawString("things magical, you'll need ", x - 180, y + 70,4210752);
+                this.font.drawString("Essence to be collected in a ", x - 180, y + 80,4210752);
+                this.font.drawString("Collector Then you'll probably ", x - 180, y + 90,4210752);
+                this.font.drawString("need a Master Ward stone...but ", x - 180, y + 100,4210752);
+                this.font.drawString("how would it know how far to ", x - 180, y + 110,4210752);
+                this.font.drawString("place the wards? Probably some ", x -180, y + 120,4210752);
+                this.font.drawString("sort of boundary ward stone or", x -180, y + 130,4210752);
+                this.font.drawString(" such?",  x -180, y + 140,4210752);
+
+
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //right side
+                this.font.drawString("I'd think that placing them in the", x+5, y+10,4210752);
+                this.font.drawString("cardinal points would be a good", x + 5, y + 30, 4210752);
+                this.font.drawString("arrangement.  Then, we'll need", x + 5, y + 40, 4210752);
+                this.font.drawString("to make some decent tools to help", x + 5, y + 50,4210752);
+                this.font.drawString("with connecting, the boundaries to", x + 5, y + 60,4210752);
+                this.font.drawString("the Master Stone. And the power", x + 5, y + 70,4210752);
+                this.font.drawString("I'd  recommend trying to create",  x + 5, y + 80,4210752);
+                this.font.drawString("the geneal tools, found on the ",  x + 5, y + 90,4210752);
+                this.font.drawString("next page.",  x + 5, y + 100,4210752);
 
             }
             else if(pageNumber ==7){
+                this.font.drawString("Welcome Mage, to the Mystical Arts", x + 5, y + 20, 4210752);
+
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //left side
+                this.font.drawString("Power Enscriber",x-180, y + 20, 4210752);
+
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x -180, y + 30, 0,0,130,50);
+                int gridX = x - 180;
+                int gridY = y + 30;
+                if(tick<120){
+
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.ESSENCE_COLLECTOR.getDefaultInstance(), gridX + 35, gridY + 1);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 18, gridY + 18);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 35);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 35);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }
+                else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.POWER_ENSCRIBER.get().getDefaultInstance(), gridX + 105, gridY + 16);
+                }
+
+                this.font.drawString("Master Ward Stone",x-180, y + 100, 4210752);
+
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x -180, y + 110, 0,0,130,50);
+                gridX = x - 180;
+                gridY = y + 110;
+                if(tick<120){
+
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.WATER_ESSENCE.getDefaultInstance(), gridX + 18, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 35, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.FIRE_ESSENCE.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.BOUNDARY_WARD_STONE.getDefaultInstance(), gridX + 18, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.WIND_ESSENCE.getDefaultInstance(), gridX + 35, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.EARTH_ESSENCE.getDefaultInstance(), gridX + 18, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }
+                else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.MASTER_WARD_STONE.getDefaultInstance(), gridX + 105, gridY + 16);
+                }
+
+
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //right side
+                this.font.drawString("Ward Enscriber", x + 5, y + 20, 4210752);
+
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x +5 , y + 30, 0,0,130,50);
+
+                gridX = x + 5;
+                gridY = y + 30;
+                if(tick<160){
+
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.BOUNDARY_WARD_STONE.getDefaultInstance(), gridX + 35, gridY + 1);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 18, gridY + 18);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 35);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 35);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }
+                else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.MCM_CHEST.getDefaultInstance(), gridX + 105, gridY + 16);
+                }
+                this.font.drawString("Boundary Ward Stone", x + 5, y + 100, 4210752);
+
+                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.blit(x +5 , y + 110, 0,0,130,50);
+
+                gridX = x + 5;
+                gridY = y + 110;
+                if(tick<160){
+
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.WATER_ESSENCE.getDefaultInstance(), gridX + 18, gridY + 1);
+                    //this.itemRenderer.renderItemIntoGUI(ItemInitNew.BOUNDARY_WARD_STONE.getDefaultInstance(), gridX + 35, gridY + 1);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.FIRE_ESSENCE.getDefaultInstance(), gridX + 1, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 18, gridY + 18);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.WIND_ESSENCE.getDefaultInstance(), gridX + 35, gridY + 18);
+                    //this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 35);
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.EARTH_ESSENCE.getDefaultInstance(), gridX + 18, gridY + 35);
+                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
+                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
+                }
+                else{
+                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.BOUNDARY_WARD_STONE.getDefaultInstance(), gridX + 105, gridY + 16);
+                }
 
             }
             else if(pageNumber ==8){

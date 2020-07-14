@@ -99,4 +99,10 @@ public class ItemInitNew {
 	@ObjectHolder("ourmod:quarry")
 	public static final Item QUARRY = null;
 
+	@ObjectHolder("ourmod:boundarywardstone")
+	public static final Item BOUNDARY_WARD_STONE = null;
+
+	@ObjectHolder("ourmod:masterwardstone")
+	public static final Item MASTER_WARD_STONE = null;
+
 }
