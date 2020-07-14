@@ -1,6 +1,7 @@
 package com.cleardragonf.ourmod.events;
 
 import com.cleardragonf.ourmod.OurMod;
+import com.cleardragonf.ourmod.entity.EntityEffect;
 import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.entity.EntityStats;
 import com.cleardragonf.ourmod.entity.SurvivalAttributes;
@@ -369,6 +370,44 @@ public class SurvivalEvents {
                     EntityStats.addTemperature((LivingEntity)player, modifier);
 
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void updateWards(LivingEvent.LivingUpdateEvent event){
+        if(event.getEntityLiving() instanceof ServerPlayerEntity) {
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
+            player.getActivePotionEffects().forEach(e -> {
+                if(player.isPotionActive(EntityEffects.HUNGER_WARD)){
+                    if(e.getAmplifier() <= 10){
+                        player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() + e.getAmplifier());
+                    }
+                    else if(e.getAmplifier() >= 11){
+                        player.getFoodStats().setFoodLevel(20);
+                    }
+                }
+                if(player.isPotionActive(EntityEffects.THIRST_WARD)){
+                    if(e.getAmplifier() <= 10){
+                        EntityStats.addThirst(player, e.getAmplifier());
+                    }
+                    else if(e.getAmplifier() >= 11){
+                        EntityStats.setThirst(player, 20);
+                    }
+                }
+                if(player.isPotionActive(EntityEffects.HEALING_WARD)){
+                    if(e.getAmplifier() <= 10){
+                       player.setHealth(player.getHealth() + e.getAmplifier());
+                    }
+                    else if(e.getAmplifier() >= 11){
+                        player.setHealth(player.getMaxHealth());
+                    }
+                }
+                if(player.isPotionActive(EntityEffects.TEMPERATURE_WARD)){
+                    if(e.getAmplifier() <= 10){
+                        EntityStats.setTemperature(player,25);
+                    }
+                }
+            });
         }
     }
 }

@@ -2,11 +2,9 @@ package com.cleardragonf.ourmod.init;
 
 import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.OurMod.OurModItemGroup;
-import com.cleardragonf.ourmod.objects.items.OurBook;
-import com.cleardragonf.ourmod.objects.items.PowerEnscriber;
-import com.cleardragonf.ourmod.objects.items.Sickle;
+import com.cleardragonf.ourmod.objects.items.*;
 
-import com.cleardragonf.ourmod.objects.items.WardEnscriber;
+import com.cleardragonf.ourmod.objects.items.wards.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
@@ -48,6 +46,26 @@ public class ItemInitNew {
 
 	public static final RegistryObject<Item> POWER_ENSCRIBER = ITEMS.register("powerenscriber", () -> new PowerEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_ENSCRIBER = ITEMS.register("wardenscriber", () -> new WardEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
+
+	//Wards
+	public static final RegistryObject<Item> WARD_STONES_HEALING = ITEMS.register("healingward", () -> new HealingWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_HUNGER = ITEMS.register("hungerward", () -> new HungerWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_THIRST = ITEMS.register("thirstward", () -> new ThirstWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_TEMPERATURE = ITEMS.register("temperatureward", () -> new TemperatureWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	/*
+	public static <K, R extends IForgeRegistryEntry<R>, V extends R> Map<K, RegistryObject<V>> registerManyObjects(Iterable<K> keys, DeferredRegister<R> register, Function<K, String> nameGetter, Function<K, V> factory)
+	{
+		Map<K, RegistryObject<V>> map = new HashMap<>();
+
+		for (K key : keys)
+		{
+			register.register(nameGetter.apply(key), () -> factory.apply(key));
+		}
+
+		return map;
+	}
+
+	 */
 
 	//Blocks
 

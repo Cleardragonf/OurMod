@@ -84,7 +84,7 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 
 	public ITextComponent getDisplayName() {
 
-		return new StringTextComponent(this.getType().getRegistryName().getPath());
+		return new StringTextComponent("Essence Collector");
 
 	}
 

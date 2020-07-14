@@ -20,6 +20,12 @@
 	"item.ourmod.lightmana": "Light Essence",
 	"item.ourmod.ourbook": "OurMod Guidebook",
 	"item.ourmod.powerenscriber": "Power Enscriber",
+	"item.ourmod.healingward": "Healing Array",
+	"item.ourmod.thirstward": "Anti-Thirst Array",
+	"item.ourmod.hungerward": "Anti-Hunger Array",
+	"item.ourmod.temperatureward": "Perfect Climate Array",
+	"item.ourmod.wardenscriber": "Ward Enscriber",
+
 
 	
 	"block.ourmod.tomatocrop": "Tomato Seeds",
@@ -57,5 +63,9 @@
 	"container.mcmchest": "MCM Chest",
 
 	"effect.ourmod.hypothermia": "Hypothermia",
-	"effect.ourmod.hyperthermia": "Hyperthermia"
+	"effect.ourmod.hyperthermia": "Hyperthermia",
+	"effect.ourmod.hungerward": "Ward of Infinite Food",
+	"effect.ourmod.thirstward": "Ward of Infinite Drink",
+	"effect.ourmod.healthward": "Ward of Infinite Healing",
+	"effect.ourmod.temperatureward": "Ward of the Perfect Climate"
 }

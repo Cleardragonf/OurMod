@@ -1,6 +1,8 @@
 package com.cleardragonf.ourmod.objects.blocks;
 
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
+import com.cleardragonf.ourmod.objects.items.PowerEnscriber;
+import com.cleardragonf.ourmod.objects.items.WardEnscriber;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import com.cleardragonf.ourmod.tileentity.MasterWardStoneTileEntity;
 import net.minecraft.block.Block;
@@ -17,6 +19,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -58,7 +61,14 @@ public class MasterWardStoneBlock extends Block{
 				}
 				if(tag.contains("wardshape")){
 					MasterWardStoneTileEntity tileEntity = (MasterWardStoneTileEntity) world.getTileEntity(pos);
-					tileEntity.addWardStone(tag.get("wardshape"));
+					if(tileEntity.boundaryWardStones.size() < 4){
+						tileEntity.addWardStone(tag.get("wardshape"));
+						player.sendMessage(new TranslationTextComponent("Successfully connected boundary " + tileEntity.boundaryWardStones.size()));
+					}else{
+						player.sendMessage(new TranslationTextComponent("You've tried to add too many boundaries...Master Ward has been reset"));
+						tileEntity.boundaryWardStones.clear();
+					}
+
 					tileEntity.markDirty();
 					tileEntity.updateBlock();
 				}
@@ -68,7 +78,12 @@ public class MasterWardStoneBlock extends Block{
 					tileEntity.markDirty();
 					tileEntity.updateBlock();
 				}
-				NetworkHooks.openGui((ServerPlayerEntity) player, (MasterWardStoneTileEntity) tile, pos);
+				if(player.getHeldItem(hand).getItem() instanceof WardEnscriber || player.getHeldItem(hand).getItem() instanceof PowerEnscriber){
+
+				}else{
+					NetworkHooks.openGui((ServerPlayerEntity) player, (MasterWardStoneTileEntity) tile, pos);
+				}
+
 				return ActionResultType.SUCCESS;
 			}
 		}
@@ -79,13 +94,14 @@ public class MasterWardStoneBlock extends Block{
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if(tileEntity instanceof MasterWardStoneTileEntity) {
+
+			((MasterWardStoneTileEntity)tileEntity).rescendWard();
 			MasterWardStoneTileEntity tile = (MasterWardStoneTileEntity) tileEntity;
 			ItemStack item = new ItemStack(this);
 			CompoundNBT tag = new CompoundNBT();
 			((MasterWardStoneTileEntity)tileEntity).write(tag);
 
 			item.setTag(tag);
-
 			ItemEntity entity = new ItemEntity(worldIn, pos.getX() + .5, pos.getY(), pos.getZ() + .5, item);
 			worldIn.addEntity(entity);
 		}

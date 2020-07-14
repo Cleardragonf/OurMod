@@ -2,13 +2,19 @@ package com.cleardragonf.ourmod.tileentity;
 
 import com.cleardragonf.ourmod.Data.Wards;
 import com.cleardragonf.ourmod.OurMod;
+import com.cleardragonf.ourmod.container.FishingNetContainer;
 import com.cleardragonf.ourmod.container.MasterWardStoneContainer;
 import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
+import com.cleardragonf.ourmod.init.ItemInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import com.cleardragonf.ourmod.objects.blocks.BoundaryWardStoneBlock;
 import com.cleardragonf.ourmod.objects.blocks.MasterWardStoneBlock;
+import com.cleardragonf.ourmod.objects.items.wards.HealingWardTablet;
+import com.cleardragonf.ourmod.objects.items.wards.HungerWardTablet;
+import com.cleardragonf.ourmod.objects.items.wards.TemperatureWardTablet;
+import com.cleardragonf.ourmod.objects.items.wards.ThirstWardTablet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,6 +23,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.IFluidState;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -29,17 +37,24 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -50,14 +65,14 @@ import java.util.Optional;
 
 public class MasterWardStoneTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-	public INBT wardStone;
 	public ListNBT boundaryWardStones = new ListNBT();
-	public List<Wards> activeWardList;
-	public int wardHeight = 5;
 	private ListNBT wards = new ListNBT();
     public INBT energyblocks;
 
+    public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
+
 	public void addWardStone(INBT target){
+
 		boundaryWardStones.add(target);
 	}
 
@@ -71,15 +86,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public int healLevel = 0;
 	public int antiThirstLevel = 0;
 	public int antiHungerLevel = 0;
-    public int entitiesThatRequireEnergy = 0;
-    public int blocksNeedingEnergy = 0;
 
-    public boolean enoughFire = true;
-    public boolean enoughWater = true;
-    public boolean enoughEarth = true;
-    public boolean enoughAir = true;
-    public boolean enoughLight = true;
-    public boolean enoughDark = true;
 
 
 	public MasterWardStoneTileEntity(TileEntityType<?> typeIn) {
@@ -101,6 +108,33 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public final CustomEnergyStorage DarkEnergy = new CustomEnergyStorage(100000, 0);
 
 	public final CustomEnergyStorage LightEnergy = new CustomEnergyStorage(100000, 0);
+
+	//Inventory Portion of MasterWardStone
+	public final ItemStackHandler inventory = new ItemStackHandler(5){
+
+		@Override
+		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+			if (stack.getItem() == null) {
+				return stack;
+			}
+			return super.insertItem(slot, stack, simulate);
+		}
+
+		@Override
+		public boolean isItemValid(int slot, ItemStack stack) {
+			return stack.getItem() != null;
+		}
+
+		@Override
+		protected void onContentsChanged(int slot) {
+			MasterWardStoneTileEntity.this.markDirty();
+		}
+	};
+
+    private IItemHandler createHandler() {
+        return inventory;
+    }
+
 
 	/*
 	public CompoundNBT serializeWard(){
@@ -124,47 +158,10 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	 */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
-		CompoundNBT wards = new CompoundNBT();
-		CompoundNBT healtag = new CompoundNBT();
-			tag.putBoolean("status", healTeam);
-			tag.putInt("level", healLevel);
-		CompoundNBT antiHungerTag = new CompoundNBT();
-			antiHungerTag.putBoolean("status", antiHunger);
-			antiHungerTag.putInt("level",antiHungerLevel);
-		CompoundNBT antiThirstTag = new CompoundNBT();
-			antiThirstTag.putBoolean("status", antiThirst);
-			antiThirstTag.putInt("level", antiThirstLevel);
-		wards.put("healteam",healtag);
-		wards.put("antihunger",antiHungerTag);
-		wards.put("antithirst",antiThirstTag);
-		compound.put("wards", wards);
-		compound.put("wardshape", this.boundaryWardStones);
-		if (energyblocks != null){
-
-			tag.put("energypos", this.energyblocks);
-		}
-		compound.putInt("fireenergy", this.FireEnergy.getEnergyStored());
-		compound.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
-		compound.putInt("airenergy", this.AirEnergy.getEnergyStored());
-		compound.putInt("earthenergy", this.EarthEnergy.getEnergyStored());
-		compound.putInt("darkenergy", this.DarkEnergy.getEnergyStored());
-		compound.putInt("lightenergy", this.LightEnergy.getEnergyStored());
-		return compound;
-	}
-
-	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
-		readRestorableNBT(compound);
-	}
-
-	@Override
 
 	public ITextComponent getDisplayName() {
 
-		return new StringTextComponent(this.getType().getRegistryName().getPath());
+		return new StringTextComponent("Master Ward Stone");
 
 	}
 
@@ -291,9 +288,11 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 		}
     }
+	public static List<BlockPos> wardLoc = new LinkedList<>();
 
-    private void execute() {
+    public void execute() {
 		List<BlockPos> boundaryList = new LinkedList<>();
+
 		boolean needsSave = false;
 		if(boundaryWardStones != null){
 			TileEntity tileEntity = world.getTileEntity(pos);
@@ -304,6 +303,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				boundaryList.add(pos);
 			}
 				if(boundaryWardStones.size() == 4){
+
 					//4 * pie * r * r
 					boolean stonePlacementAccurate = false;
 					//sqrt((x1-x2)^2 + (y1-y2) ^2+( z1 - z1)^2)
@@ -337,9 +337,39 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
 						if(this.AirEnergy.getEnergyStored() >= (10*list.size())){
 							for(PlayerEntity playerentity : list) {
-								playerentity.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 20, 1, true, true));
-								playerentity.addPotionEffect(new EffectInstance(EntityEffects.TEMPERATURE_WARD, 20, 1, true, true));
-								playerentity.addPotionEffect(new EffectInstance(EntityEffects.THIRST_WARD, 20, 1, true, true));
+									handler.ifPresent(e ->{
+										for (int i = 0; i < 5; i++) {
+											ItemStack item = e.getStackInSlot(i);
+											int level = e.getStackInSlot(i).getCount();
+											switch (item.getItem().getClass().getName()){
+												case "com.cleardragonf.ourmod.objects.items.wards.HungerWardTablet":
+													checkWardRequirements("Hunger", level, playerentity);
+													System.out.println(level + " " + "Hunger");
+													break;
+												case "com.cleardragonf.ourmod.objects.items.wards.ThirstWardTablet":
+													checkWardRequirements("Thirst", level, playerentity);
+													break;
+												case "com.cleardragonf.ourmod.objects.items.wards.HealingWardTablet":
+													checkWardRequirements("Healing", level, playerentity);
+													break;
+												case "com.cleardragonf.ourmod.objects.items.wards.TemperatureWardTablet":
+													checkWardRequirements("Temperature", level, playerentity);
+													break;
+												default:
+													checkWardRequirements("None", level, playerentity);
+													System.out.println(item.getItem().getClass().getName());
+													break;
+											}
+										}
+									});
+									/*
+									if(this.chestContents.contains(ItemInitNew.WARD_STONES_HUNGER)){
+										playerentity.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 20, 1, true, true));
+										EarthEnergy.consumeEnergy(10);
+										WaterEnergy.consumeEnergy(10);
+									}
+
+									 */
 								AirEnergy.consumeEnergy(10);
 							}
 						}else{
@@ -349,49 +379,45 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						//set with a border right now it works for replacing air with glass
 						int wardBarrier = 0;
 						//TODO: set to WardBarrier
-						try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-							final int posX = this.getPos().getX();
-							final int posY = this.getPos().getY();
-							final int posZ = this.getPos().getZ();
 
-							for(int z = -50; z <= 50; ++z){
-								for(int x = -50; x <= 50; ++x){
-									for(int y = -50; y <=50; y++){
-										final int dist = (x*x) + (y*y) + (z*z);
-										//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
-										if (dist > ((radius1 + 1) * radius1)){
-											continue;
-										}
+							try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+								final int posX = this.getPos().getX();
+								final int posY = this.getPos().getY();
+								final int posZ = this.getPos().getZ();
 
-										if (dist < ((radius1-1) * radius1)){
-											continue;
-										}
+								for(int z = -50; z <= 50; ++z){
+									for(int x = -50; x <= 50; ++x){
+										for(int y = -50; y <=50; y++){
+											final int dist = (x*x) + (y*y) + (z*z);
+											//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
+											if (dist > ((radius1 + 1) * radius1)){
+												continue;
+											}
 
-										pooledMutable.setPos(posX + x,posY + y, posZ + z);
-										final BlockState blockState = world.getBlockState(pooledMutable);
-										final IFluidState fluidState = world.getFluidState(pooledMutable);
-										final Block block = blockState.getBlock();
+											if (dist < ((radius1-1) * radius1)){
+												continue;
+											}
 
-										if(block == Blocks.AIR){
-											if(EarthEnergy.getEnergyStored() >= 6){
-												world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 2);
-												EarthEnergy.consumeEnergy(6);
+											pooledMutable.setPos(posX + x,posY + y, posZ + z);
+											final BlockState blockState = world.getBlockState(pooledMutable);
+											final IFluidState fluidState = world.getFluidState(pooledMutable);
+											final Block block = blockState.getBlock();
+
+											if(block == Blocks.AIR){
+
+												if(EarthEnergy.getEnergyStored() >= 6){
+													world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 2);
+													EarthEnergy.consumeEnergy(6);
+												}
+											}
+											if(block == BlockInitNew.WARDBARRIER.get()){
+												wardLoc.add(pooledMutable);
 											}
 										}
-										if(block == BlockInitNew.WARDBARRIER.get()){
-											if(EarthEnergy.getEnergyStored() >= 1){
-												EarthEnergy.consumeEnergy(1);
-											}else{
-												world.setBlockState(pooledMutable,Blocks.AIR.getDefaultState(), 1);
-											}
-										}
-
 									}
 								}
+								markDirty();
 							}
-							markDirty();
-						}
-
 					}
 
 
@@ -405,6 +431,139 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 		if(needsSave){
 			this.markDirty();
+		}
+	}
+
+
+	public void rescendWard() {
+		List<BlockPos> boundaryList = new LinkedList<>();
+		List<BlockPos> listToDelete = new LinkedList<>();
+
+		boolean needsSave = false;
+		if(boundaryWardStones != null){
+			TileEntity tileEntity = world.getTileEntity(pos);
+			int size = boundaryWardStones.size();
+			for (int i = 0; i < size; i++) {
+				CompoundNBT tagger = (CompoundNBT)boundaryWardStones.get(i);
+				BlockPos pos = new BlockPos(tagger.getInt("x"), tagger.getInt("y"), tagger.getInt("z"));
+				boundaryList.add(pos);
+			}
+			if(boundaryWardStones.size() > 0){
+
+				//4 * pie * r * r
+				boolean stonePlacementAccurate = true;
+				//sqrt((x1-x2)^2 + (y1-y2) ^2+( z1 - z1)^2)
+				int x1 = tileEntity.getPos().getX();
+				int y1 = tileEntity.getPos().getY();
+				int z1 = tileEntity.getPos().getZ();
+				//
+				int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(0).getX() , 2) + Math.pow(y1 - boundaryList.get(0).getY() , 2) + Math.pow(z1 - boundaryList.get(0).getZ() , 2));
+
+				//TODO: start adding a list view here that'll cycle through all wards attatched to this TE
+				if(stonePlacementAccurate == true){
+					int wardBarrier = 0;
+					//TODO: set to WardBarrier
+
+					try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+						final int posX = this.getPos().getX();
+						final int posY = this.getPos().getY();
+						final int posZ = this.getPos().getZ();
+
+						for(int z = -50; z <= 50; ++z){
+							for(int x = -50; x <= 50; ++x){
+								for(int y = -50; y <=50; y++){
+									final int dist = (x*x) + (y*y) + (z*z);
+									//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
+									if (dist > ((radius1 + 1) * radius1)){
+										continue;
+									}
+
+									if (dist < ((radius1-1) * radius1)){
+										continue;
+									}
+
+									pooledMutable.setPos(posX + x,posY + y, posZ + z);
+									final BlockState blockState = world.getBlockState(pooledMutable);
+									final IFluidState fluidState = world.getFluidState(pooledMutable);
+									final Block block = blockState.getBlock();
+
+									if(block == Blocks.AIR){
+
+									}
+									else if(block == BlockInitNew.WARDBARRIER.get()){
+										world.setBlockState(pooledMutable, Blocks.AIR.getDefaultState(), 3);
+									}else{
+										System.out.println(block);
+									}
+								}
+							}
+						}
+						markDirty();
+					}
+				}
+
+
+				else{
+
+				}
+			}
+		}else{
+
+		}
+
+		if(needsSave){
+			this.markDirty();
+		}
+	}
+
+	private void checkWardRequirements(String ward, int level, PlayerEntity player) {
+		int waterReq = 0;
+		int fireReq = 0;
+		int earthReq = 0;
+		int airReq = 0;
+		int lightReq = 0;
+		int darkReq = 0;
+
+		switch (ward){
+			case "Hunger":
+				earthReq = 10;
+				waterReq = 10;
+				System.out.println("made it to this point");
+				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && WaterEnergy.getEnergyStored() >= (waterReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 30, level,true, true));
+					EarthEnergy.consumeEnergy(earthReq * level);
+					WaterEnergy.consumeEnergy(waterReq * level);
+				}
+				break;
+			case "Healing":
+				earthReq = 10;
+				fireReq = 10;
+				lightReq = 10;
+				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.HEALING_WARD, 30, level,true, true));
+					FireEnergy.consumeEnergy(fireReq * level);
+					EarthEnergy.consumeEnergy(earthReq * level);
+					LightEnergy.consumeEnergy(lightReq * level);
+
+				}
+				break;
+			case "Thirst":
+				waterReq = 20;
+				if(WaterEnergy.getEnergyStored() >= (waterReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.THIRST_WARD, 30, 1,true, true));
+					WaterEnergy.consumeEnergy(waterReq * level);
+				}
+				break;
+			case "Temperature":
+				fireReq = 10;
+				waterReq = 10;
+				if(WaterEnergy.getEnergyStored() >= (waterReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.TEMPERATURE_WARD, 30, 1,true, true));
+					FireEnergy.consumeEnergy(fireReq * level);
+					WaterEnergy.consumeEnergy(waterReq * level);
+				}
+				break;
+
 		}
 	}
 
@@ -447,13 +606,62 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		return tag;
 	}
 
-	@Override
+
+    @Override
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
+        //TODO:: add a write method
+        handler.ifPresent(h -> {
+            CompoundNBT tag2 = ((INBTSerializable<CompoundNBT>) inventory).serializeNBT();
+            compound.put("inv", tag2);
+        });
+
+        compound.put("inv", inventory.serializeNBT());
+        CompoundNBT wards = new CompoundNBT();
+        CompoundNBT healtag = new CompoundNBT();
+        tag.putBoolean("status", healTeam);
+        tag.putInt("level", healLevel);
+        CompoundNBT antiHungerTag = new CompoundNBT();
+        antiHungerTag.putBoolean("status", antiHunger);
+        antiHungerTag.putInt("level",antiHungerLevel);
+        CompoundNBT antiThirstTag = new CompoundNBT();
+        antiThirstTag.putBoolean("status", antiThirst);
+        antiThirstTag.putInt("level", antiThirstLevel);
+        wards.put("healteam",healtag);
+        wards.put("antihunger",antiHungerTag);
+        wards.put("antithirst",antiThirstTag);
+        compound.put("wards", wards);
+        compound.put("wardshape", this.boundaryWardStones);
+        if (energyblocks != null){
+
+            compound.put("energypos", this.energyblocks);
+        }
+        compound.putInt("fireenergy", this.FireEnergy.getEnergyStored());
+        compound.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
+        compound.putInt("airenergy", this.AirEnergy.getEnergyStored());
+        compound.putInt("earthenergy", this.EarthEnergy.getEnergyStored());
+        compound.putInt("darkenergy", this.DarkEnergy.getEnergyStored());
+        compound.putInt("lightenergy", this.LightEnergy.getEnergyStored());
+        return compound;
+    }
+
+    @Override
+    public void read(CompoundNBT compound) {
+        super.read(compound);
+        readRestorableNBT(compound);
+    }
+
+
+    @Override
 	public void handleUpdateTag(CompoundNBT tag) {
 		this.read(tag);
 	}
 
 
 	public void readRestorableNBT(CompoundNBT tag) {
+		//TODO::Add a inv read
+        CompoundNBT invTag = tag.getCompound("inv");
+        handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
 		energyblocks = tag.get("energypos");
 		CompoundNBT wards = (CompoundNBT) tag.getCompound("wards");
 			CompoundNBT antiThirstTag = (CompoundNBT) wards.getCompound("antithirst");
@@ -477,4 +685,6 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public void updateBlock(){
 		world.notifyBlockUpdate(pos, this.getBlockState(), this.getBlockState(), 1);
 	}
+
+
 }

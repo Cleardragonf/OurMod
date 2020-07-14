@@ -1,0 +1,25 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" a ",
+		"b2c",
+		"   "
+	],
+	"key": {
+		"a" : {
+			"item": "ourmod:firemana"
+		},
+		"b" :{
+			"item": "ourmod:earthmana"
+		},
+		"c" : {
+			"item": "ourmod:lightmana"
+		},
+		"2" : {
+			"item": "minecraft:paper"
+		}
+	},
+	"result": {
+		"item": "ourmod:healingwardtablet"
+	}
+}
