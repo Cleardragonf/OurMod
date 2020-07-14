@@ -414,7 +414,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 											final Block block = blockState.getBlock();
 
 											if(block == Blocks.AIR){
-												wardLoc.add(pooledMutable);
+
 												if(EarthEnergy.getEnergyStored() >= 6){
 													world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 2);
 													EarthEnergy.consumeEnergy(6);
@@ -447,6 +447,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 	public void rescendWard() {
 		List<BlockPos> boundaryList = new LinkedList<>();
+		List<BlockPos> listToDelete = new LinkedList<>();
 
 		boolean needsSave = false;
 		if(boundaryWardStones != null){
@@ -500,7 +501,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 									}
 									else if(block == BlockInitNew.WARDBARRIER.get()){
-										world.setBlockState(pooledMutable, Blocks.AIR.getDefaultState(), 1);
+										world.setBlockState(pooledMutable, Blocks.AIR.getDefaultState(), 3);
 									}else{
 										System.out.println(block);
 									}
