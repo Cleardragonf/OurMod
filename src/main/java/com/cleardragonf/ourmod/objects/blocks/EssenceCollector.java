@@ -1,6 +1,7 @@
 package com.cleardragonf.ourmod.objects.blocks;
 
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
+import com.cleardragonf.ourmod.objects.items.PowerEnscriber;
 import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -44,11 +45,16 @@ public class EssenceCollector extends Block {
 
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
-			Hand handIn, BlockRayTraceResult result) {
+			Hand hand, BlockRayTraceResult result) {
 		if (!worldIn.isRemote) {
 			TileEntity tile = worldIn.getTileEntity(pos);
 			if (tile instanceof EssenceCollectorTileEntity) {
-				NetworkHooks.openGui((ServerPlayerEntity) player, (EssenceCollectorTileEntity) tile, pos);
+				if(player.getHeldItem(hand).getItem() instanceof PowerEnscriber){
+
+				}else{
+					NetworkHooks.openGui((ServerPlayerEntity) player, (EssenceCollectorTileEntity) tile, pos);
+				}
+
 				return ActionResultType.SUCCESS;
 			}
 		}

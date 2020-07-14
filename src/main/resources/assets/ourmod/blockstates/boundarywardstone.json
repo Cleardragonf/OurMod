@@ -1,5 +1,8 @@
 {
 	"variants": {
-		"": { "model": "ourmod:block/boundarywardstone" }
+		"facing=north": {"model": "ourmod:block/boundarywardstone"},
+		"facing=south": {"model": "ourmod:block/boundarywardstone", "y": 180},
+		"facing=west": {"model": "ourmod:block/boundarywardstone", "y": 270},
+		"facing=east": {"model": "ourmod:block/boundarywardstone", "y": 90}
 	}
 }

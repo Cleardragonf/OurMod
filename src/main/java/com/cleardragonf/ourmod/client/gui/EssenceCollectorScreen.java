@@ -34,7 +34,7 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		this.font.drawString(this.title.getFormattedText(), 8.0f, 6.0f, 4210752);
-		this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0f, 90.0f, 4210752);
+
 	}
 	
 	@Override
@@ -54,8 +54,6 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 		this.blit((x + 120),(y + 134) - (this.container.getDark().getEnergyStored()/1000), 179,132  - (this.container.getDark().getEnergyStored()/1000),8, (this.container.getDark().getEnergyStored()/ 1000));
 		this.blit((x + 148),(y + 134) - (this.container.getLight().getEnergyStored()/1000), 179,132  - (this.container.getLight().getEnergyStored()/1000),8, (this.container.getLight().getEnergyStored()/ 1000));
 
-
-		this.font.drawString("Wind: '" + this.container.getAir().getEnergyStored() + "'", 8.0f, 9.0f, 4210752);
 	}
 	protected void renderHoveredToolTip(int x, int y){
 		int relX = (this.width - this.xSize) /2;

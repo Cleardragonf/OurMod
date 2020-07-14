@@ -65,16 +65,14 @@ import java.util.Optional;
 
 public class MasterWardStoneTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-	public INBT wardStone;
 	public ListNBT boundaryWardStones = new ListNBT();
-	public List<Wards> activeWardList;
-	public int wardHeight = 5;
 	private ListNBT wards = new ListNBT();
     public INBT energyblocks;
 
     public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
 
 	public void addWardStone(INBT target){
+
 		boundaryWardStones.add(target);
 	}
 
@@ -88,15 +86,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	public int healLevel = 0;
 	public int antiThirstLevel = 0;
 	public int antiHungerLevel = 0;
-    public int entitiesThatRequireEnergy = 0;
-    public int blocksNeedingEnergy = 0;
 
-    public boolean enoughFire = true;
-    public boolean enoughWater = true;
-    public boolean enoughEarth = true;
-    public boolean enoughAir = true;
-    public boolean enoughLight = true;
-    public boolean enoughDark = true;
 
 
 	public MasterWardStoneTileEntity(TileEntityType<?> typeIn) {
@@ -171,7 +161,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 	public ITextComponent getDisplayName() {
 
-		return new StringTextComponent(this.getType().getRegistryName().getPath());
+		return new StringTextComponent("Master Ward Stone");
 
 	}
 
@@ -644,7 +634,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
         compound.put("wardshape", this.boundaryWardStones);
         if (energyblocks != null){
 
-            tag.put("energypos", this.energyblocks);
+            compound.put("energypos", this.energyblocks);
         }
         compound.putInt("fireenergy", this.FireEnergy.getEnergyStored());
         compound.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
