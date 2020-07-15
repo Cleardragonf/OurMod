@@ -1,0 +1,45 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "Ward Discovery",
+            "color": "dark_blue",
+            "bold": true
+        },
+        "description": {
+            "text": "Through Dedication you've found out that Wards can be crafted",
+            "color": "white",
+            "italic": true
+        },
+        "icon": {
+            "item": "minecraft:stone"
+        },
+        "frame": "goal",
+        "show_toast": false,
+        "announce_to_chat": false,
+        "hidden": true
+    },
+    "criteria": {
+        "MasterWardStoneCreation": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+                "recipe": "ourmod:masterwardstone"
+            }
+        }
+    },
+    "requirements": [
+        [
+            "MasterWardStoneCreation"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "ourmod:healingward",
+            "ourmod:hungerward",
+            "ourmod:thirstward",
+            "ourmod:temperatureward"
+        ],
+        "experience": 100
+    },
+    "parent": "adventure:root"
+}

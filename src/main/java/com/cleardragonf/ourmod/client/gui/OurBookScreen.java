@@ -255,7 +255,8 @@ public class OurBookScreen extends Screen {
                 }
 
             }
-            else if(pageNumber ==5){                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+            else if(pageNumber ==5){
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
                 //left side
 
                 this.font.drawString("Chapter 6: Power Enscriber...", (x - 180) + ((this.xSize/2) - (font.getStringWidth("Chapter 4: Matter Conversion Basics")/2)), y + 10, 4210752);
@@ -316,8 +317,6 @@ public class OurBookScreen extends Screen {
 
             }
             else if(pageNumber ==6){
-                this.font.drawString("Welcome Mage, to the Mystical Arts", x + 5, y + 20, 4210752);
-
                 //x,y,texturex,texturey,width,height @RyuShiTenshiKage
                 //left side
                 this.font.drawString("Chapter 7: Wards and their Use", (x-180)+ ((this.xSize/2) - (font.getStringWidth("Chapter 7: Wards and their Use")/2)), y + 10, 4210752);
@@ -350,8 +349,6 @@ public class OurBookScreen extends Screen {
 
             }
             else if(pageNumber ==7){
-                this.font.drawString("Welcome Mage, to the Mystical Arts", x + 5, y + 20, 4210752);
-
                 //x,y,texturex,texturey,width,height @RyuShiTenshiKage
                 //left side
                 this.font.drawString("Power Enscriber",x-180, y + 20, 4210752);
@@ -460,6 +457,18 @@ public class OurBookScreen extends Screen {
 
             }
             else if(pageNumber ==8){
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //left side
+                this.font.drawString("you've found documentation that", x - 180, y + 10, 4210752);
+                this.font.drawString("states placing a scroll in the middle", x - 180, y + 20, 4210752);
+                this.font.drawString("of a recipe and surrounding it with", x - 180, y + 30, 4210752);
+                this.font.drawString("with Earth Essence. You'll get a ", x - 180, y + 40,4210752);
+                this.font.drawString("special tablet that looks like you", x - 180, y - 1800,4210752);
+                this.font.drawString("can craft different runic arrays on it.", x - 180, y + 60,4210752);
+
+
+                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
+                //right side
 
             }
             else if(pageNumber ==9){
