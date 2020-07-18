@@ -67,5 +67,8 @@
 	"effect.ourmod.hungerward": "Ward of Infinite Food",
 	"effect.ourmod.thirstward": "Ward of Infinite Drink",
 	"effect.ourmod.healthward": "Ward of Infinite Healing",
-	"effect.ourmod.temperatureward": "Ward of the Perfect Climate"
+	"effect.ourmod.temperatureward": "Ward of the Perfect Climate",
+
+	"death.attack.hyperthermia": "You Died from Hyperthermia",
+	"death.attack.hypothermia": "You Died from Hypothermia"
 }

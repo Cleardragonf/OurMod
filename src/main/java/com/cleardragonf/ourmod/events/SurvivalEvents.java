@@ -266,7 +266,7 @@ public class SurvivalEvents {
                     EntityStats.addThirst((LivingEntity)player, -0.01d);
                     player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 100, 0, false, false, false));
                 }else if(tempeature > maxHeatStage2 && tempeature <= maxHeatStage3){
-                    EntityStats.addThirst((LivingEntity)player, -0.05d);
+                    EntityStats.addThirst((LivingEntity)player, -0.5d);
                     player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 120, 1, false, false, false));
                 }else if(tempeature > maxHeatStage3){
                     EntityStats.addThirst((LivingEntity)player, -0.1d);
@@ -275,13 +275,16 @@ public class SurvivalEvents {
             }
             if(!player.isPotionActive(EntityEffects.HYPOTHERMIA)){
                 if(tempeature < maxColdStage1 && tempeature >= maxColdStage2){
-                    EntityStats.addThirst((LivingEntity)player, -0.01d);
+                    int food = player.getFoodStats().getFoodLevel();
+                    player.getFoodStats().setFoodLevel(food - 1);
                     player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 100, 0, false, false, false));
                 }else if(tempeature < maxColdStage2 && tempeature >= maxColdStage3){
-                    EntityStats.addThirst((LivingEntity)player, -0.01d);
+                    int food = player.getFoodStats().getFoodLevel();
+                    player.getFoodStats().setFoodLevel(food - 1);
                     player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 120, 1, false, false, false));
                 }else if(tempeature < maxColdStage3){
-                    EntityStats.addThirst((LivingEntity)player, -0.01d);
+                    int food = player.getFoodStats().getFoodLevel();
+                    player.getFoodStats().setFoodLevel(food - 1);
                     player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 160, 2, false, false, false));
                 }
             }

@@ -11,19 +11,31 @@ public class EntityEffect extends Effect {
         super(effectType, liquidColorIn);
     }
 
-    public void func_76394_a(LivingEntity entityLivingBaseIn, int amplifier) {
+    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
         if (this == EntityEffects.THIRST && entityLivingBaseIn instanceof PlayerEntity) {
             EntityStats.addThirst(entityLivingBaseIn, -(0.005F * (amplifier + 1)));
-        } else if (this == EntityEffects.HYPOTHERMIA && entityLivingBaseIn instanceof PlayerEntity) {
+        }
+        else if (this == EntityEffects.HYPOTHERMIA && entityLivingBaseIn instanceof PlayerEntity) {
             if (!((PlayerEntity)entityLivingBaseIn).attackable()) {
                 entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPOTHERMIA, 0.4F);
             }
-                entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPOTHERMIA, 0.4F);
-        } else if (this == EntityEffects.HYPERTHERMIA && entityLivingBaseIn instanceof PlayerEntity) {
+            if(((PlayerEntity) entityLivingBaseIn).getFoodStats().getFoodLevel() > 0){
+
+            }else{
+                entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPOTHERMIA, 1);
+            }
+
+        }
+        else if (this == EntityEffects.HYPERTHERMIA && entityLivingBaseIn instanceof PlayerEntity) {
             if (!((PlayerEntity)entityLivingBaseIn).attackable()) {
                 entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPERTHERMIA, 0.4F);
             }
-                entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPERTHERMIA, 0.4F);
+            if(EntityStats.getThirst((PlayerEntity)entityLivingBaseIn) > 0){
+
+            }else{
+                entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPERTHERMIA, 1);
+            }
+
 
         } else if (this ==EntityEffects.CHILLED && entityLivingBaseIn instanceof PlayerEntity) {
             EntityStats.addTemperature(entityLivingBaseIn, -(0.05F * (amplifier + 1)));
@@ -33,7 +45,7 @@ public class EntityEffect extends Effect {
         super.performEffect(entityLivingBaseIn, amplifier);
     }
 
-    public boolean func_76397_a(int duration, int amplifier) {
+    public boolean isReady(int duration, int amplifier) {
         if (this == EntityEffects.CHILLED) {
             int k = 60 >> amplifier;
             if (k > 0)
