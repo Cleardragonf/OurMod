@@ -1,0 +1,35 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "Asura Magica",
+            "color": "gold",
+            "bold": true,
+            "underlined": true
+        },
+        "description": {
+            "text": "OurMod",
+            "color": "green",
+            "bold": true
+        },
+        "icon": {
+            "item": "minecraft:emerald_ore"
+        },
+        "frame": "task",
+        "show_toast": false,
+        "announce_to_chat": false,
+        "hidden": false,
+        "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+    },
+    "criteria": {
+        "Start": {
+            "trigger": "minecraft:location",
+            "conditions": {
+                "dimension": "overworld"
+            }
+        }
+    },
+    "rewards": {
+        "experience": 100
+    }
+}

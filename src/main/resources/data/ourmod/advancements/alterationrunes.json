@@ -1,0 +1,46 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "Alteration Runes",
+            "color": "dark_red",
+            "bold": false
+        },
+        "description": {
+            "text": "Through runes you've discovered the capability of changing the world around you.",
+            "color": "white",
+            "italic": true
+        },
+        "icon": {
+            "item": "ourmod:hungerward"
+        },
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": false,
+        "hidden": true
+    },
+    "criteria": {
+        "Started": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "ourmod:temperatureward",
+                        "count": {
+                            "min": 1,
+                            "max": 1
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": [
+            "ourmod:antigravityward",
+            "ourmod:"
+        ],
+        "experience": 1000
+    },
+    "parent": "ourmod:wards"
+}

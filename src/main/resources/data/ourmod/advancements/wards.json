@@ -1,0 +1,47 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "Wards",
+            "color": "gold",
+            "bold": true
+        },
+        "description": {
+            "text": "You Have discovered through the worlds power that you can generate fields of Power",
+            "color": "gold",
+            "bold": true
+        },
+        "icon": {
+            "item": "ourmod:hungerward"
+        },
+        "frame": "challenge",
+        "show_toast": true,
+        "announce_to_chat": false,
+        "hidden": false
+    },
+    "criteria": {
+        "boundarywardCreation": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "minecraft:stone",
+                        "count": {
+                            "min": 1,
+                            "max": 1
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "recipes": [
+            "ourmod:hungerward",
+            "ourmod:temperatureward",
+            "ourmod:antihostile"
+        ],
+        "experience": 1000
+    },
+    "parent": "ourmod:root"
+}
