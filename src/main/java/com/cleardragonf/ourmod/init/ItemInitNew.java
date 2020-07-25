@@ -52,6 +52,11 @@ public class ItemInitNew {
 	public static final RegistryObject<Item> WARD_STONES_HUNGER = ITEMS.register("hungerward", () -> new HungerWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_STONES_THIRST = ITEMS.register("thirstward", () -> new ThirstWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_STONES_TEMPERATURE = ITEMS.register("temperatureward", () -> new TemperatureWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_ANTI_HOSTILE = ITEMS.register("antihostileward", () -> new AntiHostileWard(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_ANTI_GRAVITY = ITEMS.register("antigravityward", () -> new AntiGravityWard(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_ANTI_PEACEFUL = ITEMS.register("antipeacefulward", () -> new AntiPeacefulWard(new Item.Properties().group(OurModItemGroup.instance)));
+
+
 	/*
 	public static <K, R extends IForgeRegistryEntry<R>, V extends R> Map<K, RegistryObject<V>> registerManyObjects(Iterable<K> keys, DeferredRegister<R> register, Function<K, String> nameGetter, Function<K, V> factory)
 	{

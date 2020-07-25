@@ -49,7 +49,8 @@ import java.util.Optional;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("ourmod")
 @Mod.EventBusSubscriber(modid = OurMod.MOD_ID, bus = Bus.MOD)
-public class OurMod
+public class
+OurMod
 {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
