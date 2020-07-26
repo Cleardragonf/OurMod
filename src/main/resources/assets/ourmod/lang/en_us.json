@@ -20,14 +20,27 @@
 	"item.ourmod.lightmana": "Light Essence",
 	"item.ourmod.ourbook": "OurMod Guidebook",
 	"item.ourmod.powerenscriber": "Power Enscriber",
+	"item.ourmod.wardenscriber": "Ward Enscriber",
+
+
 	"item.ourmod.healingward": "Healing Array",
 	"item.ourmod.thirstward": "Anti-Thirst Array",
 	"item.ourmod.hungerward": "Anti-Hunger Array",
 	"item.ourmod.temperatureward": "Perfect Climate Array",
-	"item.ourmod.wardenscriber": "Ward Enscriber",
+	"item.ourmod.antihostileward": "Perfect Climate Array",
+	"item.ourmod.antigravityward": "Perfect Climate Array",
+	"item.ourmod.antipeacefulward": "Perfect Climate Array",
+	"item.ourmod.daytimeward": "Perfect Climate Array",
 
+	"effect.ourmod.hungerward": "Ward of Infinite Food",
+	"effect.ourmod.thirstward": "Ward of Infinite Drink",
+	"effect.ourmod.healthward": "Ward of Infinite Healing",
+	"effect.ourmod.temperatureward": "Ward of the Perfect Climate",
+	"effect.ourmod.antigravityward": "Ward of Cancelling Gravity",
+	"effect.ourmod.antipeacefulward": "Ward of Anti-Passives",
+	"effect.ourmod.antihostileward": "Ward of Anti-Hostiles",
+	"effect.ourmod.daytimeward": "Ward of Daytime",
 
-	
 	"block.ourmod.tomatocrop": "Tomato Seeds",
 	"block.ourmod.ricecrop": "Rice Seeds",
 	"block.ourmod.onioncrop": "Onion Seeds",
@@ -46,7 +59,7 @@
 	"block.ourmod.darkmana": "Dark Essence",
 	"block.ourmod.lightmana": "Light Essence",
 	"block.ourmod.wardbarrier": "Ward Barrier",
-	
+
 	"block.ourmod.forcefield": "Force Field",
 	"block.ourmod.quarry": "Quarry",
 	"block.ourmod.portablechest": "Portable Chest",
@@ -55,19 +68,15 @@
 	"block.ourmod.mcmchest": "MCM Chest",
 	"block.ourmod.masterwardstone": "Master Warding Stone",
 	"block.ourmod.boundarywardstone": "Boundary Ward Stone",
-	
+
 	"itemGroup.ourmodtab": "Our Mod",
-	
+
 	"container.portablechest": "Portable Chest",
 	"container.fishingnet": "Fishing Net",
 	"container.mcmchest": "MCM Chest",
 
 	"effect.ourmod.hypothermia": "Hypothermia",
 	"effect.ourmod.hyperthermia": "Hyperthermia",
-	"effect.ourmod.hungerward": "Ward of Infinite Food",
-	"effect.ourmod.thirstward": "Ward of Infinite Drink",
-	"effect.ourmod.healthward": "Ward of Infinite Healing",
-	"effect.ourmod.temperatureward": "Ward of the Perfect Climate",
 
 	"death.attack.hyperthermia": "You Died from Hyperthermia",
 	"death.attack.hypothermia": "You Died from Hypothermia"

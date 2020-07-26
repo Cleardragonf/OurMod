@@ -10,7 +10,11 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Items;
@@ -379,38 +383,69 @@ public class SurvivalEvents {
     @SubscribeEvent
     public static void updateWards(LivingEvent.LivingUpdateEvent event){
         if(event.getEntityLiving() instanceof ServerPlayerEntity) {
-            ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
-            player.getActivePotionEffects().forEach(e -> {
-                if(player.isPotionActive(EntityEffects.HUNGER_WARD)){
-                    if(e.getAmplifier() <= 10){
-                        player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() + e.getAmplifier());
+            if(event.getEntityLiving() instanceof MonsterEntity){
+                MonsterEntity monster = (MonsterEntity) event.getEntityLiving();
+
+                monster.getActivePotionEffects().forEach(e -> {
+                    if(monster.isPotionActive(EntityEffects.ANTI_HOSTILE_WARD)){
+                        if(e.getAmplifier() <= 10){
+                            monster.setHealth(monster.getHealth() - e.getAmplifier());
+                        }
                     }
-                    else if(e.getAmplifier() >= 11){
-                        player.getFoodStats().setFoodLevel(20);
+                });
+            }
+            else if(event.getEntityLiving() instanceof AnimalEntity){
+                AnimalEntity animal = (AnimalEntity)event.getEntityLiving();
+
+                animal.getActivePotionEffects().forEach(e ->{
+                    if(animal.isPotionActive(EntityEffects.ANTI_PASSIVE_WARD)){
+                        if(e.getAmplifier() <=10){
+                            animal.setHealth(animal.getHealth() - e.getAmplifier());
+                        }
                     }
-                }
-                if(player.isPotionActive(EntityEffects.THIRST_WARD)){
-                    if(e.getAmplifier() <= 10){
-                        EntityStats.addThirst(player, e.getAmplifier());
+                });
+            }
+            else{
+                ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
+
+                player.getActivePotionEffects().forEach(e -> {
+                    if(player.isPotionActive(EntityEffects.HUNGER_WARD)){
+                        if(e.getAmplifier() <= 10){
+                            player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() + e.getAmplifier());
+                        }
+                        else if(e.getAmplifier() >= 11){
+                            player.getFoodStats().setFoodLevel(20);
+                        }
                     }
-                    else if(e.getAmplifier() >= 11){
-                        EntityStats.setThirst(player, 20);
+                    if(player.isPotionActive(EntityEffects.THIRST_WARD)){
+                        if(e.getAmplifier() <= 10){
+                            EntityStats.addThirst(player, e.getAmplifier());
+                        }
+                        else if(e.getAmplifier() >= 11){
+                            EntityStats.setThirst(player, 20);
+                        }
                     }
-                }
-                if(player.isPotionActive(EntityEffects.HEALING_WARD)){
-                    if(e.getAmplifier() <= 10){
-                       player.setHealth(player.getHealth() + e.getAmplifier());
+                    if(player.isPotionActive(EntityEffects.HEALING_WARD)){
+                        if(e.getAmplifier() <= 10){
+                            player.setHealth(player.getHealth() + e.getAmplifier());
+                        }
+                        else if(e.getAmplifier() >= 11){
+                            player.setHealth(player.getMaxHealth());
+                        }
                     }
-                    else if(e.getAmplifier() >= 11){
-                        player.setHealth(player.getMaxHealth());
+                    if(player.isPotionActive(EntityEffects.TEMPERATURE_WARD)){
+                        if(e.getAmplifier() <= 10){
+                            EntityStats.setTemperature(player,25);
+                        }
                     }
-                }
-                if(player.isPotionActive(EntityEffects.TEMPERATURE_WARD)){
-                    if(e.getAmplifier() <= 10){
-                        EntityStats.setTemperature(player,25);
+                    if(player.isPotionActive(EntityEffects.ANTI_GRAVITY_WARD)){
+                        if(e.getAmplifier() <= 10){
+                            player.abilities.allowFlying = true;
+                        }
                     }
-                }
-            });
+                });
+            }
+
         }
     }
 }

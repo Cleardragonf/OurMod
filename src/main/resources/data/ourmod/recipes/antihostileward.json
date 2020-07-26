@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"2 2",
+		" A ",
+		"2 2"
+	],
+	"key": {
+		"A" : {
+			"item": "minecraft:paper"
+		},
+		"2" : {
+			"item": "minecraft:bone"
+		}
+	},
+	"result": {
+		"item": "ourmod:antihostileward"
+	}
+}

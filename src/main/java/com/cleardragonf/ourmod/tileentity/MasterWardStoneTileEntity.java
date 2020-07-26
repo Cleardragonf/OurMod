@@ -563,6 +563,38 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					WaterEnergy.consumeEnergy(waterReq * level);
 				}
 				break;
+			case "Anti-Passive":
+				fireReq = 10;
+				lightReq = 10;
+				if(LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.ANTI_PASSIVE_WARD, 30, 1,true, true));
+					FireEnergy.consumeEnergy(fireReq * level);
+					LightEnergy.consumeEnergy(lightReq * level);
+				}
+				break;
+			case "Anti-Hostile":
+				fireReq = 10;
+				darkReq = 10;
+				if(DarkEnergy.getEnergyStored() >= (darkReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.ANTI_HOSTILE_WARD, 30, 1,true, true));
+					FireEnergy.consumeEnergy(fireReq * level);
+					DarkEnergy.consumeEnergy(darkReq * level);
+				}
+				break;
+			case "Anti-Gravity":
+				airReq = 30;
+				if(AirEnergy.getEnergyStored() >= (airReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.ANTI_GRAVITY_WARD, 30, 1,true, true));
+					AirEnergy.consumeEnergy(airReq * level);
+				}
+				break;
+			case "Daylight":
+				lightReq = 20;
+				if(LightEnergy.getEnergyStored() >= (lightReq * level)){
+					player.addPotionEffect(new EffectInstance(EntityEffects.DAYLIGHT_WARD, 30, 1,true, true));
+					LightEnergy.consumeEnergy(lightReq * level);
+				}
+				break;
 
 		}
 	}
