@@ -3,8 +3,8 @@ package com.cleardragonf.ourmod.objects.items.wards;
 import com.cleardragonf.ourmod.objects.items.WardTablets;
 
 
-public class DaytimeWardTablet extends WardTablets {
-    public DaytimeWardTablet(Properties properties) {
+public class DaytimeWard extends WardTablets {
+    public DaytimeWard(Properties properties) {
         super(properties);
     }
 

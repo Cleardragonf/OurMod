@@ -9,4 +9,6 @@ public class CDamageSource {
     public static final DamageSource HYPERTHERMIA = (new DamageSource("hyperthermia")).setDamageIsAbsolute().setDifficultyScaled();
 
     public static final DamageSource DEHYDRATE = (new DamageSource("dehydrate")).setDamageIsAbsolute().setDifficultyScaled();
+
+    public static final DamageSource WARDS = (new DamageSource("wards")).setDamageIsAbsolute().setDifficultyScaled();
 }

@@ -35,9 +35,9 @@ public class EntityEffects {
 
     public static final Effect HEALING_WARD = register("healingward", new EntityEffect(EffectType.BENEFICIAL, 5750248));
 
-    public static final Effect ANTI_PASSIVE_WARD = register("antipassiveward", new EntityEffect(EffectType.BENEFICIAL, 5750248));
+    public static final Effect ANTI_PASSIVE_WARD = register("antipassiveward", new EntityEffect(EffectType.HARMFUL, 5750248));
 
-    public static final Effect ANTI_HOSTILE_WARD = register("antihostileward", new EntityEffect(EffectType.BENEFICIAL, 5750248));
+    public static final Effect ANTI_HOSTILE_WARD = register("antihostileward", new EntityEffect(EffectType.HARMFUL, 5750248));
 
     public static final Effect ANTI_GRAVITY_WARD = register("antigravityward", new EntityEffect(EffectType.BENEFICIAL, 5750248));
 
