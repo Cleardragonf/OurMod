@@ -7,26 +7,16 @@ import com.cleardragonf.ourmod.container.MasterWardStoneContainer;
 import com.cleardragonf.ourmod.entity.EntityEffects;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
-import com.cleardragonf.ourmod.init.ItemInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
-import com.cleardragonf.ourmod.objects.blocks.BoundaryWardStoneBlock;
 import com.cleardragonf.ourmod.objects.blocks.MasterWardStoneBlock;
-import com.cleardragonf.ourmod.objects.items.wards.HealingWardTablet;
-import com.cleardragonf.ourmod.objects.items.wards.HungerWardTablet;
-import com.cleardragonf.ourmod.objects.items.wards.TemperatureWardTablet;
-import com.cleardragonf.ourmod.objects.items.wards.ThirstWardTablet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.FireBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -337,7 +327,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(radius1).expand(0.0D, 0.0D, 0.0D);
 						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
-						List<CreeperEntity> monsterList = this.world.getEntitiesWithinAABB(CreeperEntity.class, axisalignedbb);
+						List<MonsterEntity> monsterList = this.world.getEntitiesWithinAABB(MonsterEntity.class, axisalignedbb);
 						if(this.AirEnergy.getEnergyStored() >= (10*list.size())){
 							for(PlayerEntity playerentity : list) {
 									handler.ifPresent(e ->{
@@ -384,7 +374,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 									 */
 								AirEnergy.consumeEnergy(10);
 							}
-							for(CreeperEntity monster : monsterList){
+							for(MonsterEntity monster : monsterList){
 								handler.ifPresent(e ->{
 									for (int i = 0; i < 5; i++) {
 										ItemStack item = e.getStackInSlot(i);
@@ -472,7 +462,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		}
 	}
 
-	private void checkMonsterWardRequirements(String ward, int level, CreeperEntity monster) {
+	private void checkMonsterWardRequirements(String ward, int level, MonsterEntity monster) {
 		int waterReq = 0;
 		int fireReq = 0;
 		int earthReq = 0;

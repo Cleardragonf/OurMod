@@ -2,12 +2,12 @@ package com.cleardragonf.ourmod.entity;
 
 import com.cleardragonf.ourmod.util.CDamageSource;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
+import net.minecraft.util.DamageSource;
 
 public class EntityEffect extends Effect {
     public EntityEffect(EffectType effectType, int liquidColorIn) {
@@ -55,7 +55,7 @@ public class EntityEffect extends Effect {
 
         }
         else if (this == EntityEffects.ANTI_PASSIVE_WARD && entityLivingBaseIn instanceof AnimalEntity){
-            entityLivingBaseIn.attackEntityFrom(CDamageSource.WARDS, 8.0f);
+            entityLivingBaseIn.attackEntityFrom(DamageSource.WITHER, 8.0f);
         }else{
             System.out.println(entityLivingBaseIn.getClass());
         }
@@ -82,6 +82,12 @@ public class EntityEffect extends Effect {
             return true;
         }
         if (this == EntityEffects.HYPOTHERMIA) {
+            int k = 40 >> amplifier;
+            if (k > 0)
+                return (duration % k == 0);
+            return true;
+        }
+        if (this == EntityEffects.ANTI_HOSTILE_WARD) {
             int k = 40 >> amplifier;
             if (k > 0)
                 return (duration % k == 0);
