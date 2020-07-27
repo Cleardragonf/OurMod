@@ -14,6 +14,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.IFluidState;
@@ -328,6 +329,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(radius1).expand(0.0D, 0.0D, 0.0D);
 						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
 						List<MonsterEntity> monsterList = this.world.getEntitiesWithinAABB(MonsterEntity.class, axisalignedbb);
+						List<AnimalEntity> animalList = this.world.getEntitiesWithinAABB(AnimalEntity.class, axisalignedbb);
 						if(this.AirEnergy.getEnergyStored() >= (10*list.size())){
 							for(PlayerEntity playerentity : list) {
 									handler.ifPresent(e ->{
@@ -351,9 +353,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 												case "com.cleardragonf.ourmod.objects.items.wards.AntiGravityWard":
 													checkWardRequirements("Anti-Ward", level, playerentity);
 													break;
-												case "com.cleardragonf.ourmod.objects.items.wards.AntiPassiveWard":
-													checkWardRequirements("Anti-Passive", level, playerentity);
-													break;
+
 												case "com.cleardragonf.ourmod.objects.items.wards.DaytimeWard":
 													checkWardRequirements("Daytime", level, playerentity);
 													break;
@@ -385,6 +385,32 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 												break;
 											default:
 												checkMonsterWardRequirements("None", level, monster);
+												System.out.println(item.getItem().getClass().getName());
+												break;
+										}
+									}
+								});
+									/*
+									if(this.chestContents.contains(ItemInitNew.WARD_STONES_HUNGER)){
+										playerentity.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 20, 1, true, true));
+										EarthEnergy.consumeEnergy(10);
+										WaterEnergy.consumeEnergy(10);
+									}
+
+									 */
+								AirEnergy.consumeEnergy(10);
+							}
+							for(AnimalEntity animal : animalList){
+								handler.ifPresent(e ->{
+									for (int i = 0; i < 5; i++) {
+										ItemStack item = e.getStackInSlot(i);
+										int level = e.getStackInSlot(i).getCount();
+										switch (item.getItem().getClass().getName()){
+											case "com.cleardragonf.ourmod.objects.items.wards.AntiPassiveWard":
+												checkAnimalWardRequirements("Anti-Passive", level, animal);
+												break;
+											default:
+												checkAnimalWardRequirements("None", level, animal);
 												System.out.println(item.getItem().getClass().getName());
 												break;
 										}
@@ -459,6 +485,27 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 		if(needsSave){
 			this.markDirty();
+		}
+	}
+
+	private void checkAnimalWardRequirements(String ward, int level, AnimalEntity animal) {
+		int waterReq = 0;
+		int fireReq = 0;
+		int earthReq = 0;
+		int airReq = 0;
+		int lightReq = 0;
+		int darkReq = 0;
+
+		switch (ward){
+			case "Anti-Passive":
+				fireReq = 10;
+				lightReq = 10;
+				if(LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
+					animal.addPotionEffect(new EffectInstance(EntityEffects.ANTI_PASSIVE_WARD, 5000, 1,true, true));
+					FireEnergy.consumeEnergy(fireReq * level);
+					LightEnergy.consumeEnergy(darkReq * level);
+				}
+				break;
 		}
 	}
 

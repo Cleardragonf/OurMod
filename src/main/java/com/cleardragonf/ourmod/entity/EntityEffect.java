@@ -55,7 +55,11 @@ public class EntityEffect extends Effect {
 
         }
         else if (this == EntityEffects.ANTI_PASSIVE_WARD && entityLivingBaseIn instanceof AnimalEntity){
-            entityLivingBaseIn.attackEntityFrom(DamageSource.WITHER, 8.0f);
+            if (!((AnimalEntity)entityLivingBaseIn).attackable()) {
+                entityLivingBaseIn.attackEntityFrom(CDamageSource.WARDS, 50.0F);
+            }
+            entityLivingBaseIn.attackEntityFrom(CDamageSource.WARDS, 50.0f);
+
         }else{
             System.out.println(entityLivingBaseIn.getClass());
         }
@@ -88,6 +92,12 @@ public class EntityEffect extends Effect {
             return true;
         }
         if (this == EntityEffects.ANTI_HOSTILE_WARD) {
+            int k = 40 >> amplifier;
+            if (k > 0)
+                return (duration % k == 0);
+            return true;
+        }
+        if (this == EntityEffects.ANTI_PASSIVE_WARD) {
             int k = 40 >> amplifier;
             if (k > 0)
                 return (duration % k == 0);

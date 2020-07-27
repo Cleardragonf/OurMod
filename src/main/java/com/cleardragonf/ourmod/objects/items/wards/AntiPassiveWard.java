@@ -3,8 +3,8 @@ package com.cleardragonf.ourmod.objects.items.wards;
 import com.cleardragonf.ourmod.objects.items.WardTablets;
 
 
-public class AntiPeacefulWard extends WardTablets {
-    public AntiPeacefulWard(Properties properties) {
+public class AntiPassiveWard extends WardTablets {
+    public AntiPassiveWard(Properties properties) {
         super(properties);
     }
 
