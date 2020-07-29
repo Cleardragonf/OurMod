@@ -681,36 +681,71 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				break;
 			case "Daytime":
 				lightReq = 20;
-				try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-					final int posX = this.getPos().getX();
-					final int posY = this.getPos().getY();
-					final int posZ = this.getPos().getZ();
+				if(LightEnergy.getEnergyStored() >= (lightReq * level)){
+					try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+						final int posX = this.getPos().getX();
+						final int posY = this.getPos().getY();
+						final int posZ = this.getPos().getZ();
 
-					for(int z = -50; z <= 50; ++z){
-						for(int x = -50; x <= 50; ++x){
-							for(int y = -50; y <=50; y++){
-								final int dist = (x*x) + (y*y) + (z*z);
-								//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
-								if (dist > (((radius1 + 1) * radius1) -1)){
-									continue;
-								}
+						for(int z = -50; z <= 50; ++z){
+							for(int x = -50; x <= 50; ++x){
+								for(int y = -50; y <=50; y++){
+									final int dist = (x*x) + (y*y) + (z*z);
+									//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
+									if (dist > (((radius1 + 1) * radius1) -1)){
+										continue;
+									}
 
-								if (dist < 0 ){
-									continue;
-								}
-								final BooleanProperty LIT = RedstoneTorchBlock.LIT;
-								pooledMutable.setPos(posX + x,posY + y, posZ + z);
-								final BlockState blockState = world.getBlockState(pooledMutable);
-								final IFluidState fluidState = world.getFluidState(pooledMutable);
-								final Block block = blockState.getBlock();
-								if(block instanceof AirBlock){
-									world.setBlockState(pooledMutable, BlockInitNew.WARDINSIDE.get().getDefaultState());
+									if (dist < 0 ){
+										continue;
+									}
+									final BooleanProperty LIT = RedstoneTorchBlock.LIT;
+									pooledMutable.setPos(posX + x,posY + y, posZ + z);
+									final BlockState blockState = world.getBlockState(pooledMutable);
+									final IFluidState fluidState = world.getFluidState(pooledMutable);
+									final Block block = blockState.getBlock();
+									if(block instanceof AirBlock){
+										world.setBlockState(pooledMutable, BlockInitNew.WARDINSIDE.get().getDefaultState(),3);
 
+									}
 								}
 							}
 						}
+						markDirty();
 					}
-					markDirty();
+					LightEnergy.consumeEnergy(lightReq * level);
+				}else{
+					try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+						final int posX = this.getPos().getX();
+						final int posY = this.getPos().getY();
+						final int posZ = this.getPos().getZ();
+
+						for(int z = -50; z <= 50; ++z){
+							for(int x = -50; x <= 50; ++x){
+								for(int y = -50; y <=50; y++){
+									final int dist = (x*x) + (y*y) + (z*z);
+									//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
+									if (dist > (((radius1 + 1) * radius1) -1)){
+										continue;
+									}
+
+									if (dist < 0 ){
+										continue;
+									}
+									final BooleanProperty LIT = RedstoneTorchBlock.LIT;
+									pooledMutable.setPos(posX + x,posY + y, posZ + z);
+									final BlockState blockState = world.getBlockState(pooledMutable);
+									final IFluidState fluidState = world.getFluidState(pooledMutable);
+									final Block block = blockState.getBlock();
+									if(block instanceof WardInside){
+										world.setBlockState(pooledMutable, Blocks.AIR.getDefaultState(),3);
+
+									}
+								}
+							}
+						}
+						markDirty();
+					}
 				}
 				break;
 

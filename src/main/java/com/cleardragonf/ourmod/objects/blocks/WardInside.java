@@ -17,7 +17,7 @@ import net.minecraft.world.IBlockReader;
 public class WardInside extends Block {
 
     public WardInside() {
-        super(Properties.create(Material.IRON)
+        super(Properties.create(Material.AIR)
                 .lightValue(14)
         );
     }
@@ -36,8 +36,6 @@ public class WardInside extends Block {
     }
 
     public boolean isAir(BlockState state) {
-
-
         return true;
     }
 
