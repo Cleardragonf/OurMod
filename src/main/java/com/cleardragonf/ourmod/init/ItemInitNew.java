@@ -55,6 +55,7 @@ public class ItemInitNew {
 	public static final RegistryObject<Item> WARD_STONES_ANTI_HOSTILE = ITEMS.register("antihostileward", () -> new AntiHostileWard(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_STONES_ANTI_GRAVITY = ITEMS.register("antigravityward", () -> new AntiGravityWard(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_STONES_ANTI_PEACEFUL = ITEMS.register("antipeacefulward", () -> new AntiPassiveWard(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_DAYLIGHT = ITEMS.register("daytimeward", () -> new DaytimeWard(new Item.Properties().group(OurModItemGroup.instance)));
 
 
 	/*

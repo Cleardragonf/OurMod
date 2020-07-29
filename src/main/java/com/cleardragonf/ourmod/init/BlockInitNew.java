@@ -14,11 +14,12 @@ public class BlockInitNew {
 
 	
 	public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, OurMod.MOD_ID);
-	
+
 	public static final RegistryObject<Block> FORCEFIELD = BLOCKS.register("forcefield", ()-> new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	public static final RegistryObject<Block> WARDBARRIER = BLOCKS.register("wardbarrier", ()-> new WardBarrier(Block.Properties.create(Material.IRON).hardnessAndResistance(5000.0f, 5000.0f)));
-	
-	
+	public static final RegistryObject<Block> WARDINSIDE = BLOCKS.register("wardinside",WardInside::new);
+
+
 	//TileEntities
 	public static final RegistryObject<Block> PORTABLE_CHEST = BLOCKS.register("portablechest", ()-> new PortableChest(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	public static final RegistryObject<Block> QUARRY = BLOCKS.register("quarry", ()-> new BlockQuarry(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));

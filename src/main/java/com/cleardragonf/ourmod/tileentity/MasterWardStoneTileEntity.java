@@ -9,9 +9,8 @@ import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import com.cleardragonf.ourmod.objects.blocks.MasterWardStoneBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import com.cleardragonf.ourmod.objects.blocks.WardInside;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -28,6 +27,8 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.Property;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
@@ -42,6 +43,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -338,27 +340,27 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 											int level = e.getStackInSlot(i).getCount();
 											switch (item.getItem().getClass().getName()){
 												case "com.cleardragonf.ourmod.objects.items.wards.HungerWardTablet":
-													checkWardRequirements("Hunger", level, playerentity);
+													checkWardRequirements("Hunger", level, playerentity, radius1);
 													System.out.println(level + " " + "Hunger");
 													break;
 												case "com.cleardragonf.ourmod.objects.items.wards.ThirstWardTablet":
-													checkWardRequirements("Thirst", level, playerentity);
+													checkWardRequirements("Thirst", level, playerentity, radius1);
 													break;
 												case "com.cleardragonf.ourmod.objects.items.wards.HealingWardTablet":
-													checkWardRequirements("Healing", level, playerentity);
+													checkWardRequirements("Healing", level, playerentity, radius1);
 													break;
 												case "com.cleardragonf.ourmod.objects.items.wards.TemperatureWardTablet":
-													checkWardRequirements("Temperature", level, playerentity);
+													checkWardRequirements("Temperature", level, playerentity, radius1);
 													break;
 												case "com.cleardragonf.ourmod.objects.items.wards.AntiGravityWard":
-													checkWardRequirements("Anti-Ward", level, playerentity);
+													checkWardRequirements("Anti-Ward", level, playerentity, radius1);
 													break;
 
 												case "com.cleardragonf.ourmod.objects.items.wards.DaytimeWard":
-													checkWardRequirements("Daytime", level, playerentity);
+													checkWardRequirements("Daytime", level, playerentity,radius1);
 													break;
 												default:
-													checkWardRequirements("None", level, playerentity);
+													checkWardRequirements("None", level, playerentity, radius1);
 													System.out.println(item.getItem().getClass().getName());
 													break;
 											}
@@ -612,7 +614,9 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		}
 	}
 
-	private void checkWardRequirements(String ward, int level, PlayerEntity player) {
+	private void
+
+	checkWardRequirements(String ward, int level, PlayerEntity player, int radius1) {
 		int waterReq = 0;
 		int fireReq = 0;
 		int earthReq = 0;
@@ -675,11 +679,38 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					AirEnergy.consumeEnergy(airReq * level);
 				}
 				break;
-			case "Daylight":
+			case "Daytime":
 				lightReq = 20;
-				if(LightEnergy.getEnergyStored() >= (lightReq * level)){
-					player.addPotionEffect(new EffectInstance(EntityEffects.DAYLIGHT_WARD, 30, 1,true, true));
-					LightEnergy.consumeEnergy(lightReq * level);
+				try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
+					final int posX = this.getPos().getX();
+					final int posY = this.getPos().getY();
+					final int posZ = this.getPos().getZ();
+
+					for(int z = -50; z <= 50; ++z){
+						for(int x = -50; x <= 50; ++x){
+							for(int y = -50; y <=50; y++){
+								final int dist = (x*x) + (y*y) + (z*z);
+								//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
+								if (dist > (((radius1 + 1) * radius1) -1)){
+									continue;
+								}
+
+								if (dist < 0 ){
+									continue;
+								}
+								final BooleanProperty LIT = RedstoneTorchBlock.LIT;
+								pooledMutable.setPos(posX + x,posY + y, posZ + z);
+								final BlockState blockState = world.getBlockState(pooledMutable);
+								final IFluidState fluidState = world.getFluidState(pooledMutable);
+								final Block block = blockState.getBlock();
+								if(block instanceof AirBlock){
+									world.setBlockState(pooledMutable, BlockInitNew.WARDINSIDE.get().getDefaultState());
+
+								}
+							}
+						}
+					}
+					markDirty();
 				}
 				break;
 
