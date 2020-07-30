@@ -681,6 +681,9 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				break;
 			case "Daytime":
 				lightReq = 20;
+				if(level > 14){
+					level = 14;
+				}
 				if(LightEnergy.getEnergyStored() >= (lightReq * level)){
 					try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
 						final int posX = this.getPos().getX();
@@ -705,8 +708,10 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 									final IFluidState fluidState = world.getFluidState(pooledMutable);
 									final Block block = blockState.getBlock();
 									if(block instanceof AirBlock){
-										world.setBlockState(pooledMutable, BlockInitNew.WARDINSIDE.get().getDefaultState(),3);
+										world.setBlockState(pooledMutable, BlockInitNew.WARDINSIDE.get().getDefaultState().with(WardInside.LIGHT, level) ,3);
 
+									}else if(block instanceof WardInside){
+										world.setBlockState(pooledMutable, BlockInitNew.WARDINSIDE.get().getDefaultState().with(WardInside.LIGHT, level) ,3);
 									}
 								}
 							}

@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
@@ -16,12 +17,19 @@ import net.minecraft.world.IBlockReader;
 
 public class WardInside extends Block {
 
+    public static final IntegerProperty LIGHT = IntegerProperty.create("light", 0, 15);
+
     public WardInside() {
         super(Properties.create(Material.AIR)
-                .lightValue(14)
         );
     }
 
+
+
+    @Override
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+        return state.get(LIGHT);
+    }
 
     /**
      * The type of render function called. MODEL for mixed tesr and static model, MODELBLOCK_ANIMATED for TESR-only,
@@ -41,6 +49,6 @@ public class WardInside extends Block {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.LIT, BlockStateProperties.POWERED);
+        builder.add(BlockStateProperties.LIT, BlockStateProperties.POWERED, LIGHT);
     }
 }
