@@ -12,7 +12,7 @@
             "italic": true
         },
         "icon": {
-            "item": "ourmod:hungerward"
+            "item": "ourmod:antihungerward"
         },
         "frame": "task",
         "show_toast": true,
@@ -36,10 +36,6 @@
         }
     },
     "rewards": {
-        "recipes": [
-            "ourmod:antigravityward",
-            "ourmod:"
-        ],
         "experience": 1000
     },
     "parent": "ourmod:wards"

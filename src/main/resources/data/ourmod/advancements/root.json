@@ -30,6 +30,10 @@
         }
     },
     "rewards": {
-        "experience": 100
+        "experience": 100,
+        "recipes": [
+            "ourmod:boundarywardstone",
+            "ourmod:masterwardstone"
+        ]
     }
 }

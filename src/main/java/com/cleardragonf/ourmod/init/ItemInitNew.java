@@ -18,6 +18,7 @@ public class ItemInitNew {
 	
 	public static final RegistryObject<Item> SICKLE = ITEMS.register("sickle", () -> new Sickle(new Item.Properties().defaultMaxDamage(100).group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> OUR_BOOK = ITEMS.register("ourbook", () -> new OurBook(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> OUR_WARDS = ITEMS.register("ourwardsbook", () -> new OurWardsBook(new Item.Properties().group(OurModItemGroup.instance)));
 
 	//FOOD
 	public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
@@ -49,9 +50,9 @@ public class ItemInitNew {
 
 	//Wards
 	public static final RegistryObject<Item> WARD_STONES_HEALING = ITEMS.register("healingward", () -> new HealingWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_STONES_HUNGER = ITEMS.register("hungerward", () -> new HungerWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_ANTI_HUNGER = ITEMS.register("antihungerward", () -> new AntiHungerWard(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_STONES_THIRST = ITEMS.register("thirstward", () -> new ThirstWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_STONES_TEMPERATURE = ITEMS.register("temperatureward", () -> new TemperatureWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_TEMPERATURE = ITEMS.register("temperatureward", () -> new TemperatureWard(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_STONES_ANTI_HOSTILE = ITEMS.register("antihostileward", () -> new AntiHostileWard(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_STONES_ANTI_GRAVITY = ITEMS.register("antigravityward", () -> new AntiGravityWard(new Item.Properties().group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> WARD_STONES_ANTI_PEACEFUL = ITEMS.register("antipeacefulward", () -> new AntiPassiveWard(new Item.Properties().group(OurModItemGroup.instance)));

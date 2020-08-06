@@ -39,8 +39,7 @@ public class WardEnscriber extends Item{
         TileEntity tileEntity = world.getTileEntity(blockpos);
         if(tileEntity instanceof MasterWardStoneTileEntity){
             if(tag.contains("wardshape")){
-                ITextComponent text = new TranslationTextComponent("Connecting to: " + tag.get("wardshape"));
-                context.getPlayer().sendMessage(text);
+
             }else{
                 ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
                 context.getPlayer().sendMessage(text);
@@ -53,8 +52,7 @@ public class WardEnscriber extends Item{
                 pos.putInt("y", tileEntity.getPos().getY());
                 pos.putInt("z", tileEntity.getPos().getZ());
             tag.put("wardshape", pos);
-            ITextComponent text = new TranslationTextComponent("setting to: " + tag.get("wardshape"));
-            context.getPlayer().sendMessage(text);
+
             itemStack.setTag(tag);
             return ActionResultType.SUCCESS;
         }else{

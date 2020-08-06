@@ -3,8 +3,8 @@ package com.cleardragonf.ourmod.objects.items.wards;
 import com.cleardragonf.ourmod.objects.items.WardTablets;
 
 
-public class HungerWardTablet extends WardTablets {
-    public HungerWardTablet(Properties properties) {
+public class TemperatureWard extends WardTablets {
+    public TemperatureWard(Properties properties) {
         super(properties);
     }
 

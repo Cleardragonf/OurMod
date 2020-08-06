@@ -11,7 +11,7 @@
             "italic": true
         },
         "icon": {
-            "item": "minecraft:stone"
+            "item": "ourmod:antihungerward"
         },
         "frame": "task",
         "show_toast": true,
@@ -24,7 +24,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "ourmod:hungerward",
+                        "item": "ourmod:antihungerward",
                         "count": {
                             "min": 1,
                             "max": 1

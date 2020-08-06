@@ -344,131 +344,14 @@ public class OurBookScreen extends Screen {
                 this.font.drawString("with connecting, the boundaries to", x + 5, y + 60,4210752);
                 this.font.drawString("the Master Stone. And the power", x + 5, y + 70,4210752);
                 this.font.drawString("I'd  recommend trying to create",  x + 5, y + 80,4210752);
-                this.font.drawString("the geneal tools, found on the ",  x + 5, y + 90,4210752);
-                this.font.drawString("next page.",  x + 5, y + 100,4210752);
+                this.font.drawString("the geneal tools.",  x + 5, y + 90,4210752);
 
             }
             else if(pageNumber ==7){
-                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
-                //left side
-                this.font.drawString("Power Enscriber",x-180, y + 20, 4210752);
-
-                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
-                this.blit(x -180, y + 30, 0,0,130,50);
-                int gridX = x - 180;
-                int gridY = y + 30;
-                if(tick<120){
-
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 1);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.ESSENCE_COLLECTOR.getDefaultInstance(), gridX + 35, gridY + 1);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 18);
-                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 18, gridY + 18);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 18);
-                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 35);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 35);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
-                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
-                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
-                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
-                }
-                else{
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.POWER_ENSCRIBER.get().getDefaultInstance(), gridX + 105, gridY + 16);
-                }
-
-                this.font.drawString("Master Ward Stone",x-180, y + 100, 4210752);
-
-                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
-                this.blit(x -180, y + 110, 0,0,130,50);
-                gridX = x - 180;
-                gridY = y + 110;
-                if(tick<120){
-
-                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 1);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.WATER_ESSENCE.getDefaultInstance(), gridX + 18, gridY + 1);
-                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 35, gridY + 1);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.FIRE_ESSENCE.getDefaultInstance(), gridX + 1, gridY + 18);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.BOUNDARY_WARD_STONE.getDefaultInstance(), gridX + 18, gridY + 18);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.WIND_ESSENCE.getDefaultInstance(), gridX + 35, gridY + 18);
-                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 35);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.EARTH_ESSENCE.getDefaultInstance(), gridX + 18, gridY + 35);
-                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 35, gridY + 35);
-                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
-                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
-                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
-                }
-                else{
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.MASTER_WARD_STONE.getDefaultInstance(), gridX + 105, gridY + 16);
-                }
-
-
-                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
-                //right side
-                this.font.drawString("Ward Enscriber", x + 5, y + 20, 4210752);
-
-                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
-                this.blit(x +5 , y + 30, 0,0,130,50);
-
-                gridX = x + 5;
-                gridY = y + 30;
-                if(tick<160){
-
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 1);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.BOUNDARY_WARD_STONE.getDefaultInstance(), gridX + 35, gridY + 1);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 18);
-                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 18, gridY + 18);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 18);
-                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 35);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 18, gridY + 35);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
-                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
-                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
-                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
-                }
-                else{
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.MCM_CHEST.getDefaultInstance(), gridX + 105, gridY + 16);
-                }
-                this.font.drawString("Boundary Ward Stone", x + 5, y + 100, 4210752);
-
-                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
-                this.blit(x +5 , y + 110, 0,0,130,50);
-
-                gridX = x + 5;
-                gridY = y + 110;
-                if(tick<160){
-
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 1, gridY + 1);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.WATER_ESSENCE.getDefaultInstance(), gridX + 18, gridY + 1);
-                    //this.itemRenderer.renderItemIntoGUI(ItemInitNew.BOUNDARY_WARD_STONE.getDefaultInstance(), gridX + 35, gridY + 1);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.FIRE_ESSENCE.getDefaultInstance(), gridX + 1, gridY + 18);
-                    this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 18, gridY + 18);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.WIND_ESSENCE.getDefaultInstance(), gridX + 35, gridY + 18);
-                    //this.itemRenderer.renderItemIntoGUI(Items.STONE.getDefaultInstance(), gridX + 1, gridY + 35);
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.EARTH_ESSENCE.getDefaultInstance(), gridX + 18, gridY + 35);
-                    //this.itemRenderer.renderItemIntoGUI(Items.IRON_INGOT.getDefaultInstance(), gridX + 35, gridY + 35);
-                    //x,y,texturex,texturey,width,height @RyuShiTenshiKage
-                    this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
-                    this.blit(gridX + 58,gridY + 7,0,52,34 - (34/tick),24);
-                }
-                else{
-                    this.itemRenderer.renderItemIntoGUI(ItemInitNew.BOUNDARY_WARD_STONE.getDefaultInstance(), gridX + 105, gridY + 16);
-                }
 
             }
             else if(pageNumber ==8){
-                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
-                //left side
-                this.font.drawString("you've found documentation that", x - 180, y + 10, 4210752);
-                this.font.drawString("states placing a scroll in the middle", x - 180, y + 20, 4210752);
-                this.font.drawString("of a recipe and surrounding it with", x - 180, y + 30, 4210752);
-                this.font.drawString("with Earth Essence. You'll get a ", x - 180, y + 40,4210752);
-                this.font.drawString("special tablet that looks like you", x - 180, y - 1800,4210752);
-                this.font.drawString("can craft different runic arrays on it.", x - 180, y + 60,4210752);
 
-
-                //x,y,texturex,texturey,width,height @RyuShiTenshiKage
-                //right side
 
             }
             else if(pageNumber ==9){

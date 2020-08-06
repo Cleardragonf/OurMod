@@ -12,7 +12,7 @@
             "bold": true
         },
         "icon": {
-            "item": "ourmod:hungerward"
+            "item": "ourmod:antihungerward"
         },
         "frame": "challenge",
         "show_toast": true,
@@ -25,7 +25,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "minecraft:stone",
+                        "item": "ourmod:boundarywardstone",
                         "count": {
                             "min": 1,
                             "max": 1
@@ -37,9 +37,12 @@
     },
     "rewards": {
         "recipes": [
-            "ourmod:hungerward",
+            "ourmod:antihungerward",
             "ourmod:temperatureward",
-            "ourmod:antihostile"
+            "ourmod:antihostileward"
+        ],
+        "loot": [
+            "ourmod:ourwardsbook"
         ],
         "experience": 1000
     },

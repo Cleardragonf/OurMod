@@ -18,14 +18,16 @@
 	"item.ourmod.earthmana": "Earth Essence",
 	"item.ourmod.darkmana": "Dark Essence",
 	"item.ourmod.lightmana": "Light Essence",
-	"item.ourmod.ourbook": "OurMod Guidebook",
 	"item.ourmod.powerenscriber": "Power Enscriber",
 	"item.ourmod.wardenscriber": "Ward Enscriber",
+
+	"item.ourmod.ourbook": "OurMod Guidebook",
+	"item.ourmod.ourwardsbook": "OurWards GuideBook",
 
 
 	"item.ourmod.healingward": "Healing Array",
 	"item.ourmod.thirstward": "Anti-Thirst Array",
-	"item.ourmod.hungerward": "Anti-Hunger Array",
+	"item.ourmod.antihungerward": "Anti-Hunger Array",
 	"item.ourmod.temperatureward": "Perfect Climate Array",
 	"item.ourmod.antihostileward": "Anti-Hostile Array",
 	"item.ourmod.antigravityward": "Anti-Gravity Array",
