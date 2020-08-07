@@ -170,11 +170,11 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 			final int posY = tilePos.getY();
 			final int posZ = tilePos.getZ();
 
-			for(int z = -25; z <= 25; ++z){
-				for(int x = -25; x <= 25; ++x){
-					for(int y = -25; y <=25; y++){
+			for(int z = -50; z <= 50; ++z){
+				for(int x = -50; x <= 50; ++x){
+					for(int y = -50; y <=50; y++){
 						final int dist = (x*x) + (y*y) + (z*z);
-						if (dist > 50){
+						if (dist > 2500){
 							continue;
 						}
 
