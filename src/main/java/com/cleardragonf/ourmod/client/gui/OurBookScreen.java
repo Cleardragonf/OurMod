@@ -29,7 +29,7 @@ public class OurBookScreen extends Screen {
     public OurBookScreen(ITextComponent titleIn) {
         super(titleIn);
     }
-    private static final ResourceLocation GUI = new ResourceLocation(OurMod.MOD_ID, "textures/gui/ourbook.png");
+    private static final ResourceLocation GUI = new ResourceLocation(OurMod.MOD_ID, "textures/gui/asurabook.png");
     private static final ResourceLocation BLANK_CRAFTING = new ResourceLocation(OurMod.MOD_ID, "textures/gui/blankcrafting.png");
     int xSize = 185;
     int ySize = 245;

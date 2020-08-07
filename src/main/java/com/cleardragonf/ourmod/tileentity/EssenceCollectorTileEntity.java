@@ -198,10 +198,10 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 								|| block == Blocks.NETHERRACK || block == Blocks.OBSIDIAN || block == Blocks.PODZOL || block == Blocks.PRISMARINE ||block ==  Blocks.QUARTZ_BLOCK
 						|| block == Blocks.SAND){
 							++earthBlocksFound;
-						}else if(block == BlockInitNew.DARK_MANA.get()) {
+						}else if(block == BlockInitNew.DARK_MANA.get() || block.getLightValue(block.getDefaultState(), world, pos) < 2) {
 							++darkBlocksFound;
 						}
-						else if(block == BlockInitNew.LIGHT_MANA.get()) {
+						else if(block == BlockInitNew.LIGHT_MANA.get() || block.getLightValue(block.getDefaultState(), world, pos) > 1){
 							++lightBlocksFound;
 						}
 					}

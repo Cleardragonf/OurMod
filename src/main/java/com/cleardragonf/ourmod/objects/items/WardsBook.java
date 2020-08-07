@@ -12,8 +12,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-public class OurWardsBook extends BookItem {
-    public OurWardsBook(Properties group) {
+public class WardsBook extends BookItem {
+    public WardsBook(Properties group) {
         super(group);
     }
 

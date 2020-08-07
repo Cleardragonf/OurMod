@@ -15,8 +15,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class OurBook extends BookItem {
-    public OurBook(Properties group) {
+public class AsuraBook extends BookItem {
+    public AsuraBook(Properties group) {
         super(group);
     }
 

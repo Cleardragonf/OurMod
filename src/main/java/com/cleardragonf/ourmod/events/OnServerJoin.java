@@ -22,7 +22,7 @@ public class OnServerJoin
 		event.getPlayer().sendMessage(new TranslationTextComponent("hello"));
 
 
-		ItemStack item = new ItemStack( ItemInitNew.OUR_BOOK.get());
+		ItemStack item = new ItemStack( ItemInitNew.ASURA_BOOK.get());
 		ItemEntity entity = new ItemEntity(event.getPlayer().world, event.getPlayer().getPosX() + .5, event.getPlayer().getPosY(), event.getPlayer().getPosZ() + .5, item);
 		event.getPlayer().world.addEntity(entity);
 	}
