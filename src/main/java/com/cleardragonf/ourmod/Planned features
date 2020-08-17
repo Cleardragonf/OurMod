@@ -1,10 +1,4 @@
-TODO:• WardStones 1.3
-TODO:  XP Storage
-TODO:  Portable Chest
-TODO:  MCM Battery Storage
-TODO:  Update Thirst, Sleep Hunger Calculations to the Player
-TODO:  Update when players get the book
-TODO:  Mob Capturing and Spawn Creations....
-TODO:  Custom MOB Spawning
-TODO:  Working on Fixing Enchantment Combination on Anvil
-TODO:  Teleport Rings
+TODO:  make a runic Charge that'll allow 'Capture' to be deployed to it
+TODO:  Copy how an egg is thrown for this item
+TODO:  Get the entity that is hit by the item, and remove it and write it's stats to the item
+TODO:  create custom 'Spawner'
