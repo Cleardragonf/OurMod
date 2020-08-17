@@ -1,10 +1,3 @@
-TODO:• WardStones 1.3
-TODO:  XP Storage
-TODO:  Portable Chest
-TODO:  MCM Battery Storage
-TODO:  Update Thirst, Sleep Hunger Calculations to the Player
-TODO:  Update when players get the book
-TODO:  Mob Capturing and Spawn Creations....
-TODO:  Custom MOB Spawning
-TODO:  Working on Fixing Enchantment Combination on Anvil
-TODO:  Teleport Rings
+TODO:  Fix Shift click for MCM Chest
+TODO:  Fix where the Input for the Funnel should go aka to slots 1-4
+TODO:  Fix the View of the items in the MCM Chest and also fix the 'limitation for moving them to and from each stack'
