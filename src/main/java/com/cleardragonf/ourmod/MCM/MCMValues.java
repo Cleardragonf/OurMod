@@ -242,7 +242,7 @@ public class MCMValues {
         mcmList.put(Items.ENDERMAN_SPAWN_EGG,128);
         mcmList.put(Items.ENDERMITE_SPAWN_EGG,128);
         mcmList.put(Items.EVOKER_SPAWN_EGG,128);
-        mcmList.put(Items.EXPERIENCE_BOTTLE,128);
+        mcmList.put(Items.EXPERIENCE_BOTTLE,1280);
         mcmList.put(Items.FEATHER,48);
         mcmList.put(Items.FERMENTED_SPIDER_EYE,150);
         mcmList.put(Items.FIRE_CHARGE,50);

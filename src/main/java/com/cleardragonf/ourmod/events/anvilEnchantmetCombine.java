@@ -62,23 +62,27 @@ public class anvilEnchantmetCombine {
     }
 
     private static void handleTome(ItemStack book1, ItemStack book2, AnvilUpdateEvent event) {
-            Map<Enchantment, Integer> enchantsBook = EnchantmentHelper.getEnchantments(book1);
-            Map<Enchantment, Integer> enchantsTome = EnchantmentHelper.getEnchantments(book2);
+            Map<Enchantment, Integer> enchantBook1 = EnchantmentHelper.getEnchantments(book1);
+            Map<Enchantment, Integer> enchantBook2 = EnchantmentHelper.getEnchantments(book2);
 
-            if (enchantsTome == null) {
+            if (enchantBook2 == null) {
                 return;
             }
 
-            for (Map.Entry<Enchantment, Integer> entry : enchantsTome.entrySet()) {
-                if(enchantsBook.getOrDefault(entry.getKey(), 0).equals(entry.getValue())) {
-                    enchantsBook.put(entry.getKey(), entry.getValue() + 1);
+            //This is what controls the Adding of the enchantment
+        //book 1 Enchantment get enchantments from bookk 2 there value
+            for (Map.Entry<Enchantment, Integer> entry : enchantBook2.entrySet()) {
+                if(enchantBook1.containsKey(entry.getKey())) {
+                    enchantBook1.put(entry.getKey(), enchantBook1.get(entry.getKey()).intValue() + 1);
                 }
                 else return;
             }
 
             ItemStack output = new ItemStack(Items.ENCHANTED_BOOK);
-            for (Map.Entry<Enchantment, Integer> entry : enchantsBook.entrySet())
+            for (Map.Entry<Enchantment, Integer> entry : enchantBook1.entrySet()){
                 EnchantedBookItem.addEnchantment(output, new EnchantmentData(entry.getKey(),entry.getValue()));
+            }
+
 
             event.setOutput(output);
             event.setCost(mergeCost);
