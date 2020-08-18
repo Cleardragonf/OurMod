@@ -1,10 +1,6 @@
-TODO:• WardStones 1.3
-TODO:  XP Storage
-TODO:  Portable Chest
-TODO:  MCM Battery Storage
-TODO:  Update Thirst, Sleep Hunger Calculations to the Player
-TODO:  Update when players get the book
-TODO:  Mob Capturing and Spawn Creations....
-TODO:  Custom MOB Spawning
-TODO:  Working on Fixing Enchantment Combination on Anvil
-TODO:  Teleport Rings
+TODO:  Create the ChargeBlock Block and Item
+TODO:  Create the ChargeBlockTileEntity
+TODO:  Create the ChargeBlockContainer
+TODO:  Create the ChargeBlockScreen
+TODO:  Create the ICONS, Block Image
+TODO:  Create the json Files
