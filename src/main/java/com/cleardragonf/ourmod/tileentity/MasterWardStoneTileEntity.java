@@ -341,7 +341,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 											switch (item.getItem().getClass().getName()){
 												case "com.cleardragonf.ourmod.objects.items.wards.HungerWardTablet":
 													checkWardRequirements("Hunger", level, playerentity, radius1);
-													System.out.println(level + " " + "Hunger");
+
 													break;
 												case "com.cleardragonf.ourmod.objects.items.wards.ThirstWardTablet":
 													checkWardRequirements("Thirst", level, playerentity, radius1);
@@ -361,7 +361,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 													break;
 												default:
 													checkWardRequirements("None", level, playerentity, radius1);
-													System.out.println(item.getItem().getClass().getName());
+
 													break;
 											}
 										}
@@ -387,7 +387,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 												break;
 											default:
 												checkMonsterWardRequirements("None", level, monster);
-												System.out.println(item.getItem().getClass().getName());
+
 												break;
 										}
 									}
@@ -413,7 +413,6 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 												break;
 											default:
 												checkAnimalWardRequirements("None", level, animal);
-												System.out.println(item.getItem().getClass().getName());
 												break;
 										}
 									}
@@ -429,7 +428,6 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 								AirEnergy.consumeEnergy(10);
 							}
 						}else{
-							System.out.println("Not activiating Effect...because Air Storage only at " + AirEnergy.getEnergyStored());
 						}
 
 						//set with a border right now it works for replacing air with glass
@@ -591,7 +589,6 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 									else if(block == BlockInitNew.WARDBARRIER.get()){
 										world.setBlockState(pooledMutable, Blocks.AIR.getDefaultState(), 3);
 									}else{
-										System.out.println(block);
 									}
 								}
 							}
@@ -628,7 +625,6 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 			case "Hunger":
 				earthReq = 10;
 				waterReq = 10;
-				System.out.println("made it to this point");
 				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && WaterEnergy.getEnergyStored() >= (waterReq * level)){
 					player.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 30, level,true, true));
 					EarthEnergy.consumeEnergy(earthReq * level);
