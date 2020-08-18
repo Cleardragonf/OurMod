@@ -8,6 +8,9 @@ import com.cleardragonf.ourmod.container.MCMChestContainer;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.monster.SkeletonEntity;
+import net.minecraft.entity.monster.SlimeEntity;
+import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -109,10 +112,13 @@ public class EntitySpawnerTileEntity extends TileEntity implements ITickableTile
 			executeEnergySearch();
 			executeMCMEnergyConvert();
 			for (int i = 0; i < 4; i++) {
-				if(!inventory.getStackInSlot(i).isEmpty()){
+				if(inventory.getStackInSlot(i).isEmpty()){
+
+				}else{
+
 					if(this.MCMEnergy.getEnergyStored() > 50){
-						if(inventory.getStackInSlot(i).equals(Items.ZOMBIE_SPAWN_EGG)){
-							System.out.println("Zombie Spawn!");
+						if(inventory.getStackInSlot(i).getItem().equals(Items.ZOMBIE_SPAWN_EGG)){
+
 						}
 					}
 				}
