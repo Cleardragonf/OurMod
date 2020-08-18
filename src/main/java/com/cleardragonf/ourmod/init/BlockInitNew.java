@@ -28,6 +28,7 @@ public class BlockInitNew {
 	public static final RegistryObject<MCMChest> MCM_CHEST = BLOCKS.register("mcmchest", MCMChest::new);
 	public static final RegistryObject<Block> MASTER_WARD_STONE = BLOCKS.register("masterwardstone", ()-> new MasterWardStoneBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
 	public static final RegistryObject<Block> BOUNDARY_WARD_STONE = BLOCKS.register("boundarywardstone", ()-> new BoundaryWardStoneBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(10.0f, 15.0f)));
+	public static final RegistryObject<EntitySpawnerBlock> ENTITY_SPAWNER = BLOCKS.register("entityspawner", EntitySpawnerBlock::new);
 
 	//CROPS
 	public static final RegistryObject<Block> TOMATO_CROP = BLOCKS.register("tomatocrop", () -> new TomatoCrop(Block.Properties.from(Blocks.WHEAT)));

@@ -21,4 +21,5 @@ public class ModContainerTypes {
 	public static final RegistryObject<ContainerType<MCMChestContainer>> MCM_CHEST = CONTAINER_TYPES.register("mcmchest", () -> IForgeContainerType.create(MCMChestContainer::new ));
 	public static final RegistryObject<ContainerType<MasterWardStoneContainer>> MASTER_WARD_STONE = CONTAINER_TYPES.register("masterwardstone", () -> IForgeContainerType.create(MasterWardStoneContainer::new ));
 	public static final RegistryObject<ContainerType<BoundaryWardStoneContainer>> BOUNDARY_WARD_STONE = CONTAINER_TYPES.register("boundarywardstone", () -> IForgeContainerType.create(BoundaryWardStoneContainer::new ));
+	public static final RegistryObject<ContainerType<EntitySpawnerContainer>> ENTITY_SPAWNER = CONTAINER_TYPES.register("entityspawner", () -> IForgeContainerType.create(EntitySpawnerContainer::new ));
 }
