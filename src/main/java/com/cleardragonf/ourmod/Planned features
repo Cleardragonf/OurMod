@@ -1,3 +1,4 @@
 TODO:  Fix Shift click for MCM Chest
 TODO:  Fix where the Input for the Funnel should go aka to slots 1-4
 TODO:  Fix the View of the items in the MCM Chest and also fix the 'limitation for moving them to and from each stack'
+TODO:  •  Removed logging from MasterWardStoneTileEntity
