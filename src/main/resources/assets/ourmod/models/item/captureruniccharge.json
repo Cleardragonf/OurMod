@@ -1,3 +1,6 @@
 {
-	"parent": "ourmod:items/captureruniccharge"
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "ourmod:items/captureruniccharge"
+	}
 }

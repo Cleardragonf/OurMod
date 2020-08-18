@@ -2,3 +2,7 @@ TODO: • make a runic Charge that'll allow 'Capture' to be deployed to it
 TODO: • Copy how an egg is thrown for this item
 TODO: • Add Entities to the Charge Portion....
 TODO:   create custom 'Spawner'
+TODO:   create custom spawner recipes
+TODO:   create custom spawner block
+todo:   create custom spawner tileEntity
+todo:   create custom images, and jsons
