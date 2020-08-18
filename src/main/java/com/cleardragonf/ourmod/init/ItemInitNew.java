@@ -59,20 +59,8 @@ public class ItemInitNew {
 	public static final RegistryObject<Item> WARD_STONES_DAYLIGHT = ITEMS.register("daytimeward", () -> new DaytimeWard(new Item.Properties().group(OurModItemGroup.instance)));
 
 
-	/*
-	public static <K, R extends IForgeRegistryEntry<R>, V extends R> Map<K, RegistryObject<V>> registerManyObjects(Iterable<K> keys, DeferredRegister<R> register, Function<K, String> nameGetter, Function<K, V> factory)
-	{
-		Map<K, RegistryObject<V>> map = new HashMap<>();
-
-		for (K key : keys)
-		{
-			register.register(nameGetter.apply(key), () -> factory.apply(key));
-		}
-
-		return map;
-	}
-
-	 */
+	//General Items
+	public static final RegistryObject<Item> CAPTURE_RUNIC_CHARGE = ITEMS.register("captureruniccharge", () -> new CaptureRunicCharge(new Item.Properties().group(OurModItemGroup.instance)));
 
 	//Blocks
 
