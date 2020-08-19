@@ -2,6 +2,7 @@ package com.cleardragonf.ourmod.objects.items;
 
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.objects.blocks.EssenceCollector;
+import com.cleardragonf.ourmod.tileentity.EntitySpawnerTileEntity;
 import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import com.cleardragonf.ourmod.tileentity.MasterWardStoneTileEntity;
@@ -77,7 +78,17 @@ public class PowerEnscriber extends Item{
             context.getPlayer().sendMessage(text);
             itemStack.setTag(tag);
             return ActionResultType.SUCCESS;
-        }else{
+        }else if(tileEntity instanceof EntitySpawnerTileEntity){
+            if(tag.contains("energypos")){
+                ITextComponent text = new TranslationTextComponent("Connecting to: " + tag.get("energypos"));
+                context.getPlayer().sendMessage(text);
+            }else{
+                ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
+                context.getPlayer().sendMessage(text);
+            }
+            return ActionResultType.SUCCESS;
+        }
+        else{
             return ActionResultType.PASS;
         }
     }

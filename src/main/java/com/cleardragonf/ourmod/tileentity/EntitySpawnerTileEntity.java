@@ -8,10 +8,10 @@ import com.cleardragonf.ourmod.container.MCMChestContainer;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.ModTileEntityTypes;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.monster.SkeletonEntity;
-import net.minecraft.entity.monster.SlimeEntity;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.entity.*;
+import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -19,6 +19,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.NetworkManager;
@@ -27,7 +28,9 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -40,6 +43,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 
 public class EntitySpawnerTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
@@ -47,9 +51,9 @@ public class EntitySpawnerTileEntity extends TileEntity implements ITickableTile
 	public CompoundNBT tag = new CompoundNBT();
 
 	public INBT energyblocks;
-
-
-
+	private WeightedSpawnerEntity spawnData = new WeightedSpawnerEntity();
+	private boolean initialized = false;
+	public int tick, y;
 
 
 	public LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
@@ -66,7 +70,7 @@ public class EntitySpawnerTileEntity extends TileEntity implements ITickableTile
 
 		@Override
 		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-			if (stack.getItem() == null) {
+			if (!(stack.getItem() instanceof SpawnEggItem)) {
 				return stack;
 			}
 			return super.insertItem(slot, stack, simulate);
@@ -74,7 +78,7 @@ public class EntitySpawnerTileEntity extends TileEntity implements ITickableTile
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			return stack.getItem() != null;
+			return (stack.getItem() instanceof SpawnEggItem);
 		}
 
 		@Override
@@ -94,21 +98,30 @@ public class EntitySpawnerTileEntity extends TileEntity implements ITickableTile
 		world.notifyBlockUpdate(pos, this.getBlockState(), this.getBlockState(), 1);
 	}
 
+	public void setEntityType(EntityType<?> type) {
+		this.spawnData.getNbt().putString("id", Registry.ENTITY_TYPE.getKey(type).toString());
+	}
+	private void init() {
+		initialized = true;
+		y = 3;
+
+	}
+
 	@Override
 	public void tick() {
-		write(tag);
-		markDirty();
-		if (world.isRemote) {
-			return;
+		if (!initialized)
+			init();
+		tick++;
+		if (tick == 40) {
+			tick = 0;
+			if (y > 2)
+				execute();
 		}
 
-		if (counter > 0) {
-			counter--;
 
-			markDirty();
-		}
+	}
 
-		if (counter <= 0) {
+	public void execute(){
 			executeEnergySearch();
 			executeMCMEnergyConvert();
 			for (int i = 0; i < 4; i++) {
@@ -117,61 +130,58 @@ public class EntitySpawnerTileEntity extends TileEntity implements ITickableTile
 				}else{
 
 					if(this.MCMEnergy.getEnergyStored() > 50){
-						if(inventory.getStackInSlot(i).getItem().equals(Items.ZOMBIE_SPAWN_EGG)){
-
-						}
+						EntityType<?> entityType = ((SpawnEggItem)inventory.getStackInSlot(i).getItem()).getType(inventory.getStackInSlot(i).getTag());
+						Entity entity = entityType.create(this.world);
+						entity.setLocationAndAngles(this.getPos().getX() +1, this.getPos().getY(), this.getPos().getZ(), 360.0F, 0.0F);
+						this.world.addEntity(entity);
+						this.MCMEnergy.consumeEnergy(50);
 					}
 				}
 			}
 			markDirty();
 		}
 
-		BlockState blockState = world.getBlockState(pos);
-		if (blockState.get(BlockStateProperties.POWERED) != counter > 0) {
-			world.setBlockState(pos, blockState.with(BlockStateProperties.POWERED, counter > 0), 3);
-		}
-	}
 
 	private void executeMCMEnergyConvert() {
 		if(this.MCMEnergy.getEnergyStored() < 6000000){
 			if(this.FireEnergy.getEnergyStored() > 0){
 				int transfer = this.FireEnergy.getEnergyStored();
-				this.MCMEnergy.addEnergy(transfer/1000);
+				this.MCMEnergy.addEnergy(transfer/100);
 				this.FireEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
 			if(this.WaterEnergy.getEnergyStored() > 0){
 				int transfer = this.WaterEnergy.getEnergyStored();
-				this.MCMEnergy.addEnergy(transfer/1000);
+				this.MCMEnergy.addEnergy(transfer/100);
 				this.WaterEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
 			if(this.AirEnergy.getEnergyStored() > 0){
 				int transfer = this.AirEnergy.getEnergyStored();
-				this.MCMEnergy.addEnergy(transfer/1000);
+				this.MCMEnergy.addEnergy(transfer/100);
 				this.AirEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
 			if(this.EarthEnergy.getEnergyStored() > 0){
 				int transfer = this.EarthEnergy.getEnergyStored();
-				this.MCMEnergy.addEnergy(transfer/1000);
+				this.MCMEnergy.addEnergy(transfer/100);
 				this.EarthEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
 			if(this.DarkEnergy.getEnergyStored() > 0){
 				int transfer = this.DarkEnergy.getEnergyStored();
-				this.MCMEnergy.addEnergy(transfer/1000);
+				this.MCMEnergy.addEnergy(transfer/100);
 				this.DarkEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
 			}
 			if(this.LightEnergy.getEnergyStored() > 0){
 				int transfer = this.LightEnergy.getEnergyStored();
-				this.MCMEnergy.addEnergy(transfer/1000);
+				this.MCMEnergy.addEnergy(transfer/100);
 				this.LightEnergy.consumeEnergy(transfer);
 				write(tag);
 				markDirty();
