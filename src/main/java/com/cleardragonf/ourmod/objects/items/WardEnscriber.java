@@ -42,7 +42,7 @@ public class WardEnscriber extends Item{
 
             }else{
                 ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
-                context.getPlayer().sendMessage(text);
+                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
             }
             return ActionResultType.SUCCESS;
         }

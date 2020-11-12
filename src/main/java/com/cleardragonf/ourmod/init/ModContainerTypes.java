@@ -13,7 +13,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModContainerTypes {
-	public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = new DeferredRegister<ContainerType<?>>(ForgeRegistries.CONTAINERS, OurMod.MOD_ID);
+	public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, OurMod.MOD_ID);
 	
 	public static final RegistryObject<ContainerType<PortableChestContainer>> PORTABLE_CHEST = CONTAINER_TYPES.register("portablechest", () -> IForgeContainerType.create(PortableChestContainer::new ));
 	public static final RegistryObject<ContainerType<FishingNetContainer>> FISHING_NET = CONTAINER_TYPES.register("fishingnet", () -> IForgeContainerType.create(FishingNetContainer::new ));

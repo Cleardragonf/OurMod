@@ -11,7 +11,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
@@ -75,8 +75,8 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void read(BlockState blockState,CompoundNBT compound) {
+		super.read(blockState, compound);
 		readRestorableNBT(compound);
 	}
 
@@ -165,48 +165,43 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 		int lightBlocksFound = 0;
 		int multiplierBlocksFound = 0;
 
-		try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-			final int posX = tilePos.getX();
-			final int posY = tilePos.getY();
-			final int posZ = tilePos.getZ();
+		Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(pos.getX()-5,pos.getY()-5,pos.getZ()-5,pos.getX() +5,pos.getY() +5,pos.getZ()+5);
 
-			for(int z = -50; z <= 50; ++z){
-				for(int x = -50; x <= 50; ++x){
-					for(int y = -50; y <=50; y++){
-						final int dist = (x*x) + (y*y) + (z*z);
-						if (dist > 2500){
-							continue;
-						}
+		for (BlockPos block : mutable) {
+			final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
 
-						if (dist < 1){
-							continue;
-						}
-
-						pooledMutable.setPos(posX + x,posY + y, posZ + z);
-						final BlockState blockState = world.getBlockState(pooledMutable);
-						final IFluidState fluidState = world.getFluidState(pooledMutable);
-						final Block block = blockState.getBlock();
-
-						if(block instanceof FireBlock || block == BlockInitNew.FIRE_MANA.get() || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || block==Blocks.CAMPFIRE){
-							++fireBlocksFound;
-						}else if(block == Blocks.WATER || block == BlockInitNew.WATER_MANA.get()|| (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
-							++waterBlocksFound;
-						}else if(block == Blocks.AIR|| block == BlockInitNew.AIR_MANA.get()){
-							++airBlocksFound;
-						}else if(block == Blocks.DIRT || block == BlockInitNew.EARTH_MANA.get()|| block ==  Blocks.GRASS ||block ==  Blocks.GRANITE ||block ==  Blocks.STONE ||block ==  Blocks.ANDESITE
-								|| block == Blocks.CLAY || block == Blocks.DIORITE || block == Blocks.GRAVEL|| block == Blocks.ICE || block == Blocks.MOSSY_COBBLESTONE
-								|| block == Blocks.NETHERRACK || block == Blocks.OBSIDIAN || block == Blocks.PODZOL || block == Blocks.PRISMARINE ||block ==  Blocks.QUARTZ_BLOCK
-						|| block == Blocks.SAND){
-							++earthBlocksFound;
-						}else if(block == BlockInitNew.DARK_MANA.get() || block.getLightValue(block.getDefaultState(), world, pos) < 2) {
-							++darkBlocksFound;
-						}
-						else if(block == BlockInitNew.LIGHT_MANA.get() || block.getLightValue(block.getDefaultState(), world, pos) > 1){
-							++lightBlocksFound;
-						}
-					}
-				}
+			if(dist>100){
+				continue;
 			}
+			if(dist<0){
+				continue;
+			}
+			final BlockState blockState = world.getBlockState(block);
+			final FluidState fluidState = world.getFluidState(block);
+			final Block targetblock = blockState.getBlock();
+
+			if(targetblock instanceof FireBlock || targetblock == BlockInitNew.FIRE_MANA.get() || targetblock == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || targetblock==Blocks.CAMPFIRE){
+				++fireBlocksFound;
+			}else if(targetblock == Blocks.WATER || targetblock == BlockInitNew.WATER_MANA.get()|| (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
+				System.out.println("water should work");
+				++waterBlocksFound;
+			}else if(targetblock == Blocks.AIR|| targetblock == BlockInitNew.AIR_MANA.get()){
+				++airBlocksFound;
+			}else if(targetblock == Blocks.DIRT || targetblock == BlockInitNew.EARTH_MANA.get()|| targetblock ==  Blocks.GRASS ||targetblock ==  Blocks.GRANITE ||targetblock ==  Blocks.STONE ||targetblock ==  Blocks.ANDESITE
+					|| targetblock == Blocks.CLAY || targetblock == Blocks.DIORITE || targetblock == Blocks.GRAVEL|| targetblock == Blocks.ICE || targetblock == Blocks.MOSSY_COBBLESTONE
+					|| targetblock == Blocks.NETHERRACK || targetblock == Blocks.OBSIDIAN || targetblock == Blocks.PODZOL || targetblock == Blocks.PRISMARINE ||targetblock ==  Blocks.QUARTZ_BLOCK
+					|| targetblock == Blocks.SAND){
+				++earthBlocksFound;
+			}else if(targetblock == BlockInitNew.DARK_MANA.get() || targetblock.getLightValue(targetblock.getDefaultState(), world, pos) < 2) {
+				++darkBlocksFound;
+			}
+			else if(targetblock == BlockInitNew.LIGHT_MANA.get() || targetblock.getLightValue(targetblock.getDefaultState(), world, pos) > 2){
+				System.out.println("light should work");
+				++lightBlocksFound;
+			}else{
+				System.out.println(targetblock.toString());
+			}
+
 		}
 
 		if(multiplierBlocksFound > 0){
@@ -292,8 +287,8 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 	}
 
 	@Override
-	public void handleUpdateTag(CompoundNBT tag) {
-		this.read(tag);
+	public void handleUpdateTag(BlockState blockState,CompoundNBT tag) {
+		this.read(blockState, tag);
 	}
 
 

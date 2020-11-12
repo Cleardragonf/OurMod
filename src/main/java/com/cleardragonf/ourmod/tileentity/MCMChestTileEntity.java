@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -335,10 +334,10 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	}
 */
 	@Override
-	public void read(CompoundNBT tag) {
+	public void read(BlockState blockState,CompoundNBT tag) {
 		CompoundNBT invTag = tag.getCompound("inv");
 		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
-		super.read(tag);
+		super.read(blockState,tag);
 		readRestorableNBT(tag);
 	}
 
@@ -413,14 +412,14 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	}
 
 	@Override
-	public void handleUpdateTag(CompoundNBT tag) {
-		this.read(tag);
+	public void handleUpdateTag(BlockState blockState,CompoundNBT tag) {
+		this.read(blockState,tag);
 	}
 
 	// this method gets called on the client when it receives the packet that was sent in the previous method
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.read(pkt.getNbtCompound());
+		this.read(this.getBlockState(), pkt.getNbtCompound());
 	}
 
 

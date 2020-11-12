@@ -91,8 +91,8 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void read(BlockState blockState,CompoundNBT compound) {
+		super.read(blockState,compound);
 		this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
 		if (!this.checkLootAndRead(compound)) {
 			ItemStackHelper.loadAllItems(compound, this.chestContents);

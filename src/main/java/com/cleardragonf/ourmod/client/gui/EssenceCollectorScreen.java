@@ -2,11 +2,13 @@ package com.cleardragonf.ourmod.client.gui;
 
 import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.container.EssenceCollectorContainer;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,59 +26,59 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 	}
 	
 	@Override
-	public void render(final int mouseX, final int mouseY, final float partialTicks) {
-		this.renderBackground();
-		super.render(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
+	public void render(MatrixStack matrixStack,final int mouseX, final int mouseY, final float partialTicks) {
+		this.renderBackground(matrixStack);
+		super.render(matrixStack,mouseX, mouseY, partialTicks);
+		this.renderHoveredTooltip(matrixStack,mouseX, mouseY);
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		this.font.drawString(this.title.getFormattedText(), 8.0f, 6.0f, 4210752);
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack,int mouseX, int mouseY) {
+		super.drawGuiContainerForegroundLayer(matrixStack,mouseX, mouseY);
+		this.font.drawString(matrixStack,this.title.getUnformattedComponentText(), 8.0f, 6.0f, 4210752);
 
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack,float partialTicks, int mouseX, int mouseY) {
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 		this.minecraft.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
-		this.blit(x, y, 0, 0, this.xSize, this.ySize);
+		this.blit(matrixStack,x, y, 0, 0, this.xSize, this.ySize);
 		//x,y,texturex,texturey,width,height @RyuShiTenshiKage
 		//Air Essence GUI
 		///this.blit((x + 17),y + 34, 179,33,8, this.container.getAir().getEnergyStored()/ 1000);
-		this.blit((x + 17),(y + 134) - (this.container.getFire().getEnergyStored()/1000), 179,132  - (this.container.getFire().getEnergyStored()/1000),8, (this.container.getFire().getEnergyStored()/ 1000));
-		this.blit((x + 45),(y + 134) - (this.container.getWater().getEnergyStored()/1000), 179,132  - (this.container.getWater().getEnergyStored()/1000),8, (this.container.getWater().getEnergyStored()/ 1000));
-		this.blit((x + 68),(y + 134) - (this.container.getAir().getEnergyStored()/1000), 179,132  - (this.container.getAir().getEnergyStored()/1000),8, (this.container.getAir().getEnergyStored()/ 1000));
-		this.blit((x + 92),(y + 134) - (this.container.getEarth().getEnergyStored()/1000), 179,132  - (this.container.getEarth().getEnergyStored()/1000),8, (this.container.getEarth().getEnergyStored()/ 1000));
-		this.blit((x + 120),(y + 134) - (this.container.getDark().getEnergyStored()/1000), 179,132  - (this.container.getDark().getEnergyStored()/1000),8, (this.container.getDark().getEnergyStored()/ 1000));
-		this.blit((x + 148),(y + 134) - (this.container.getLight().getEnergyStored()/1000), 179,132  - (this.container.getLight().getEnergyStored()/1000),8, (this.container.getLight().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 17),(y + 134) - (this.container.getFire().getEnergyStored()/1000), 179,132  - (this.container.getFire().getEnergyStored()/1000),8, (this.container.getFire().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 45),(y + 134) - (this.container.getWater().getEnergyStored()/1000), 179,132  - (this.container.getWater().getEnergyStored()/1000),8, (this.container.getWater().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 68),(y + 134) - (this.container.getAir().getEnergyStored()/1000), 179,132  - (this.container.getAir().getEnergyStored()/1000),8, (this.container.getAir().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 92),(y + 134) - (this.container.getEarth().getEnergyStored()/1000), 179,132  - (this.container.getEarth().getEnergyStored()/1000),8, (this.container.getEarth().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 120),(y + 134) - (this.container.getDark().getEnergyStored()/1000), 179,132  - (this.container.getDark().getEnergyStored()/1000),8, (this.container.getDark().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 148),(y + 134) - (this.container.getLight().getEnergyStored()/1000), 179,132  - (this.container.getLight().getEnergyStored()/1000),8, (this.container.getLight().getEnergyStored()/ 1000));
 
 	}
-	protected void renderHoveredToolTip(int x, int y){
+	protected void renderHoveredToolTip(MatrixStack matrixStack,int x, int y){
 		int relX = (this.width - this.xSize) /2;
 		int relY = (this.height - this.ySize) /2;
 		if(trueZone(relX + 17, relY + 34, 8,100,x,y)) {
-			tooltipText("Fire: ", x, y);
+			tooltipText(matrixStack,"Fire: ", x, y);
 		}
 		if(trueZone(relX + 45, relY + 34, 8,100,x,y)) {
-			tooltipText("Water: ", x, y);
+			tooltipText(matrixStack,"Water: ", x, y);
 		}
 		if(trueZone(relX + 68, relY + 34, 8,100,x,y)) {
-			tooltipText("Air: ", x, y);
+			tooltipText(matrixStack,"Air: ", x, y);
 		}
 		if(trueZone(relX + 92, relY + 34, 8,100,x,y)) {
-			tooltipText("Earth: ", x, y);
+			tooltipText(matrixStack,"Earth: ", x, y);
 		}
 		if(trueZone(relX + 120, relY + 34, 8,100,x,y)) {
-			tooltipText("Dark: ", x, y);
+			tooltipText(matrixStack,"Dark: ", x, y);
 		}
 		if(trueZone(relX + 148, relY + 34, 8,100,x,y)) {
-			tooltipText("Light: ", x, y);
+			tooltipText(matrixStack,"Light: ", x, y);
 		}
-		super.renderHoveredToolTip(x, y);
+		super.renderHoveredTooltip(matrixStack,x, y);
 	}
 
 	private boolean trueZone(int OffsX, int OffsY, int Width, int Height, double MouseX, double MouseY){
@@ -87,25 +89,25 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 		}
 	}
 
-	public void tooltipText(String string, int x, int y) {
+	public void tooltipText(MatrixStack matrixStack, String string, int x, int y) {
 		switch (string) {
 			case "Fire: ":
-				this.renderTooltip("Fire: '" + this.container.getFire().getEnergyStored() + "'", x, y);
+				this.renderTooltip(matrixStack, new TranslationTextComponent("Fire: '" + this.container.getFire().getEnergyStored() + "'"), x, y);
 				break;
 			case "Water: ":
-				this.renderTooltip("Water: '" + this.container.getWater().getEnergyStored() + "'", x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Water: '" + this.container.getWater().getEnergyStored() + "'"), x, y);
 				break;
 			case "Air: ":
-				this.renderTooltip("Air: '" + this.container.getAir().getEnergyStored() + "'", x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Air: '" + this.container.getAir().getEnergyStored() + "'"), x, y);
 				break;
 			case "Earth: ":
-				this.renderTooltip("Earth: '" + this.container.getEarth().getEnergyStored() + "'", x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Earth: '" + this.container.getEarth().getEnergyStored() + "'"), x, y);
 				break;
 			case "Dark: ":
-				this.renderTooltip("Dark: '" + this.container.getDark().getEnergyStored() + "'", x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Dark: '" + this.container.getDark().getEnergyStored() + "'"), x, y);
 				break;
 			case "Light: ":
-				this.renderTooltip("Light: '" + this.container.getLight().getEnergyStored() + "'", x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Light: '" + this.container.getLight().getEnergyStored() + "'"), x, y);
 				break;
 		}
 	}

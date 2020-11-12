@@ -22,6 +22,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -44,7 +45,7 @@ import java.util.Random;
 @Mod.EventBusSubscriber
 public class SurvivalEvents {
     public static Object2FloatMap<BlockState> BLOCK_HEAT_MAP = (Object2FloatMap<BlockState>)new Object2FloatOpenHashMap();
-    public static Object2FloatMap<Biome> BIOME_HEAT_MAP = (Object2FloatMap<Biome>)new Object2FloatOpenHashMap();
+    public static Object2FloatMap<RegistryKey> BIOME_HEAT_MAP = (Object2FloatMap<RegistryKey>)new Object2FloatOpenHashMap();
 
     public static void  registerHeatMap(){
         BLOCK_HEAT_MAP.put(Blocks.LAVA.getDefaultState(), 50.0f);
@@ -97,7 +98,7 @@ public class SurvivalEvents {
         BIOME_HEAT_MAP.put(Biomes.MOUNTAINS, 25.0f);
         BIOME_HEAT_MAP.put(Biomes.MUSHROOM_FIELD_SHORE, 30.0f);
         BIOME_HEAT_MAP.put(Biomes.MUSHROOM_FIELDS, 30.0f);
-        BIOME_HEAT_MAP.put(Biomes.NETHER, 100.0f);
+        BIOME_HEAT_MAP.put(Biomes.NETHER_WASTES, 100.0f);
         BIOME_HEAT_MAP.put(Biomes.OCEAN, 25.0f);
         BIOME_HEAT_MAP.put(Biomes.PLAINS, 25.0f);
         BIOME_HEAT_MAP.put(Biomes.RIVER, 25.0f);
@@ -128,14 +129,16 @@ public class SurvivalEvents {
         BIOME_HEAT_MAP.put(Biomes.WOODED_HILLS, 35.0f);
         BIOME_HEAT_MAP.put(Biomes.WOODED_MOUNTAINS, 30.0f);
     }
-
+    /*
     @SubscribeEvent
     public static void registerAttributes(EntityEvent.EntityConstructing event){
         if(event.getEntity() instanceof PlayerEntity){
-            ((PlayerEntity)event.getEntity()).getAttributes().registerAttribute(SurvivalAttributes.COLD_RESISTANCE);
+            ((PlayerEntity)event.getEntity()).getAttribute(SurvivalAttributes.COLD_RESISTANCE).getAttribute()
             ((PlayerEntity)event.getEntity()).getAttributes().registerAttribute(SurvivalAttributes.HEAT_RESISTANCE);
         }
     }
+
+     */
 
     @SubscribeEvent
     public static void registerStats(LivingEvent.LivingUpdateEvent event){
@@ -296,7 +299,7 @@ public class SurvivalEvents {
     }
 
     public static float getExactWorldTemperature(World world, BlockPos pos, TempType type){
-        float biomeTemp = world.getBiome(pos).getDefaultTemperature();
+        float biomeTemp = world.getBiome(pos).getTemperature();
         float gameTime = (float)(world.getGameTime());
         float skyLight = world.getLightFor(LightType.SKY, pos);
         float blockLight = world.getLight(pos);

@@ -19,7 +19,7 @@ public class OnServerJoin
 {
 	@SubscribeEvent
 	public static void  OnServerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-		event.getPlayer().sendMessage(new TranslationTextComponent("hello"));
+		event.getPlayer().sendMessage(new TranslationTextComponent("hello"), event.getPlayer().getUniqueID());
 
 
 		ItemStack item = new ItemStack( ItemInitNew.ASURA_BOOK.get());

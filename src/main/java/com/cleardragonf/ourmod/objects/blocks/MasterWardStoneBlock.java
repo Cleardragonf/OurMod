@@ -63,9 +63,9 @@ public class MasterWardStoneBlock extends Block{
 					MasterWardStoneTileEntity tileEntity = (MasterWardStoneTileEntity) world.getTileEntity(pos);
 					if(tileEntity.boundaryWardStones.size() < 4){
 						tileEntity.addWardStone(tag.get("wardshape"));
-						player.sendMessage(new TranslationTextComponent("Successfully connected boundary " + tileEntity.boundaryWardStones.size()));
+						player.sendMessage(new TranslationTextComponent("Successfully connected boundary " + tileEntity.boundaryWardStones.size()),player.getUniqueID());
 					}else{
-						player.sendMessage(new TranslationTextComponent("You've tried to add too many boundaries...Master Ward has been reset"));
+						player.sendMessage(new TranslationTextComponent("You've tried to add too many boundaries...Master Ward has been reset"), player.getUniqueID());
 						tileEntity.boundaryWardStones.clear();
 					}
 
