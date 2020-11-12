@@ -25,14 +25,11 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -45,7 +42,6 @@ public class MCMChest extends Block {
 		super(Properties.create(Material.IRON)
 				.sound(SoundType.METAL)
 				.hardnessAndResistance(2.0f)
-				.lightValue(14)
 		);
 	}
 
@@ -55,8 +51,8 @@ public class MCMChest extends Block {
 	}
 
 	@Override
-	public int getLightValue(BlockState state) {
-		return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state) : 0;
+	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+		return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state,world ,pos) : 0;
 	}
 
 	@Nullable
@@ -126,7 +122,7 @@ public class MCMChest extends Block {
 	}
 
 	public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity) {
-		Vec3d vec = entity.getPositionVec();
+		Vector3d vec = entity.getPositionVec();
 		return Direction.getFacingFromVector((float) (vec.x - clickedBlock.getX()), (float) (vec.y - clickedBlock.getY()), (float) (vec.z - clickedBlock.getZ()));
 	}
 

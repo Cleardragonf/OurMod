@@ -16,7 +16,7 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -24,27 +24,17 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.Property;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -54,8 +44,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 
 public class MasterWardStoneTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
@@ -435,48 +423,32 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						//set with a border right now it works for replacing air with glass
 						int wardBarrier = 0;
 						//TODO: set to WardBarrier
+						Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(-50,-50,-50,50,50,50);
 
-							try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-								final int posX = this.getPos().getX();
-								final int posY = this.getPos().getY();
-								final int posZ = this.getPos().getZ();
-
-								for(int z = -50; z <= 50; ++z){
-									for(int x = -50; x <= 50; ++x){
-										for(int y = -50; y <=50; y++){
-											final int dist = (x*x) + (y*y) + (z*z);
-											//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
-											if (dist > ((radius1 + 1) * radius1)){
-												continue;
-											}
-
-											if (dist < ((radius1-1) * radius1)){
-												continue;
-											}
-
-											pooledMutable.setPos(posX + x,posY + y, posZ + z);
-											final BlockState blockState = world.getBlockState(pooledMutable);
-											final IFluidState fluidState = world.getFluidState(pooledMutable);
-											final Block block = blockState.getBlock();
-
-											if(block == Blocks.AIR){
-
-												if(EarthEnergy.getEnergyStored() >= 6){
-													world.setBlockState(pooledMutable, BlockInitNew.WARDBARRIER.get().getDefaultState(), 2);
-													EarthEnergy.consumeEnergy(6);
-												}
-											}
-											if(block == BlockInitNew.WARDBARRIER.get()){
-												wardLoc.add(pooledMutable);
-											}
-										}
-									}
-								}
-								markDirty();
+						for (BlockPos block : mutable) {
+							final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
+							if(dist>25){
+								continue;
 							}
+							if(dist<1){
+								continue;
+							}
+							final BlockState blockState = world.getBlockState(block);
+							final FluidState fluidState = world.getFluidState(block);
+							final Block targetblock = blockState.getBlock();
+							if(targetblock == Blocks.AIR){
+
+								if(EarthEnergy.getEnergyStored() >= 6){
+									world.setBlockState(block, BlockInitNew.WARDBARRIER.get().getDefaultState(), 2);
+									EarthEnergy.consumeEnergy(6);
+								}
+							}
+							if(targetblock == BlockInitNew.WARDBARRIER.get()){
+								wardLoc.add(block);
+							}
+
+						}markDirty();
 					}
-
-
 				else{
 
 				}
@@ -562,39 +534,28 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					int wardBarrier = 0;
 					//TODO: set to WardBarrier
 
-					try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-						final int posX = this.getPos().getX();
-						final int posY = this.getPos().getY();
-						final int posZ = this.getPos().getZ();
+					Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(pos.getX()-5,pos.getY()-5,pos.getZ()-5,pos.getX()+5,pos.getY()+5,pos.getZ()+5);
 
-						for(int z = -50; z <= 50; ++z){
-							for(int x = -50; x <= 50; ++x){
-								for(int y = -50; y <=50; y++){
-									final int dist = (x*x) + (y*y) + (z*z);
-									//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
-									if (dist > ((radius1 + 1) * radius1)){
-										continue;
-									}
+					for (BlockPos block : mutable) {
+						final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
+						if(dist>25){
+							continue;
+						}
+						if(dist<1){
+							continue;
+						}
+						final BlockState blockState = world.getBlockState(block);
+						final FluidState fluidState = world.getFluidState(block);
+						final Block targetblock = blockState.getBlock();
 
-									if (dist < ((radius1-1) * radius1)){
-										continue;
-									}
 
-									pooledMutable.setPos(posX + x,posY + y, posZ + z);
-									final BlockState blockState = world.getBlockState(pooledMutable);
-									final IFluidState fluidState = world.getFluidState(pooledMutable);
-									final Block block = blockState.getBlock();
+						if(targetblock == Blocks.AIR){
 
-									if(block == Blocks.AIR){
-
-									}
-									else if(block == BlockInitNew.WARDBARRIER.get()){
-										world.setBlockState(pooledMutable, Blocks.AIR.getDefaultState(), 3);
-									}else{
-										System.out.println(block);
-									}
-								}
-							}
+						}
+						else if(targetblock == BlockInitNew.WARDBARRIER.get()){
+							world.setBlockState(block, Blocks.AIR.getDefaultState(), 3);
+						}else{
+							System.out.println(block);
 						}
 						markDirty();
 					}
@@ -685,72 +646,52 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					level = 14;
 				}
 				if(LightEnergy.getEnergyStored() >= (lightReq * level)){
-					try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-						final int posX = this.getPos().getX();
-						final int posY = this.getPos().getY();
-						final int posZ = this.getPos().getZ();
+					Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(-5,-5,-5,5,5,5);
 
-						for(int z = -50; z <= 50; ++z){
-							for(int x = -50; x <= 50; ++x){
-								for(int y = -50; y <=50; y++){
-									final int dist = (x*x) + (y*y) + (z*z);
-									//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
-									if (dist > (((radius1 + 1) * radius1) -1)){
-										continue;
-									}
-
-									if (dist < 0 ){
-										continue;
-									}
-									final BooleanProperty LIT = RedstoneTorchBlock.LIT;
-									pooledMutable.setPos(posX + x,posY + y, posZ + z);
-									final BlockState blockState = world.getBlockState(pooledMutable);
-									final IFluidState fluidState = world.getFluidState(pooledMutable);
-									final Block block = blockState.getBlock();
-									if(block instanceof AirBlock){
-										world.setBlockState(pooledMutable, BlockInitNew.WARDINSIDE.get().getDefaultState().with(WardInside.LIGHT, level) ,3);
-
-									}else if(block instanceof WardInside){
-										world.setBlockState(pooledMutable, BlockInitNew.WARDINSIDE.get().getDefaultState().with(WardInside.LIGHT, level) ,3);
-									}
-								}
-							}
+					for (BlockPos block : mutable) {
+						final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
+						if(dist>25){
+							continue;
 						}
-						markDirty();
+						if(dist<1){
+							continue;
+						}
+						final BlockState blockState = world.getBlockState(block);
+						final FluidState fluidState = world.getFluidState(block);
+						final Block targetblock = blockState.getBlock();
+
+						if(targetblock instanceof AirBlock){
+							world.setBlockState(block, BlockInitNew.WARDINSIDE.get().getDefaultState().with(WardInside.LIGHT, level) ,3);
+
+						}else if(targetblock instanceof WardInside){
+							world.setBlockState(block, BlockInitNew.WARDINSIDE.get().getDefaultState().with(WardInside.LIGHT, level) ,3);
+						}
+
 					}
 					LightEnergy.consumeEnergy(lightReq * level);
+					markDirty();
 				}else{
-					try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-						final int posX = this.getPos().getX();
-						final int posY = this.getPos().getY();
-						final int posZ = this.getPos().getZ();
+					Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(-5,-5,-5,5,5,5);
 
-						for(int z = -50; z <= 50; ++z){
-							for(int x = -50; x <= 50; ++x){
-								for(int y = -50; y <=50; y++){
-									final int dist = (x*x) + (y*y) + (z*z);
-									//2, 0 is the ratio for testing based on 1 being the distance working now on the aua
-									if (dist > (((radius1 + 1) * radius1) -1)){
-										continue;
-									}
-
-									if (dist < 0 ){
-										continue;
-									}
-									final BooleanProperty LIT = RedstoneTorchBlock.LIT;
-									pooledMutable.setPos(posX + x,posY + y, posZ + z);
-									final BlockState blockState = world.getBlockState(pooledMutable);
-									final IFluidState fluidState = world.getFluidState(pooledMutable);
-									final Block block = blockState.getBlock();
-									if(block instanceof WardInside){
-										world.setBlockState(pooledMutable, Blocks.AIR.getDefaultState(),3);
-
-									}
-								}
-							}
+					for (BlockPos block : mutable) {
+						final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
+						if(dist>25){
+							continue;
 						}
-						markDirty();
+						if(dist<1){
+							continue;
+						}
+						final BlockState blockState = world.getBlockState(block);
+						final FluidState fluidState = world.getFluidState(block);
+						final Block targetblock = blockState.getBlock();
+
+						if(targetblock instanceof WardInside){
+							world.setBlockState(block, Blocks.AIR.getDefaultState(),3);
+
+						}
+
 					}
+					markDirty();
 				}
 				break;
 
@@ -761,7 +702,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		BlockState blockstate = world.getBlockState(pos);
 		if(blockstate.isAir(world, pos))return false;
 		else {
-			IFluidState ifluidstate = world.getFluidState(pos);
+			FluidState ifluidstate = world.getFluidState(pos);
 			world.playEvent(2001, pos, Block.getStateId(blockstate));
 			if(dropBlock) {
 				TileEntity tileentity= blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
@@ -836,15 +777,15 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    public void read(BlockState blockState,CompoundNBT compound) {
+        super.read(blockState,compound);
         readRestorableNBT(compound);
     }
 
 
     @Override
-	public void handleUpdateTag(CompoundNBT tag) {
-		this.read(tag);
+	public void handleUpdateTag(BlockState blockState,CompoundNBT tag) {
+		this.read(blockState,tag);
 	}
 
 

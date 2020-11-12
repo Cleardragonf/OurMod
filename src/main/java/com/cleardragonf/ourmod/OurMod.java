@@ -132,6 +132,7 @@ OurMod
         SurvivalEvents.registerBiomeHeatMap();
         MCMValueProvider.registerCapability();
         NetRegistries.registerMSG();
+        OreGeneration.registerOre();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -141,7 +142,7 @@ OurMod
 
     @SubscribeEvent
     public static void loadCompleteEvent(FMLLoadCompleteEvent event){
-        OreGeneration.setupOreGeneration();
+        //OreGeneration.setupOreGeneration();
     }
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent

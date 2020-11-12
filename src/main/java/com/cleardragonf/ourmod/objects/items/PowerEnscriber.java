@@ -50,20 +50,20 @@ public class PowerEnscriber extends Item{
         if(tileEntity instanceof MCMChestTileEntity){
             if(tag.contains("energypos")){
                 ITextComponent text = new TranslationTextComponent("Connecting to: " + tag.get("energypos"));
-                context.getPlayer().sendMessage(text);
+                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
             }else{
                 ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
-                context.getPlayer().sendMessage(text);
+                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
             }
             return ActionResultType.SUCCESS;
         }
         else if(tileEntity instanceof MasterWardStoneTileEntity){
             if(tag.contains("energypos")){
                 ITextComponent text = new TranslationTextComponent("Connecting to: " + tag.get("energypos"));
-                context.getPlayer().sendMessage(text);
+                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
             }else{
                 ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
-                context.getPlayer().sendMessage(text);
+                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
             }
             return ActionResultType.SUCCESS;
         }
@@ -74,7 +74,7 @@ public class PowerEnscriber extends Item{
                 pos.putInt("z", tileEntity.getPos().getZ());
             tag.put("energypos", pos);
             ITextComponent text = new TranslationTextComponent("setting to: " + tag.get("energypos"));
-            context.getPlayer().sendMessage(text);
+            context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
             itemStack.setTag(tag);
             return ActionResultType.SUCCESS;
         }else{

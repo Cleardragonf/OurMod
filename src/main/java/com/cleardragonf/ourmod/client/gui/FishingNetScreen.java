@@ -2,6 +2,7 @@ package com.cleardragonf.ourmod.client.gui;
 
 import com.cleardragonf.ourmod.OurMod;
 import com.cleardragonf.ourmod.container.FishingNetContainer;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -24,25 +25,25 @@ public class FishingNetScreen extends ContainerScreen<FishingNetContainer> {
     }
 
     @Override
-    public void render(final int mouseX, final int mouseY, final float partialTicks) {
-        this.renderBackground();
-        super.render(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+    public void render(MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack,mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack,mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        this.font.drawString(this.title.getFormattedText(), 8.0f, 6.0f, 4210752);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0f, 90.0f, 4210752);
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack,int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(matrixStack,mouseX, mouseY);
+        this.font.drawString(matrixStack,this.title.getUnformattedComponentText(), 8.0f, 6.0f, 4210752);
+        this.font.drawString(matrixStack,this.playerInventory.getDisplayName().getUnformattedComponentText(), 8.0f, 90.0f, 4210752);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack,float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
         int x = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
-        this.blit(x, y, 0, 0, this.xSize, this.ySize);
+        this.blit(matrixStack,x, y, 0, 0, this.xSize, this.ySize);
     }
 }

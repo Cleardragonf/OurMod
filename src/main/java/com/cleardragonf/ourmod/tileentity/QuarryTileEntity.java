@@ -8,7 +8,7 @@ import com.cleardragonf.ourmod.util.helpers.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -67,7 +67,7 @@ public class QuarryTileEntity extends TileEntity implements ITickableTileEntity{
 		BlockState blockstate = world.getBlockState(pos);
 		if(blockstate.isAir(world, pos))return false;
 		else {
-			IFluidState ifluidstate = world.getFluidState(pos);
+			FluidState ifluidstate = world.getFluidState(pos);
 			world.playEvent(2001, pos, Block.getStateId(blockstate));
 			if(dropBlock) {
 				TileEntity tileentity= blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
@@ -85,8 +85,8 @@ public class QuarryTileEntity extends TileEntity implements ITickableTileEntity{
 	}
 	
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void read(BlockState state,CompoundNBT compound) {
+		super.read(state,compound);
 		CompoundNBT initValues = compound.getCompound("initvalues");
 		if(initValues != null) {
 			this.x = initValues.getInt("x");

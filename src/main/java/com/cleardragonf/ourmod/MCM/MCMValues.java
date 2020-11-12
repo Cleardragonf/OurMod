@@ -592,7 +592,7 @@ public class MCMValues {
         mcmList.put(Items.WITHER_SKELETON_SPAWN_EGG,128);
         mcmList.put(Items.WOLF_SPAWN_EGG,128);
         mcmList.put(Items.ZOMBIE_HORSE_SPAWN_EGG,128);
-        mcmList.put(Items.ZOMBIE_PIGMAN_SPAWN_EGG,128);
+        //mcmList.put(Items.ZOMBIE_PIGMAN_SPAWN_EGG,128);
         mcmList.put(Items.ZOMBIE_SPAWN_EGG,128);
         mcmList.put(Items.ZOMBIE_VILLAGER_SPAWN_EGG,128);
         return mcmList;

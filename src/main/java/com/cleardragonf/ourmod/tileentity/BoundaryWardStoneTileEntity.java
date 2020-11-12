@@ -11,7 +11,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
@@ -74,8 +74,8 @@ public class BoundaryWardStoneTileEntity extends TileEntity implements ITickable
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void read(BlockState blockState,CompoundNBT compound) {
+		super.read(blockState,compound);
 		readRestorableNBT(compound);
 	}
 
@@ -164,49 +164,42 @@ public class BoundaryWardStoneTileEntity extends TileEntity implements ITickable
 		int lightBlocksFound = 0;
 		int multiplierBlocksFound = 0;
 
-		try(BlockPos.PooledMutable pooledMutable = BlockPos.PooledMutable.retain()){
-			final int posX = tilePos.getX();
-			final int posY = tilePos.getY();
-			final int posZ = tilePos.getZ();
 
-			for(int z = -5; z <= 10; ++z){
-				for(int x = -5; x <= 10; ++x){
-					for(int y = -5; y <=10; y++){
-						final int dist = (x*x) + (y*y) + (z*z);
-						if (dist > 25){
-							continue;
-						}
+		Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(-5,-5,-5,5,5,5);
 
-						if (dist < 1){
-							continue;
-						}
-
-						pooledMutable.setPos(posX + x,posY + y, posZ + z);
-						final BlockState blockState = world.getBlockState(pooledMutable);
-						final IFluidState fluidState = world.getFluidState(pooledMutable);
-						final Block block = blockState.getBlock();
-
-						if(block instanceof FireBlock || block == BlockInitNew.FIRE_MANA.get() || block == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || block==Blocks.CAMPFIRE){
-							++fireBlocksFound;
-						}else if(block == Blocks.WATER || block == BlockInitNew.WATER_MANA.get()|| (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
-							++waterBlocksFound;
-						}else if(block == Blocks.AIR|| block == BlockInitNew.AIR_MANA.get()){
-							++airBlocksFound;
-						}else if(block == Blocks.DIRT || block == BlockInitNew.EARTH_MANA.get()|| block ==  Blocks.GRASS ||block ==  Blocks.GRANITE ||block ==  Blocks.STONE ||block ==  Blocks.ANDESITE
-								|| block == Blocks.CLAY || block == Blocks.DIORITE || block == Blocks.GRAVEL|| block == Blocks.ICE || block == Blocks.MOSSY_COBBLESTONE
-								|| block == Blocks.NETHERRACK || block == Blocks.OBSIDIAN || block == Blocks.PODZOL || block == Blocks.PRISMARINE ||block ==  Blocks.QUARTZ_BLOCK
-						|| block == Blocks.SAND){
-							++earthBlocksFound;
-						}else if(block == BlockInitNew.DARK_MANA.get()) {
-							++darkBlocksFound;
-						}
-						else if(block == BlockInitNew.LIGHT_MANA.get()) {
-							++lightBlocksFound;
-						}
-					}
-				}
+		for (BlockPos block : mutable) {
+			final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
+			if(dist>25){
+				continue;
 			}
+			if(dist<1){
+				continue;
+			}
+			final BlockState blockState = world.getBlockState(block);
+			final FluidState fluidState = world.getFluidState(block);
+			final Block targetblock = blockState.getBlock();
+
+
+			if(targetblock instanceof FireBlock || targetblock == BlockInitNew.FIRE_MANA.get() || targetblock == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || targetblock==Blocks.CAMPFIRE){
+				++fireBlocksFound;
+			}else if(targetblock == Blocks.WATER || targetblock == BlockInitNew.WATER_MANA.get()|| (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
+				++waterBlocksFound;
+			}else if(targetblock == Blocks.AIR|| targetblock == BlockInitNew.AIR_MANA.get()){
+				++airBlocksFound;
+			}else if(targetblock == Blocks.DIRT || targetblock == BlockInitNew.EARTH_MANA.get()|| targetblock ==  Blocks.GRASS ||targetblock ==  Blocks.GRANITE ||targetblock ==  Blocks.STONE ||targetblock ==  Blocks.ANDESITE
+					|| targetblock == Blocks.CLAY || targetblock == Blocks.DIORITE || targetblock == Blocks.GRAVEL|| targetblock == Blocks.ICE || targetblock == Blocks.MOSSY_COBBLESTONE
+					|| targetblock == Blocks.NETHERRACK || targetblock == Blocks.OBSIDIAN || targetblock == Blocks.PODZOL || targetblock == Blocks.PRISMARINE ||targetblock ==  Blocks.QUARTZ_BLOCK
+					|| targetblock == Blocks.SAND){
+				++earthBlocksFound;
+			}else if(targetblock == BlockInitNew.DARK_MANA.get()) {
+				++darkBlocksFound;
+			}
+			else if(targetblock == BlockInitNew.LIGHT_MANA.get()) {
+				++lightBlocksFound;
+			}
+
 		}
+
 
 		if(multiplierBlocksFound > 0){
 			fireBlocksFound *= multiplierBlocksFound;
@@ -291,8 +284,8 @@ public class BoundaryWardStoneTileEntity extends TileEntity implements ITickable
 	}
 
 	@Override
-	public void handleUpdateTag(CompoundNBT tag) {
-		this.read(tag);
+	public void handleUpdateTag(BlockState blockState, CompoundNBT tag) {
+		this.read(blockState,tag);
 	}
 
 

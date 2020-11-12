@@ -14,7 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
 
 public class ItemInitNew {
-	public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, OurMod.MOD_ID);
+	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, OurMod.MOD_ID);
 	
 	public static final RegistryObject<Item> SICKLE = ITEMS.register("sickle", () -> new Sickle(new Item.Properties().defaultMaxDamage(100).group(OurModItemGroup.instance)));
 	public static final RegistryObject<Item> ASURA_BOOK = ITEMS.register("asurabook", () -> new AsuraBook(new Item.Properties().group(OurModItemGroup.instance)));
