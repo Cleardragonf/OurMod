@@ -26,7 +26,7 @@ public class CaptureRunicCharge extends Item {
         if (!worldIn.isRemote) {
             ChargeEntity chargeEntity = new ChargeEntity(worldIn, playerIn);
             chargeEntity.setItem(itemstack);
-            chargeEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
+            chargeEntity.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
             worldIn.addEntity(chargeEntity);
         }
 

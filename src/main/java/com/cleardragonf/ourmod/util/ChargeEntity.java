@@ -65,7 +65,7 @@ public class ChargeEntity extends ProjectileItemEntity {
         if (result.getType() == RayTraceResult.Type.ENTITY) {
             Entity entity = ((EntityRayTraceResult)result).getEntity();
             int i = entity instanceof BlazeEntity ? 3 : 0;
-            entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float)i);
+            entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getEntity()), (float)i);
             if(entity instanceof ZombieEntity){
                 ItemStack stack = Items.ZOMBIE_SPAWN_EGG.getDefaultInstance();
                 world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));

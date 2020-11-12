@@ -19,7 +19,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -35,18 +35,12 @@ public class EntitySpawnerBlock extends Block {
 		super(Properties.create(Material.IRON)
 				.sound(SoundType.METAL)
 				.hardnessAndResistance(2.0f)
-				.lightValue(14)
 		);
 	}
 
 	@Override
 	public boolean hasTileEntity(BlockState state) {
 		return true;
-	}
-
-	@Override
-	public int getLightValue(BlockState state) {
-		return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state) : 0;
 	}
 
 	@Nullable
@@ -116,7 +110,7 @@ public class EntitySpawnerBlock extends Block {
 	}
 
 	public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity) {
-		Vec3d vec = entity.getPositionVec();
+		Vector3d vec = entity.getPositionVec();
 		return Direction.getFacingFromVector((float) (vec.x - clickedBlock.getX()), (float) (vec.y - clickedBlock.getY()), (float) (vec.z - clickedBlock.getZ()));
 	}
 

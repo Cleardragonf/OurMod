@@ -81,10 +81,10 @@ public class PowerEnscriber extends Item{
         }else if(tileEntity instanceof EntitySpawnerTileEntity){
             if(tag.contains("energypos")){
                 ITextComponent text = new TranslationTextComponent("Connecting to: " + tag.get("energypos"));
-                context.getPlayer().sendMessage(text);
+                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
             }else{
                 ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
-                context.getPlayer().sendMessage(text);
+                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
             }
             return ActionResultType.SUCCESS;
         }
