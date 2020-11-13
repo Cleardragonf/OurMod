@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,9 +25,10 @@ public class ChargeEntity extends ProjectileItemEntity {
     public ChargeEntity(EntityType<? extends net.minecraft.entity.projectile.SnowballEntity> p_i50159_1_, World p_i50159_2_) {
         super(p_i50159_1_, p_i50159_2_);
     }
-
+    public PlayerEntity playerEntity;
     public ChargeEntity(World worldIn, LivingEntity throwerIn) {
         super(EntityType.SNOWBALL, throwerIn, worldIn);
+        playerEntity = (PlayerEntity)throwerIn;
     }
 
     public ChargeEntity(World worldIn, double x, double y, double z) {
@@ -67,39 +69,66 @@ public class ChargeEntity extends ProjectileItemEntity {
             int i = entity instanceof BlazeEntity ? 3 : 0;
             entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getEntity()), (float)i);
             if(entity instanceof ZombieEntity){
-                ItemStack stack = Items.ZOMBIE_SPAWN_EGG.getDefaultInstance();
-                world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
-                ((ZombieEntity)entity).remove();
+                if(playerEntity.inventory.hasItemStack(Items.ROTTEN_FLESH.getDefaultInstance())){
+                    playerEntity.inventory.decrStackSize(playerEntity.inventory.getSlotFor(Items.ROTTEN_FLESH.getDefaultInstance()), 1);
+                    ItemStack stack = Items.ZOMBIE_SPAWN_EGG.getDefaultInstance();
+                    world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
+                    ((ZombieEntity)entity).remove();
+                }
             }
             else if(entity instanceof SkeletonEntity){
-                ItemStack stack = Items.SKELETON_SPAWN_EGG.getDefaultInstance();
-                world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
-                ((SkeletonEntity)entity).remove();
+                if(playerEntity.inventory.hasItemStack(Items.BONE.getDefaultInstance())){
+                    playerEntity.inventory.decrStackSize(playerEntity.inventory.getSlotFor(Items.BONE.getDefaultInstance()), 1);
+                    ItemStack stack = Items.SKELETON_SPAWN_EGG.getDefaultInstance();
+                    world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
+                    ((SkeletonEntity)entity).remove();
+                }
+
             }
             else if(entity instanceof SpiderEntity){
-                ItemStack stack = Items.SPIDER_SPAWN_EGG.getDefaultInstance();
-                world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
-                ((SpiderEntity)entity).remove();
+                if(playerEntity.inventory.hasItemStack(Items.SPIDER_EYE.getDefaultInstance())){
+                    playerEntity.inventory.decrStackSize(playerEntity.inventory.getSlotFor(Items.SPIDER_EYE.getDefaultInstance()), 1);
+                    ItemStack stack = Items.SPIDER_SPAWN_EGG.getDefaultInstance();
+                    world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
+                    ((SpiderEntity)entity).remove();
+                }
+
             }
             else if(entity instanceof SlimeEntity){
-                ItemStack stack = Items.SLIME_SPAWN_EGG.getDefaultInstance();
-                world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
-                ((SlimeEntity)entity).remove();
+                if(playerEntity.inventory.hasItemStack(Items.SLIME_BALL.getDefaultInstance())){
+                    playerEntity.inventory.decrStackSize(playerEntity.inventory.getSlotFor(Items.SLIME_BALL.getDefaultInstance()), 1);
+                    ItemStack stack = Items.SLIME_SPAWN_EGG.getDefaultInstance();
+                    world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
+                    ((SlimeEntity)entity).remove();
+                }
+
             }
             else if(entity instanceof CreeperEntity){
-                ItemStack stack = Items.CREEPER_SPAWN_EGG.getDefaultInstance();
-                world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
-                ((CreeperEntity)entity).remove();
+                if(playerEntity.inventory.hasItemStack(Items.GUNPOWDER.getDefaultInstance())){
+                    playerEntity.inventory.decrStackSize(playerEntity.inventory.getSlotFor(Items.GUNPOWDER.getDefaultInstance()), 1);
+                    ItemStack stack = Items.CREEPER_SPAWN_EGG.getDefaultInstance();
+                    world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
+                    ((CreeperEntity)entity).remove();
+                }
+
             }
             else if(entity instanceof EndermanEntity){
-                ItemStack stack = Items.ENDERMAN_SPAWN_EGG.getDefaultInstance();
-                world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
-                ((EndermanEntity)entity).remove();
+                if(playerEntity.inventory.hasItemStack(Items.ENDER_PEARL.getDefaultInstance())){
+                    playerEntity.inventory.decrStackSize(playerEntity.inventory.getSlotFor(Items.ENDER_PEARL.getDefaultInstance()), 1);
+                    ItemStack stack = Items.ENDERMAN_SPAWN_EGG.getDefaultInstance();
+                    world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
+                    ((EndermanEntity)entity).remove();
+                }
+
             }
             else if(entity instanceof GhastEntity){
-                ItemStack stack = Items.GHAST_SPAWN_EGG.getDefaultInstance();
-                world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
-                ((GhastEntity)entity).remove();
+                if(playerEntity.inventory.hasItemStack(Items.GHAST_TEAR.getDefaultInstance())){
+                    playerEntity.inventory.decrStackSize(playerEntity.inventory.getSlotFor(Items.GHAST_TEAR.getDefaultInstance()), 1);
+                    ItemStack stack = Items.GHAST_SPAWN_EGG.getDefaultInstance();
+                    world.addEntity(new ItemEntity(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack));
+                    ((GhastEntity)entity).remove();
+                }
+
             }
         }
 
