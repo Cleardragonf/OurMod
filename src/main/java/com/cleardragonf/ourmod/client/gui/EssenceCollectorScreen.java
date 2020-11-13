@@ -29,7 +29,7 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 	public void render(MatrixStack matrixStack,final int mouseX, final int mouseY, final float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack,mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack,mouseX, mouseY);
+		this.renderHoveredToolTip(matrixStack,mouseX, mouseY);
 	}
 	
 	@Override

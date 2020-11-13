@@ -74,7 +74,7 @@ public class PowerEnscriber extends Item{
                 pos.putInt("y", tileEntity.getPos().getY());
                 pos.putInt("z", tileEntity.getPos().getZ());
             tag.put("energypos", pos);
-            ITextComponent text = new TranslationTextComponent("setting to: " + tag.get("energypos"));
+            ITextComponent text = new TranslationTextComponent("setting to: " + tag.get("energypos") + tag.get("earthenergy"));
             context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
             itemStack.setTag(tag);
             return ActionResultType.SUCCESS;

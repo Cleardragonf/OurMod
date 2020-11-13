@@ -168,22 +168,26 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 		Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(pos.getX()-5,pos.getY()-5,pos.getZ()-5,pos.getX() +5,pos.getY() +5,pos.getZ()+5);
 
 		for (BlockPos block : mutable) {
-			final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
+			//the cause for issues is the getX is depending on the X axis along with the others...need it to loop through...and then utilize only that loops number...
+			//final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
+			int posX = this.getPos().getX() - block.getX();
+			int posY = this.getPos().getY() - block.getY();
+			int posZ = this.getPos().getZ() - block.getZ();
+			final int dist = (posX * posX) + (posY * posY) + (posZ * posZ);
+			if(dist>25){
+				continue;
+			}
+			if(dist< 1){
+				continue;
+			}
 
-			if(dist>100){
-				continue;
-			}
-			if(dist<0){
-				continue;
-			}
+
 			final BlockState blockState = world.getBlockState(block);
 			final FluidState fluidState = world.getFluidState(block);
 			final Block targetblock = blockState.getBlock();
-
 			if(targetblock instanceof FireBlock || targetblock == BlockInitNew.FIRE_MANA.get() || targetblock == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || targetblock==Blocks.CAMPFIRE){
 				++fireBlocksFound;
 			}else if(targetblock == Blocks.WATER || targetblock == BlockInitNew.WATER_MANA.get()|| (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
-				System.out.println("water should work");
 				++waterBlocksFound;
 			}else if(targetblock == Blocks.AIR|| targetblock == BlockInitNew.AIR_MANA.get()){
 				++airBlocksFound;
@@ -196,7 +200,6 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 				++darkBlocksFound;
 			}
 			else if(targetblock == BlockInitNew.LIGHT_MANA.get() || targetblock.getLightValue(targetblock.getDefaultState(), world, pos) > 2){
-				System.out.println("light should work");
 				++lightBlocksFound;
 			}else{
 				System.out.println(targetblock.toString());
