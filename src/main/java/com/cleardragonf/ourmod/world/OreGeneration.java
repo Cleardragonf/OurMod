@@ -39,10 +39,10 @@ public class OreGeneration {
     private  static final ArrayList<ConfiguredFeature<?, ?>> endOres = new ArrayList<ConfiguredFeature<?, ?>>();
 
     public static void registerOre(){
-        overworldOres.add(register("earthmana", Feature.ORE.withConfiguration(new OreFeatureConfig(
-                OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, BlockInitNew.EARTH_MANA.get().getDefaultState(), 4)) //Veing Size
-                .range(64).square() //spawn height start
-                .func_242731_b(16))); //Chunk Spawn Frequency
+        overworldOres.add(register("earthmana", Feature.ORE.configured(new OreFeatureConfig(
+                OreFeatureConfig.FillerBlockType.NATURAL_STONE, BlockInitNew.EARTH_MANA.get().defaultBlockState(), 4)) //Veing Size
+                .range(64).squared() //spawn height start
+                .count(16))); //Chunk Spawn Frequency
     }
 
     private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String name, ConfiguredFeature<FC, ?> configuredFeature){
@@ -53,7 +53,7 @@ public class OreGeneration {
     public static void gen(BiomeLoadingEvent event){
         BiomeGenerationSettingsBuilder generation = event.getGeneration();
         if(event.getCategory().equals(Biomes.PLAINS)){
-            generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, overworldOres.get(0));
+            generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, overworldOres.get(0));
         }
     }
 

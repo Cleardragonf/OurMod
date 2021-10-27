@@ -38,40 +38,40 @@ import static net.minecraft.block.DirectionalBlock.FACING;
 public class BoundaryWardStoneBlock extends Block{
 
 
-	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+	public static final DirectionProperty FACING = HorizontalBlock.FACING;
 
 	private static final VoxelShape SHAPE_N = Stream.of(
-			Block.makeCuboidShape(4, 0, 4, 12, 4, 12),
-			Block.makeCuboidShape(5, 4, 6, 11, 7, 10),
-			Block.makeCuboidShape(6, 7, 7, 10, 9, 9)
-	).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
+			Block.box(4, 0, 4, 12, 4, 12),
+			Block.box(5, 4, 6, 11, 7, 10),
+			Block.box(6, 7, 7, 10, 9, 9)
+	).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get();
 
 	private static final VoxelShape SHAPE_S = Stream.of(
-			Block.makeCuboidShape(4, 0, 4, 12, 4, 12),
-			Block.makeCuboidShape(5, 4, 6, 11, 7, 10),
-			Block.makeCuboidShape(6, 7, 7, 10, 9, 9)
-	).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
+			Block.box(4, 0, 4, 12, 4, 12),
+			Block.box(5, 4, 6, 11, 7, 10),
+			Block.box(6, 7, 7, 10, 9, 9)
+	).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get();
 
 	private static final VoxelShape SHAPE_E = Stream.of(
-			Block.makeCuboidShape(4, 0, 4, 12, 4, 12),
-			Block.makeCuboidShape(6, 4, 5, 10, 7, 11),
-			Block.makeCuboidShape(7, 7, 6, 9, 9, 10)
-	).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
+			Block.box(4, 0, 4, 12, 4, 12),
+			Block.box(6, 4, 5, 10, 7, 11),
+			Block.box(7, 7, 6, 9, 9, 10)
+	).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get();
 
 	private static final VoxelShape SHAPE_W = Stream.of(
-			Block.makeCuboidShape(4, 0, 4, 12, 4, 12),
-			Block.makeCuboidShape(6, 4, 5, 10, 7, 11),
-			Block.makeCuboidShape(7, 7, 6, 9, 9, 10)
-	).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
+			Block.box(4, 0, 4, 12, 4, 12),
+			Block.box(6, 4, 5, 10, 7, 11),
+			Block.box(7, 7, 6, 9, 9, 10)
+	).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get();
 
 	public BoundaryWardStoneBlock(Properties properties) {
 		super(properties);
-		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
 	}
 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		switch (state.get(FACING)){
+		switch (state.getValue(FACING)){
 			case NORTH:
 				return SHAPE_N;
 			case SOUTH:
@@ -97,12 +97,12 @@ public class BoundaryWardStoneBlock extends Block{
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
 											 Hand hand, BlockRayTraceResult result) {
-		if (!worldIn.isRemote) {
-			TileEntity tile = worldIn.getTileEntity(pos);
+		if (!worldIn.isClientSide()) {
+			TileEntity tile = worldIn.getBlockEntity(pos);
 			if (tile instanceof BoundaryWardStoneTileEntity) {
-				if(player.getHeldItem(hand).getItem() instanceof WardEnscriber){
+				if(player.getItemInHand(hand).getItem() instanceof WardEnscriber){
 
 				}else{
 					//NetworkHooks.openGui((ServerPlayerEntity) player, (BoundaryWardStoneTileEntity) tile, pos);
@@ -115,32 +115,32 @@ public class BoundaryWardStoneBlock extends Block{
 	}
 
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof BoundaryWardStoneTileEntity) {
 			BoundaryWardStoneTileEntity tile = (BoundaryWardStoneTileEntity) tileEntity;
 			ItemStack item = new ItemStack(this);
 			CompoundNBT tag = new CompoundNBT();
-			((BoundaryWardStoneTileEntity)tileEntity).write(tag);
+			((BoundaryWardStoneTileEntity)tileEntity).save(tag);
 
 			item.setTag(tag);
 
 			ItemEntity entity = new ItemEntity(worldIn, pos.getX() + .5, pos.getY(), pos.getZ() + .5, item);
-			worldIn.addEntity(entity);
+			worldIn.addFreshEntity(entity);
 		}
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, worldIn, pos, newState, isMoving);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+		super.setPlacedBy(worldIn, pos, state, placer, stack);
 
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof BoundaryWardStoneTileEntity) {
 			CompoundNBT tag = stack.getTag();
 			if(tag != null) {
 				((BoundaryWardStoneTileEntity)tileEntity).readRestorableNBT(tag);
-				worldIn.notifyBlockUpdate(pos, getDefaultState(), getDefaultState(), Constants.BlockFlags.DEFAULT);
+				worldIn.sendBlockUpdated(pos, defaultBlockState(), defaultBlockState(), Constants.BlockFlags.DEFAULT);
 			}
 		}
 	}
@@ -148,21 +148,21 @@ public class BoundaryWardStoneBlock extends Block{
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 

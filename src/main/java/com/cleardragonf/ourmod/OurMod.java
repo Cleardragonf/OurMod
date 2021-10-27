@@ -109,7 +109,7 @@ OurMod
                 .filter(block -> !(block.get() instanceof CauliflowerCrop))
                 .filter(block -> !(block.get() instanceof EggplantCrop))
                 .map(RegistryObject::get).forEach(block -> {
-			final Item.Properties properties = new Item.Properties().group(OurModItemGroup.instance);
+			final Item.Properties properties = new Item.Properties().tab(OurModItemGroup.instance);
 			final BlockItem blockItem = new BlockItem(block, properties);
 			blockItem.setRegistryName(block.getRegistryName());
 			registry.register(blockItem);
@@ -152,14 +152,14 @@ OurMod
     }
     
     public static class OurModItemGroup extends ItemGroup{
-    	public static final OurModItemGroup instance = new OurModItemGroup(ItemGroup.GROUPS.length, "ourmodtab");
+    	public static final OurModItemGroup instance = new OurModItemGroup(ItemGroup.TABS.length, "ourmodtab");
     	
     	private OurModItemGroup(int index, String label) {
     		super(index, label);
     	}
     	
     	@Override
-    	public ItemStack createIcon() {
+    	public ItemStack makeIcon() {
     		return new ItemStack(BlockInitNew.FORCEFIELD.get());
     	}
     }

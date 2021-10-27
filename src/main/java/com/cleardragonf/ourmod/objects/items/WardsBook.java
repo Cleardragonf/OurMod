@@ -18,7 +18,7 @@ public class WardsBook extends BookItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
         if (FMLEnvironment.dist == Dist.CLIENT)
         {
             ITextComponent title = new TranslationTextComponent("Wards by the Asura");
@@ -26,6 +26,6 @@ public class WardsBook extends BookItem {
         }
 
 
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.use(worldIn, playerIn, handIn);
     }
 }

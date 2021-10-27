@@ -57,7 +57,7 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return 36;
 	}
 
@@ -82,43 +82,43 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
-		if (!this.checkLootAndWrite(compound)) {
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
+		if (!this.trySaveLootTable(compound)) {
 			ItemStackHelper.saveAllItems(compound, this.chestContents);
 		}
 		return compound;
 	}
 
 	@Override
-	public void read(BlockState blockState,CompoundNBT compound) {
-		super.read(blockState,compound);
-		this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
-		if (!this.checkLootAndRead(compound)) {
+	public void load(BlockState blockState,CompoundNBT compound) {
+		super.load(blockState,compound);
+		this.chestContents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+		if (!this.tryLoadLootTable(compound)) {
 			ItemStackHelper.loadAllItems(compound, this.chestContents);
 		}
 	}
 
 	private void playSound(SoundEvent sound) {
-		double dx = (double) this.pos.getX() + 0.5D;
-		double dy = (double) this.pos.getY() + 0.5D;
-		double dz = (double) this.pos.getZ() + 0.5D;
-		this.world.playSound((PlayerEntity) null, dx, dy, dz, sound, SoundCategory.BLOCKS, 0.5f,
-				this.world.rand.nextFloat() * 0.1f + 0.9f);
+		double dx = (double) this.worldPosition.getX() + 0.5D;
+		double dy = (double) this.worldPosition.getY() + 0.5D;
+		double dz = (double) this.worldPosition.getZ() + 0.5D;
+		this.level.playSound((PlayerEntity) null, dx, dy, dz, sound, SoundCategory.BLOCKS, 0.5f,
+				this.level.random.nextFloat() * 0.1f + 0.9f);
 	}
 
 	@Override
-	public boolean receiveClientEvent(int id, int type) {
+	public boolean triggerEvent(int id, int type) {
 		if (id == 1) {
 			this.numPlayersUsing = type;
 			return true;
 		} else {
-			return super.receiveClientEvent(id, type);
+			return super.triggerEvent(id, type);
 		}
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
+	public void startOpen(PlayerEntity player) {
 		if (!player.isSpectator()) {
 			if (this.numPlayersUsing < 0) {
 				this.numPlayersUsing = 0;
@@ -130,7 +130,7 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
+	public void stopOpen(PlayerEntity player) {
 		if (!player.isSpectator()) {
 			--this.numPlayersUsing;
 			this.onOpenOrClose();
@@ -140,15 +140,15 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 	protected void onOpenOrClose() {
 		Block block = this.getBlockState().getBlock();
 		if (block instanceof FishingNet) {
-			this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
-			this.world.notifyNeighborsOfStateChange(this.pos, block);
+			this.level.blockEvent(this.worldPosition, block, 1, this.numPlayersUsing);
+			this.level.updateNeighborsAt(this.worldPosition, block);
 		}
 	}
 
 	public static int getPlayersUsing(IBlockReader reader, BlockPos pos) {
 		BlockState blockstate = reader.getBlockState(pos);
 		if (blockstate.hasTileEntity()) {
-			TileEntity tileentity = reader.getTileEntity(pos);
+			TileEntity tileentity = reader.getBlockEntity(pos);
 			if (tileentity instanceof FishingNetTileEntity) {
 				return ((FishingNetTileEntity) tileentity).numPlayersUsing;
 			}
@@ -163,8 +163,8 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 	}
 
 	@Override
-	public void updateContainingBlockInfo() {
-		super.updateContainingBlockInfo();
+	public void clearCache() {
+		super.clearCache();
 		if (this.itemHandler != null) {
 			this.itemHandler.invalidate();
 			this.itemHandler = null;
@@ -184,8 +184,8 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 	}
 	
 	@Override
-	public void remove() {
-		super.remove();
+	public void setRemoved() {
+		super.setRemoved();
 		if(itemHandler != null) {
 			itemHandler.invalidate();
 		}
@@ -218,8 +218,8 @@ public class FishingNetTileEntity extends LockableLootTileEntity implements ITic
 		tick++;
 		if (tick == 40) {
 			tick = 0;
-			if(this.getTileEntity().getWorld().getBiome(pos).equals(Biomes.OCEAN) || this.getTileEntity().getWorld().getBiome(pos).equals(Biomes.DEEP_OCEAN)
-					|| this.getTileEntity().getWorld().getBiome(pos).equals(Biomes.WARM_OCEAN) || this.getTileEntity().getWorld().getBiome(pos).equals(Biomes.LUKEWARM_OCEAN)){
+			if(this.getTileEntity().getLevel().getBiome(worldPosition).equals(Biomes.OCEAN) || this.getTileEntity().getLevel().getBiome(worldPosition).equals(Biomes.DEEP_OCEAN)
+					|| this.getTileEntity().getLevel().getBiome(worldPosition).equals(Biomes.WARM_OCEAN) || this.getTileEntity().getLevel().getBiome(worldPosition).equals(Biomes.LUKEWARM_OCEAN)){
 
 				execute();
 			}

@@ -110,7 +110,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 		@Override
 		protected void onContentsChanged(int slot) {
-			MasterWardStoneTileEntity.this.markDirty();
+			MasterWardStoneTileEntity.this.setChanged();
 		}
 	};
 
@@ -149,35 +149,35 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	}
 
 	private void playSound(SoundEvent sound) {
-		double dx = (double) this.pos.getX() + 0.5D;
-		double dy = (double) this.pos.getY() + 0.5D;
-		double dz = (double) this.pos.getZ() + 0.5D;
-		this.world.playSound((PlayerEntity) null, dx, dy, dz, sound, SoundCategory.BLOCKS, 0.5f,
-				this.world.rand.nextFloat() * 0.1f + 0.9f);
+		double dx = (double) this.worldPosition.getX() + 0.5D;
+		double dy = (double) this.worldPosition.getY() + 0.5D;
+		double dz = (double) this.worldPosition.getZ() + 0.5D;
+		this.level.playSound((PlayerEntity) null, dx, dy, dz, sound, SoundCategory.BLOCKS, 0.5f,
+				this.level.random.nextFloat() * 0.1f + 0.9f);
 	}
 
 	@Override
-	public boolean receiveClientEvent(int id, int type) {
+	public boolean triggerEvent(int id, int type) {
 		if (id == 1) {
 			this.numPlayersUsing = type;
 			return true;
 		} else {
-			return super.receiveClientEvent(id, type);
+			return super.triggerEvent(id, type);
 		}
 	}
 
 	protected void onOpenOrClose() {
 		Block block = this.getBlockState().getBlock();
 		if (block instanceof MasterWardStoneBlock) {
-			this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
-			this.world.notifyNeighborsOfStateChange(this.pos, block);
+			this.level.blockEvent(this.worldPosition, block, 1, this.numPlayersUsing);
+			this.level.updateNeighborsAt(this.worldPosition, block);
 		}
 	}
 
 	public static int getPlayersUsing(IBlockReader reader, BlockPos pos) {
 		BlockState blockstate = reader.getBlockState(pos);
 		if (blockstate.hasTileEntity()) {
-			TileEntity tileentity = reader.getTileEntity(pos);
+			TileEntity tileentity = reader.getBlockEntity(pos);
 			if (tileentity instanceof MasterWardStoneTileEntity) {
 				return ((MasterWardStoneTileEntity) tileentity).numPlayersUsing;
 			}
@@ -186,14 +186,14 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	}
 
 	@Override
-	public void updateContainingBlockInfo() {
-		super.updateContainingBlockInfo();
+	public void clearCache() {
+		super.clearCache();
 	}
 
 	
 	@Override
-	public void remove() {
-		super.remove();
+	public void setRemoved() {
+		super.setRemoved();
 	}
 
 
@@ -218,7 +218,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 			CompoundNBT tagger = (CompoundNBT) energyblocks;
 
 			BlockPos pos = new BlockPos(tagger.getInt("x"),tagger.getInt("y"),tagger.getInt("z"));
-			TileEntity tileEntity = world.getTileEntity(pos);
+			TileEntity tileEntity = level.getBlockEntity(pos);
 			if(tileEntity instanceof EssenceCollectorTileEntity){
 				EssenceCollectorTileEntity tileTarget = (EssenceCollectorTileEntity) tileEntity;
 
@@ -227,43 +227,43 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					int transfer = tileTarget.FireEnergy.getEnergyStored();
 					tileTarget.FireEnergy.consumeEnergy(transfer);
 					this.FireEnergy.addEnergy(transfer);
-					write(tag);
-					markDirty();
+					save(tag);
+					setChanged();
 				}
 				if(tileTarget.WaterEnergy.getEnergyStored() > 0 && this.WaterEnergy.getEnergyStored() < 1000000){
 					int transfer = tileTarget.WaterEnergy.getEnergyStored();
 					tileTarget.WaterEnergy.consumeEnergy(transfer);
 					this.WaterEnergy.addEnergy(transfer);
-					write(tag);
-					markDirty();
+					save(tag);
+					setChanged();
 				}
 				if(tileTarget.AirEnergy.getEnergyStored() > 0 && this.AirEnergy.getEnergyStored() < 1000000){
 					int transfer = tileTarget.AirEnergy.getEnergyStored();
 					tileTarget.AirEnergy.consumeEnergy(transfer);
 					this.AirEnergy.addEnergy(transfer);
-					write(tag);
-					markDirty();
+					save(tag);
+					setChanged();
 				}
 				if(tileTarget.EarthEnergy.getEnergyStored() > 0 && this.EarthEnergy.getEnergyStored() < 1000000){
 					int transfer = tileTarget.EarthEnergy.getEnergyStored();
 					tileTarget.EarthEnergy.consumeEnergy(transfer);
 					this.EarthEnergy.addEnergy(transfer);
-					write(tag);
-					markDirty();
+					save(tag);
+					setChanged();
 				}
 				if(tileTarget.DarkEnergy.getEnergyStored() > 0 && this.DarkEnergy.getEnergyStored() < 1000000){
 					int transfer = tileTarget.DarkEnergy.getEnergyStored();
 					tileTarget.DarkEnergy.consumeEnergy(transfer);
 					this.DarkEnergy.addEnergy(transfer);
-					write(tag);
-					markDirty();
+					save(tag);
+					setChanged();
 				}
 				if(tileTarget.LightEnergy.getEnergyStored() > 0 && this.LightEnergy.getEnergyStored() < 1000000){
 					int transfer = tileTarget.LightEnergy.getEnergyStored();
 					tileTarget.LightEnergy.consumeEnergy(transfer);
 					this.LightEnergy.addEnergy(transfer);
-					write(tag);
-					markDirty();
+					save(tag);
+					setChanged();
 				}
 			}else{
 				energyblocks = null;
@@ -278,7 +278,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 		boolean needsSave = false;
 		if(boundaryWardStones != null){
-			TileEntity tileEntity = world.getTileEntity(pos);
+			TileEntity tileEntity = level.getBlockEntity(worldPosition);
 			int size = boundaryWardStones.size();
 			for (int i = 0; i < size; i++) {
 				CompoundNBT tagger = (CompoundNBT)boundaryWardStones.get(i);
@@ -290,9 +290,9 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					//4 * pie * r * r
 					boolean stonePlacementAccurate = false;
 					//sqrt((x1-x2)^2 + (y1-y2) ^2+( z1 - z1)^2)
-					int x1 = tileEntity.getPos().getX();
-					int y1 = tileEntity.getPos().getY();
-					int z1 = tileEntity.getPos().getZ();
+					int x1 = tileEntity.getBlockPos().getX();
+					int y1 = tileEntity.getBlockPos().getY();
+					int z1 = tileEntity.getBlockPos().getZ();
 					//
 					int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(0).getX() , 2) + Math.pow(y1 - boundaryList.get(0).getY() , 2) + Math.pow(z1 - boundaryList.get(0).getZ() , 2));
 
@@ -304,8 +304,8 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 					if(radius1 == radius2 && radius1 == radius3 && radius1 == radius4) {
 
-						if(world.getTileEntity(boundaryList.get(0)) instanceof BoundaryWardStoneTileEntity && world.getTileEntity(boundaryList.get(1)) instanceof BoundaryWardStoneTileEntity
-								&&world.getTileEntity(boundaryList.get(2)) instanceof BoundaryWardStoneTileEntity&&world.getTileEntity(boundaryList.get(3)) instanceof BoundaryWardStoneTileEntity) {
+						if(level.getBlockEntity(boundaryList.get(0)) instanceof BoundaryWardStoneTileEntity && level.getBlockEntity(boundaryList.get(1)) instanceof BoundaryWardStoneTileEntity
+								&&level.getBlockEntity(boundaryList.get(2)) instanceof BoundaryWardStoneTileEntity&&level.getBlockEntity(boundaryList.get(3)) instanceof BoundaryWardStoneTileEntity) {
 							stonePlacementAccurate = true;
 
 						}else{
@@ -316,10 +316,10 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					if(stonePlacementAccurate == true){
 						//double d0 = (double)(1 * 10 + 10);
 
-						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(radius1).expand(0.0D, 0.0D, 0.0D);
-						List<PlayerEntity> list = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
-						List<MonsterEntity> monsterList = this.world.getEntitiesWithinAABB(MonsterEntity.class, axisalignedbb);
-						List<AnimalEntity> animalList = this.world.getEntitiesWithinAABB(AnimalEntity.class, axisalignedbb);
+						AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.worldPosition)).inflate(radius1).expandTowards(0.0D, 0.0D, 0.0D);
+						List<PlayerEntity> list = this.level.getEntitiesOfClass(PlayerEntity.class, axisalignedbb);
+						List<MonsterEntity> monsterList = this.level.getEntitiesOfClass(MonsterEntity.class, axisalignedbb);
+						List<AnimalEntity> animalList = this.level.getEntitiesOfClass(AnimalEntity.class, axisalignedbb);
 						if(this.AirEnergy.getEnergyStored() >= (10*list.size())){
 							for(PlayerEntity playerentity : list) {
 									handler.ifPresent(e ->{
@@ -423,7 +423,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						//set with a border right now it works for replacing air with glass
 						int wardBarrier = 0;
 						//TODO: set to WardBarrier
-						Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(-50,-50,-50,50,50,50);
+						Iterable<BlockPos> mutable = BlockPos.betweenClosed(-50,-50,-50,50,50,50);
 
 						for (BlockPos block : mutable) {
 							final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
@@ -433,13 +433,13 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 							if(dist<1){
 								continue;
 							}
-							final BlockState blockState = world.getBlockState(block);
-							final FluidState fluidState = world.getFluidState(block);
+							final BlockState blockState = level.getBlockState(block);
+							final FluidState fluidState = level.getFluidState(block);
 							final Block targetblock = blockState.getBlock();
 							if(targetblock == Blocks.AIR){
 
 								if(EarthEnergy.getEnergyStored() >= 6){
-									world.setBlockState(block, BlockInitNew.WARDBARRIER.get().getDefaultState(), 2);
+									level.setBlock(block, BlockInitNew.WARDBARRIER.get().defaultBlockState(), 2);
 									EarthEnergy.consumeEnergy(6);
 								}
 							}
@@ -447,7 +447,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 								wardLoc.add(block);
 							}
 
-						}markDirty();
+						}setChanged();
 					}
 				else{
 
@@ -458,7 +458,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 			}
 
 		if(needsSave){
-			this.markDirty();
+			this.setChanged();
 		}
 	}
 
@@ -475,7 +475,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				fireReq = 10;
 				lightReq = 10;
 				if(LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
-					animal.addPotionEffect(new EffectInstance(EntityEffects.ANTI_PASSIVE_WARD, 5000, 1,true, true));
+					animal.addEffect(new EffectInstance(EntityEffects.ANTI_PASSIVE_WARD, 5000, 1,true, true));
 					FireEnergy.consumeEnergy(fireReq * level);
 					LightEnergy.consumeEnergy(darkReq * level);
 				}
@@ -496,7 +496,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				fireReq = 10;
 				darkReq = 10;
 				if(DarkEnergy.getEnergyStored() >= (darkReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
-					monster.addPotionEffect(new EffectInstance(EntityEffects.ANTI_HOSTILE_WARD, 5000, 1,true, true));
+					monster.addEffect(new EffectInstance(EntityEffects.ANTI_HOSTILE_WARD, 5000, 1,true, true));
 					FireEnergy.consumeEnergy(fireReq * level);
 					DarkEnergy.consumeEnergy(darkReq * level);
 				}
@@ -511,7 +511,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 		boolean needsSave = false;
 		if(boundaryWardStones != null){
-			TileEntity tileEntity = world.getTileEntity(pos);
+			TileEntity tileEntity = level.getBlockEntity(worldPosition);
 			int size = boundaryWardStones.size();
 			for (int i = 0; i < size; i++) {
 				CompoundNBT tagger = (CompoundNBT)boundaryWardStones.get(i);
@@ -523,9 +523,9 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				//4 * pie * r * r
 				boolean stonePlacementAccurate = true;
 				//sqrt((x1-x2)^2 + (y1-y2) ^2+( z1 - z1)^2)
-				int x1 = tileEntity.getPos().getX();
-				int y1 = tileEntity.getPos().getY();
-				int z1 = tileEntity.getPos().getZ();
+				int x1 = tileEntity.getBlockPos().getX();
+				int y1 = tileEntity.getBlockPos().getY();
+				int z1 = tileEntity.getBlockPos().getZ();
 				//
 				int radius1 = (int) Math.sqrt(Math.pow(x1 - boundaryList.get(0).getX() , 2) + Math.pow(y1 - boundaryList.get(0).getY() , 2) + Math.pow(z1 - boundaryList.get(0).getZ() , 2));
 
@@ -534,7 +534,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					int wardBarrier = 0;
 					//TODO: set to WardBarrier
 
-					Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(pos.getX()-5,pos.getY()-5,pos.getZ()-5,pos.getX()+5,pos.getY()+5,pos.getZ()+5);
+					Iterable<BlockPos> mutable = BlockPos.betweenClosed(worldPosition.getX()-5,worldPosition.getY()-5,worldPosition.getZ()-5,worldPosition.getX()+5,worldPosition.getY()+5,worldPosition.getZ()+5);
 
 					for (BlockPos block : mutable) {
 						final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
@@ -544,8 +544,8 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						if(dist<1){
 							continue;
 						}
-						final BlockState blockState = world.getBlockState(block);
-						final FluidState fluidState = world.getFluidState(block);
+						final BlockState blockState = level.getBlockState(block);
+						final FluidState fluidState = level.getFluidState(block);
 						final Block targetblock = blockState.getBlock();
 
 
@@ -553,11 +553,11 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 						}
 						else if(targetblock == BlockInitNew.WARDBARRIER.get()){
-							world.setBlockState(block, Blocks.AIR.getDefaultState(), 3);
+							level.setBlock(block, Blocks.AIR.defaultBlockState(), 3);
 						}else{
 							System.out.println(block);
 						}
-						markDirty();
+						setChanged();
 					}
 				}
 
@@ -571,7 +571,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 		}
 
 		if(needsSave){
-			this.markDirty();
+			this.setChanged();
 		}
 	}
 
@@ -591,7 +591,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				waterReq = 10;
 				System.out.println("made it to this point");
 				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && WaterEnergy.getEnergyStored() >= (waterReq * level)){
-					player.addPotionEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 30, level,true, true));
+					player.addEffect(new EffectInstance(EntityEffects.HUNGER_WARD, 30, level,true, true));
 					EarthEnergy.consumeEnergy(earthReq * level);
 					WaterEnergy.consumeEnergy(waterReq * level);
 				}
@@ -601,7 +601,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				fireReq = 10;
 				lightReq = 10;
 				if(EarthEnergy.getEnergyStored() >= (earthReq * level) && LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
-					player.addPotionEffect(new EffectInstance(EntityEffects.HEALING_WARD, 30, level,true, true));
+					player.addEffect(new EffectInstance(EntityEffects.HEALING_WARD, 30, level,true, true));
 					FireEnergy.consumeEnergy(fireReq * level);
 					EarthEnergy.consumeEnergy(earthReq * level);
 					LightEnergy.consumeEnergy(lightReq * level);
@@ -611,7 +611,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 			case "Thirst":
 				waterReq = 20;
 				if(WaterEnergy.getEnergyStored() >= (waterReq * level)){
-					player.addPotionEffect(new EffectInstance(EntityEffects.THIRST_WARD, 30, 1,true, true));
+					player.addEffect(new EffectInstance(EntityEffects.THIRST_WARD, 30, 1,true, true));
 					WaterEnergy.consumeEnergy(waterReq * level);
 				}
 				break;
@@ -619,7 +619,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				fireReq = 10;
 				waterReq = 10;
 				if(WaterEnergy.getEnergyStored() >= (waterReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
-					player.addPotionEffect(new EffectInstance(EntityEffects.TEMPERATURE_WARD, 30, 1,true, true));
+					player.addEffect(new EffectInstance(EntityEffects.TEMPERATURE_WARD, 30, 1,true, true));
 					FireEnergy.consumeEnergy(fireReq * level);
 					WaterEnergy.consumeEnergy(waterReq * level);
 				}
@@ -628,7 +628,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 				fireReq = 10;
 				lightReq = 10;
 				if(LightEnergy.getEnergyStored() >= (lightReq * level) && FireEnergy.getEnergyStored() >= (fireReq * level)){
-					player.addPotionEffect(new EffectInstance(EntityEffects.ANTI_PASSIVE_WARD, 30, 1,true, true));
+					player.addEffect(new EffectInstance(EntityEffects.ANTI_PASSIVE_WARD, 30, 1,true, true));
 					FireEnergy.consumeEnergy(fireReq * level);
 					LightEnergy.consumeEnergy(lightReq * level);
 				}
@@ -636,7 +636,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 			case "Anti-Gravity":
 				airReq = 30;
 				if(AirEnergy.getEnergyStored() >= (airReq * level)){
-					player.addPotionEffect(new EffectInstance(EntityEffects.ANTI_GRAVITY_WARD, 30, 1,true, true));
+					player.addEffect(new EffectInstance(EntityEffects.ANTI_GRAVITY_WARD, 30, 1,true, true));
 					AirEnergy.consumeEnergy(airReq * level);
 				}
 				break;
@@ -646,7 +646,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 					level = 14;
 				}
 				if(LightEnergy.getEnergyStored() >= (lightReq * level)){
-					Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(-5,-5,-5,5,5,5);
+					Iterable<BlockPos> mutable = BlockPos.betweenClosed(-5,-5,-5,5,5,5);
 
 					for (BlockPos block : mutable) {
 						final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
@@ -656,22 +656,22 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						if(dist<1){
 							continue;
 						}
-						final BlockState blockState = world.getBlockState(block);
-						final FluidState fluidState = world.getFluidState(block);
+						final BlockState blockState = this.level.getBlockState(block);
+						final FluidState fluidState = this.level.getFluidState(block);
 						final Block targetblock = blockState.getBlock();
 
 						if(targetblock instanceof AirBlock){
-							world.setBlockState(block, BlockInitNew.WARDINSIDE.get().getDefaultState().with(WardInside.LIGHT, level) ,3);
+							this.level.setBlock(block, BlockInitNew.WARDINSIDE.get().defaultBlockState().setValue(WardInside.LIGHT, level) ,3);
 
 						}else if(targetblock instanceof WardInside){
-							world.setBlockState(block, BlockInitNew.WARDINSIDE.get().getDefaultState().with(WardInside.LIGHT, level) ,3);
+							this.level.setBlock(block, BlockInitNew.WARDINSIDE.get().defaultBlockState().setValue(WardInside.LIGHT, level) ,3);
 						}
 
 					}
 					LightEnergy.consumeEnergy(lightReq * level);
-					markDirty();
+					setChanged();
 				}else{
-					Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(-5,-5,-5,5,5,5);
+					Iterable<BlockPos> mutable = BlockPos.betweenClosed(-5,-5,-5,5,5,5);
 
 					for (BlockPos block : mutable) {
 						final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
@@ -681,17 +681,17 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 						if(dist<1){
 							continue;
 						}
-						final BlockState blockState = world.getBlockState(block);
-						final FluidState fluidState = world.getFluidState(block);
+						final BlockState blockState = this.level.getBlockState(block);
+						final FluidState fluidState = this.level.getFluidState(block);
 						final Block targetblock = blockState.getBlock();
 
 						if(targetblock instanceof WardInside){
-							world.setBlockState(block, Blocks.AIR.getDefaultState(),3);
+							this.level.setBlock(block, Blocks.AIR.defaultBlockState(),3);
 
 						}
 
 					}
-					markDirty();
+					setChanged();
 				}
 				break;
 
@@ -699,16 +699,16 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	}
 
 	private boolean destroyBlock(BlockPos pos, boolean dropBlock, @Nullable Entity entity) {
-		BlockState blockstate = world.getBlockState(pos);
-		if(blockstate.isAir(world, pos))return false;
+		BlockState blockstate = level.getBlockState(pos);
+		if(blockstate.isAir(level, pos))return false;
 		else {
-			FluidState ifluidstate = world.getFluidState(pos);
-			world.playEvent(2001, pos, Block.getStateId(blockstate));
+			FluidState ifluidstate = level.getFluidState(pos);
+			level.levelEvent(2001, pos, Block.getId(blockstate));
 			if(dropBlock) {
-				TileEntity tileentity= blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
-				Block.spawnDrops(blockstate, world, this.pos.add(0, 1.5, 0), tileentity, entity, ItemStack.EMPTY);
+				TileEntity tileentity= blockstate.hasTileEntity() ? level.getBlockEntity(pos) : null;
+				Block.dropResources(blockstate, level, this.worldPosition.offset(0, 1.5, 0), tileentity, entity, ItemStack.EMPTY);
 			}
-			return world.setBlockState(pos, ifluidstate.getBlockState(), 3);
+			return level.setBlock(pos, ifluidstate.getFluidState().createLegacyBlock(), 3);
 		}
 
 	}
@@ -727,20 +727,20 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		this.write(tag);
+		this.save(tag);
 		return super.getUpdatePacket();
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
-		write(tag);
+		save(tag);
 		return tag;
 	}
 
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         //TODO:: add a write method
         handler.ifPresent(h -> {
             CompoundNBT tag2 = ((INBTSerializable<CompoundNBT>) inventory).serializeNBT();
@@ -777,15 +777,15 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
     }
 
     @Override
-    public void read(BlockState blockState,CompoundNBT compound) {
-        super.read(blockState,compound);
+    public void load(BlockState blockState,CompoundNBT compound) {
+        super.load(blockState,compound);
         readRestorableNBT(compound);
     }
 
 
     @Override
 	public void handleUpdateTag(BlockState blockState,CompoundNBT tag) {
-		this.read(blockState,tag);
+		this.load(blockState,tag);
 	}
 
 
@@ -814,7 +814,7 @@ public class MasterWardStoneTileEntity extends TileEntity implements ITickableTi
 	}
 
 	public void updateBlock(){
-		world.notifyBlockUpdate(pos, this.getBlockState(), this.getBlockState(), 1);
+		level.sendBlockUpdated(worldPosition, this.getBlockState(), this.getBlockState(), 1);
 	}
 
 

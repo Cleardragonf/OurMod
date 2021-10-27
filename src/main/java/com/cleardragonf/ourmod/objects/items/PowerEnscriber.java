@@ -36,45 +36,45 @@ public class PowerEnscriber extends Item{
     public ActionResultType onItemUse(ItemUseContext context) {
 
         CompoundNBT tag;
-        ItemStack itemStack = context.getItem().getStack();
+        ItemStack itemStack = context.getItemInHand().getStack();
         if(itemStack.hasTag()){
             tag = itemStack.getTag();
         }else{
             tag = new CompoundNBT();
         }
 
-        World world = context.getWorld();
-        BlockPos blockpos = context.getPos();
+        World world = context.getLevel();
+        BlockPos blockpos = context.getClickedPos();
         BlockState blockstate = world.getBlockState(blockpos);
-        TileEntity tileEntity = world.getTileEntity(blockpos);
+        TileEntity tileEntity = world.getBlockEntity(blockpos);
         if(tileEntity instanceof MCMChestTileEntity){
             if(tag.contains("energypos")){
                 ITextComponent text = new TranslationTextComponent("Connecting to: " + tag.get("energypos"));
-                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
+                context.getPlayer().sendMessage(text, context.getPlayer().getUUID());
             }else{
                 ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
-                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
+                context.getPlayer().sendMessage(text, context.getPlayer().getUUID());
             }
             return ActionResultType.SUCCESS;
         }
         else if(tileEntity instanceof MasterWardStoneTileEntity){
             if(tag.contains("energypos")){
                 ITextComponent text = new TranslationTextComponent("Connecting to: " + tag.get("energypos"));
-                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
+                context.getPlayer().sendMessage(text, context.getPlayer().getUUID());
             }else{
                 ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
-                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
+                context.getPlayer().sendMessage(text, context.getPlayer().getUUID());
             }
             return ActionResultType.SUCCESS;
         }
         else if(tileEntity instanceof EssenceCollectorTileEntity){
             CompoundNBT pos = new CompoundNBT();
-                pos.putInt("x", tileEntity.getPos().getX());
-                pos.putInt("y", tileEntity.getPos().getY());
-                pos.putInt("z", tileEntity.getPos().getZ());
+                pos.putInt("x", tileEntity.getBlockPos().getX());
+                pos.putInt("y", tileEntity.getBlockPos().getY());
+                pos.putInt("z", tileEntity.getBlockPos().getZ());
             tag.put("energypos", pos);
             ITextComponent text = new TranslationTextComponent("setting to: " + tag.get("energypos") + tag.get("earthenergy"));
-            context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
+            context.getPlayer().sendMessage(text, context.getPlayer().getUUID());
             itemStack.setTag(tag);
             return ActionResultType.SUCCESS;
         }else{

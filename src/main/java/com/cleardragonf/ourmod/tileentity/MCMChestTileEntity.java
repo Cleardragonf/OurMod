@@ -96,7 +96,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 		@Override
 		protected void onContentsChanged(int slot) {
-			MCMChestTileEntity.this.markDirty();
+			MCMChestTileEntity.this.setChanged();
 		}
 	};
 
@@ -108,21 +108,21 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	}
 
 	public void updateBlock(){
-		world.notifyBlockUpdate(pos, this.getBlockState(), this.getBlockState(), 1);
+		level.sendBlockUpdated(worldPosition, this.getBlockState(), this.getBlockState(), 1);
 	}
 
 	@Override
 	public void tick() {
-		write(tag);
-		markDirty();
-		if (world.isRemote) {
+		save(tag);
+		setChanged();
+		if (level.isClientSide()) {
 			return;
 		}
 
 		if (counter > 0) {
 			counter--;
 
-			markDirty();
+			setChanged();
 		}
 
 		if (counter <= 0) {
@@ -159,16 +159,16 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 				//Removes inputs and Adds MCM Value to the Chest
 				for (int i = 1; i < 5; i++) {
-					markDirty();
+					setChanged();
 					if(!inventory.getStackInSlot(i).isEmpty()){
 
-						markDirty();
+						setChanged();
 						Item inputstack = inventory.getStackInSlot(i).getStack().getItem();
 						inventory.getStackInSlot(i).getStack().getCapability(MCMValueProvider.MCMValue).ifPresent(a ->{
 							this.MCMEnergy.addEnergy(MCMREader(inputstack, a));
 						});
 						inventory.extractItem(i,1,false);
-						markDirty();
+						setChanged();
 
 					}
 
@@ -176,12 +176,12 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 				}
 				counter = 10;
-				markDirty();
+				setChanged();
 		}
 
-		BlockState blockState = world.getBlockState(pos);
-		if (blockState.get(BlockStateProperties.POWERED) != counter > 0) {
-			world.setBlockState(pos, blockState.with(BlockStateProperties.POWERED, counter > 0), 3);
+		BlockState blockState = level.getBlockState(worldPosition);
+		if (blockState.getValue(BlockStateProperties.POWERED) != counter > 0) {
+			level.setBlock(worldPosition, blockState.setValue(BlockStateProperties.POWERED, counter > 0), 3);
 		}
 
 		//sendOutPower();
@@ -193,43 +193,43 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 				int transfer = this.FireEnergy.getEnergyStored();
 				this.MCMEnergy.addEnergy(transfer);
 				this.FireEnergy.consumeEnergy(transfer);
-				write(tag);
-				markDirty();
+				save(tag);
+				setChanged();
 			}
 			if(this.WaterEnergy.getEnergyStored() > 0){
 				int transfer = this.WaterEnergy.getEnergyStored();
 				this.MCMEnergy.addEnergy(transfer);
 				this.WaterEnergy.consumeEnergy(transfer);
-				write(tag);
-				markDirty();
+				save(tag);
+				setChanged();
 			}
 			if(this.AirEnergy.getEnergyStored() > 0){
 				int transfer = this.AirEnergy.getEnergyStored();
 				this.MCMEnergy.addEnergy(transfer);
 				this.AirEnergy.consumeEnergy(transfer);
-				write(tag);
-				markDirty();
+				save(tag);
+				setChanged();
 			}
 			if(this.EarthEnergy.getEnergyStored() > 0){
 				int transfer = this.EarthEnergy.getEnergyStored();
 				this.MCMEnergy.addEnergy(transfer);
 				this.EarthEnergy.consumeEnergy(transfer);
-				write(tag);
-				markDirty();
+				save(tag);
+				setChanged();
 			}
 			if(this.DarkEnergy.getEnergyStored() > 0){
 				int transfer = this.DarkEnergy.getEnergyStored();
 				this.MCMEnergy.addEnergy(transfer);
 				this.DarkEnergy.consumeEnergy(transfer);
-				write(tag);
-				markDirty();
+				save(tag);
+				setChanged();
 			}
 			if(this.LightEnergy.getEnergyStored() > 0){
 				int transfer = this.LightEnergy.getEnergyStored();
 				this.MCMEnergy.addEnergy(transfer);
 				this.LightEnergy.consumeEnergy(transfer);
-				write(tag);
-				markDirty();
+				save(tag);
+				setChanged();
 			}
 		}
 	}
@@ -242,7 +242,7 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 			CompoundNBT tagger = (CompoundNBT) energyblocks;
 
 				BlockPos pos = new BlockPos(tagger.getInt("x"),tagger.getInt("y"),tagger.getInt("z"));
-				TileEntity tileEntity = world.getTileEntity(pos);
+				TileEntity tileEntity = level.getBlockEntity(pos);
 				if(tileEntity instanceof EssenceCollectorTileEntity){
 					EssenceCollectorTileEntity tileTarget = (EssenceCollectorTileEntity) tileEntity;
 
@@ -251,43 +251,43 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 						int transfer = tileTarget.FireEnergy.getEnergyStored();
 						tileTarget.FireEnergy.consumeEnergy(transfer);
 						this.FireEnergy.addEnergy(transfer);
-						write(tag);
-						markDirty();
+						save(tag);
+						setChanged();
 					}
 					if(tileTarget.WaterEnergy.getEnergyStored() > 0 && this.WaterEnergy.getEnergyStored() < 1000000){
 						int transfer = tileTarget.WaterEnergy.getEnergyStored();
 						tileTarget.WaterEnergy.consumeEnergy(transfer);
 						this.WaterEnergy.addEnergy(transfer);
-						write(tag);
-						markDirty();
+						save(tag);
+						setChanged();
 					}
 					if(tileTarget.AirEnergy.getEnergyStored() > 0 && this.AirEnergy.getEnergyStored() < 1000000){
 						int transfer = tileTarget.AirEnergy.getEnergyStored();
 						tileTarget.AirEnergy.consumeEnergy(transfer);
 						this.AirEnergy.addEnergy(transfer);
-						write(tag);
-						markDirty();
+						save(tag);
+						setChanged();
 					}
 					if(tileTarget.EarthEnergy.getEnergyStored() > 0 && this.EarthEnergy.getEnergyStored() < 1000000){
 						int transfer = tileTarget.EarthEnergy.getEnergyStored();
 						tileTarget.EarthEnergy.consumeEnergy(transfer);
 						this.EarthEnergy.addEnergy(transfer);
-						write(tag);
-						markDirty();
+						save(tag);
+						setChanged();
 					}
 					if(tileTarget.DarkEnergy.getEnergyStored() > 0 && this.DarkEnergy.getEnergyStored() < 1000000){
 						int transfer = tileTarget.DarkEnergy.getEnergyStored();
 						tileTarget.DarkEnergy.consumeEnergy(transfer);
 						this.DarkEnergy.addEnergy(transfer);
-						write(tag);
-						markDirty();
+						save(tag);
+						setChanged();
 					}
 					if(tileTarget.LightEnergy.getEnergyStored() > 0 && this.LightEnergy.getEnergyStored() < 1000000){
 						int transfer = tileTarget.LightEnergy.getEnergyStored();
 						tileTarget.LightEnergy.consumeEnergy(transfer);
 						this.LightEnergy.addEnergy(transfer);
-						write(tag);
-						markDirty();
+						save(tag);
+						setChanged();
 					}
 				}else{
 					energyblocks = null;
@@ -334,16 +334,16 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	}
 */
 	@Override
-	public void read(BlockState blockState,CompoundNBT tag) {
+	public void load(BlockState blockState,CompoundNBT tag) {
 		CompoundNBT invTag = tag.getCompound("inv");
 		handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) inventory).deserializeNBT(invTag));
-		super.read(blockState,tag);
+		super.load(blockState,tag);
 		readRestorableNBT(tag);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT tag) {
-		super.write(tag);
+	public CompoundNBT save(CompoundNBT tag) {
+		super.save(tag);
 		handler.ifPresent(h -> {
 			CompoundNBT compound = ((INBTSerializable<CompoundNBT>) inventory).serializeNBT();
 			tag.put("inv", compound);
@@ -398,28 +398,28 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT tag = new CompoundNBT();
-		this.write(tag);
+		this.save(tag);
 
 		// the number here is generally ignored for non-vanilla TileEntities, 0 is safest
-		return new SUpdateTileEntityPacket(this.getPos(), 0 , tag);
+		return new SUpdateTileEntityPacket(this.getBlockPos(), 0 , tag);
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT tag = new CompoundNBT();
-		write(tag);
+		save(tag);
 		return tag;
 	}
 
 	@Override
 	public void handleUpdateTag(BlockState blockState,CompoundNBT tag) {
-		this.read(blockState,tag);
+		this.load(blockState,tag);
 	}
 
 	// this method gets called on the client when it receives the packet that was sent in the previous method
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.read(this.getBlockState(), pkt.getNbtCompound());
+		this.load(this.getBlockState(), pkt.getTag());
 	}
 
 

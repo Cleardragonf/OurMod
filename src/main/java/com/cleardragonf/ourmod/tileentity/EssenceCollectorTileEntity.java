@@ -63,8 +63,8 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
 		compound.putInt("fireenergy", this.FireEnergy.getEnergyStored());
 		compound.putInt("waterenergy", this.WaterEnergy.getEnergyStored());
 		compound.putInt("airenergy", this.AirEnergy.getEnergyStored());
@@ -75,8 +75,8 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 	}
 
 	@Override
-	public void read(BlockState blockState,CompoundNBT compound) {
-		super.read(blockState, compound);
+	public void load(BlockState blockState,CompoundNBT compound) {
+		super.load(blockState, compound);
 		readRestorableNBT(compound);
 	}
 
@@ -89,35 +89,35 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 	}
 
 	private void playSound(SoundEvent sound) {
-		double dx = (double) this.pos.getX() + 0.5D;
-		double dy = (double) this.pos.getY() + 0.5D;
-		double dz = (double) this.pos.getZ() + 0.5D;
-		this.world.playSound((PlayerEntity) null, dx, dy, dz, sound, SoundCategory.BLOCKS, 0.5f,
-				this.world.rand.nextFloat() * 0.1f + 0.9f);
+		double dx = (double) this.worldPosition.getX() + 0.5D;
+		double dy = (double) this.worldPosition.getY() + 0.5D;
+		double dz = (double) this.worldPosition.getZ() + 0.5D;
+		this.level.playSound((PlayerEntity) null, dx, dy, dz, sound, SoundCategory.BLOCKS, 0.5f,
+				this.level.random.nextFloat() * 0.1f + 0.9f);
 	}
 
 	@Override
-	public boolean receiveClientEvent(int id, int type) {
+	public boolean triggerEvent(int id, int type) {
 		if (id == 1) {
 			this.numPlayersUsing = type;
 			return true;
 		} else {
-			return super.receiveClientEvent(id, type);
+			return super.triggerEvent(id, type);
 		}
 	}
 
 	protected void onOpenOrClose() {
 		Block block = this.getBlockState().getBlock();
 		if (block instanceof EssenceCollector) {
-			this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
-			this.world.notifyNeighborsOfStateChange(this.pos, block);
+			this.level.blockEvent(this.worldPosition, block, 1, this.numPlayersUsing);
+			this.level.updateNeighborsAt(this.worldPosition, block);
 		}
 	}
 
 	public static int getPlayersUsing(IBlockReader reader, BlockPos pos) {
 		BlockState blockstate = reader.getBlockState(pos);
 		if (blockstate.hasTileEntity()) {
-			TileEntity tileentity = reader.getTileEntity(pos);
+			TileEntity tileentity = reader.getBlockEntity(pos);
 			if (tileentity instanceof EssenceCollectorTileEntity) {
 				return ((EssenceCollectorTileEntity) tileentity).numPlayersUsing;
 			}
@@ -126,14 +126,14 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 	}
 
 	@Override
-	public void updateContainingBlockInfo() {
-		super.updateContainingBlockInfo();
+	public void clearCache() {
+		super.clearCache();
 	}
 
 	
 	@Override
-	public void remove() {
-		super.remove();
+	public void setRemoved() {
+		super.setRemoved();
 	}
 
 
@@ -152,8 +152,8 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 	}
 
 	private void execute() {
-		final BlockPos tilePos = this.pos;
-		final World world = this.world;
+		final BlockPos tilePos = this.worldPosition;
+		final World world = this.level;
 		if (world == null){
 			return;
 		}
@@ -165,14 +165,14 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 		int lightBlocksFound = 0;
 		int multiplierBlocksFound = 0;
 
-		Iterable<BlockPos> mutable = new BlockPos.Mutable().getAllInBoxMutable(pos.getX()-5,pos.getY()-5,pos.getZ()-5,pos.getX() +5,pos.getY() +5,pos.getZ()+5);
+		Iterable<BlockPos> mutable = BlockPos.betweenClosed(worldPosition.getX()-5,worldPosition.getY()-5,worldPosition.getZ()-5,worldPosition.getX() +5,worldPosition.getY() +5,worldPosition.getZ()+5);
 
 		for (BlockPos block : mutable) {
 			//the cause for issues is the getX is depending on the X axis along with the others...need it to loop through...and then utilize only that loops number...
 			//final int dist = (block.getX()*block.getX()) + (block.getY()*block.getY()) + (block.getZ() * block.getZ());
-			int posX = this.getPos().getX() - block.getX();
-			int posY = this.getPos().getY() - block.getY();
-			int posZ = this.getPos().getZ() - block.getZ();
+			int posX = this.getBlockPos().getX() - block.getX();
+			int posY = this.getBlockPos().getY() - block.getY();
+			int posZ = this.getBlockPos().getZ() - block.getZ();
 			final int dist = (posX * posX) + (posY * posY) + (posZ * posZ);
 			if(dist>25){
 				continue;
@@ -185,9 +185,9 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 			final BlockState blockState = world.getBlockState(block);
 			final FluidState fluidState = world.getFluidState(block);
 			final Block targetblock = blockState.getBlock();
-			if(targetblock instanceof FireBlock || targetblock == BlockInitNew.FIRE_MANA.get() || targetblock == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.LAVA)) || targetblock==Blocks.CAMPFIRE){
+			if(targetblock instanceof FireBlock || targetblock == BlockInitNew.FIRE_MANA.get() || targetblock == Blocks.FIRE || (!fluidState.isEmpty() && fluidState.is(FluidTags.LAVA)) || targetblock==Blocks.CAMPFIRE){
 				++fireBlocksFound;
-			}else if(targetblock == Blocks.WATER || targetblock == BlockInitNew.WATER_MANA.get()|| (!fluidState.isEmpty() && fluidState.isTagged(FluidTags.WATER))){
+			}else if(targetblock == Blocks.WATER || targetblock == BlockInitNew.WATER_MANA.get()|| (!fluidState.isEmpty() && fluidState.is(FluidTags.WATER))){
 				++waterBlocksFound;
 			}else if(targetblock == Blocks.AIR|| targetblock == BlockInitNew.AIR_MANA.get()){
 				++airBlocksFound;
@@ -196,10 +196,10 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 					|| targetblock == Blocks.NETHERRACK || targetblock == Blocks.OBSIDIAN || targetblock == Blocks.PODZOL || targetblock == Blocks.PRISMARINE ||targetblock ==  Blocks.QUARTZ_BLOCK
 					|| targetblock == Blocks.SAND){
 				++earthBlocksFound;
-			}else if(targetblock == BlockInitNew.DARK_MANA.get() || targetblock.getLightValue(targetblock.getDefaultState(), world, pos) < 2) {
+			}else if(targetblock == BlockInitNew.DARK_MANA.get() || targetblock.getLightValue(targetblock.defaultBlockState(), world, worldPosition) < 2) {
 				++darkBlocksFound;
 			}
-			else if(targetblock == BlockInitNew.LIGHT_MANA.get() || targetblock.getLightValue(targetblock.getDefaultState(), world, pos) > 2){
+			else if(targetblock == BlockInitNew.LIGHT_MANA.get() || targetblock.getLightValue(targetblock.defaultBlockState(), world, worldPosition) > 2){
 				++lightBlocksFound;
 			}else{
 				System.out.println(targetblock.toString());
@@ -222,7 +222,7 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 		}else{
 			FireEnergy.addEnergy(fireBlocksFound * 1);
 			needsSave = true;
-			write(tag);
+			save(tag);
 		}
 
 		if(this.WaterEnergy.getEnergyStored() >= 100000){
@@ -230,38 +230,38 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 		}else{
 			WaterEnergy.addEnergy(waterBlocksFound * 1);
 			needsSave = true;
-			write(tag);
+			save(tag);
 		}
 		if(this.AirEnergy.getEnergyStored() >= 100000){
 
 		}else{
 			AirEnergy.addEnergy(airBlocksFound * 1);
 			needsSave = true;
-			write(tag);
+			save(tag);
 		}
 		if(this.DarkEnergy.getEnergyStored() >= 100000){
 
 		}else{
 			DarkEnergy.addEnergy(darkBlocksFound * 1);
 			needsSave = true;
-			write(tag);
+			save(tag);
 		}
 		if(this.EarthEnergy.getEnergyStored() >= 100000){
 
 		}else{
 			EarthEnergy.addEnergy(earthBlocksFound * 1);
 			needsSave = true;
-			write(tag);
+			save(tag);
 		}
 		if(this.LightEnergy.getEnergyStored() >= 100000){
 
 		}else{
 			LightEnergy.addEnergy(lightBlocksFound * 1);
 			needsSave = true;
-			write(tag);
+			save(tag);
 		}
 		if(needsSave){
-			this.markDirty();
+			this.setChanged();
 		}
 	}
 
@@ -279,19 +279,19 @@ public class EssenceCollectorTileEntity extends TileEntity implements ITickableT
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		this.write(tag);
+		this.save(tag);
 		return super.getUpdatePacket();
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
-		write(tag);
+		save(tag);
 		return tag;
 	}
 
 	@Override
 	public void handleUpdateTag(BlockState blockState,CompoundNBT tag) {
-		this.read(blockState, tag);
+		this.load(blockState, tag);
 	}
 
 

@@ -43,9 +43,9 @@ public class QuarryTileEntity extends TileEntity implements ITickableTileEntity{
 	
 	private void init() {
 		initialized = true;
-		x = this.pos.getX() - 1;
-		y = this.pos.getY() - 1;
-		z = this.pos.getZ() - 1;
+		x = this.worldPosition.getX() - 1;
+		y = this.worldPosition.getY() - 1;
+		z = this.worldPosition.getZ() - 1;
 		tick = 0;
 	}
 
@@ -55,7 +55,7 @@ public class QuarryTileEntity extends TileEntity implements ITickableTileEntity{
 		for (int x = 0; x < 3; x++) {
 			for (int z = 0; z < 3; z++) {
 				BlockPos posToBreak = new BlockPos(this.x + x, this.y, this.z + z);
-				blocksRemoved[index] = this.world.getBlockState(posToBreak).getBlock();
+				blocksRemoved[index] = this.level.getBlockState(posToBreak).getBlock();
 				destroyBlock(posToBreak, true, null);
 				index++;
 			}
@@ -64,29 +64,29 @@ public class QuarryTileEntity extends TileEntity implements ITickableTileEntity{
 	}
 
 	private boolean destroyBlock(BlockPos pos, boolean dropBlock, @Nullable Entity entity) {
-		BlockState blockstate = world.getBlockState(pos);
-		if(blockstate.isAir(world, pos))return false;
+		BlockState blockstate = level.getBlockState(pos);
+		if(blockstate.isAir(level, pos))return false;
 		else {
-			FluidState ifluidstate = world.getFluidState(pos);
-			world.playEvent(2001, pos, Block.getStateId(blockstate));
+			FluidState ifluidstate = level.getFluidState(pos);
+			level.levelEvent(2001, pos, Block.getId(blockstate));
 			if(dropBlock) {
-				TileEntity tileentity= blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
-				Block.spawnDrops(blockstate, world, this.pos.add(0, 1.5, 0), tileentity, entity, ItemStack.EMPTY);
+				TileEntity tileentity= blockstate.hasTileEntity() ? level.getBlockEntity(pos) : null;
+				Block.dropResources(blockstate, level, this.worldPosition.offset(0, 1.5, 0), tileentity, entity, ItemStack.EMPTY);
 			}
-			return world.setBlockState(pos, ifluidstate.getBlockState(), 3);
+			return level.setBlock(pos, ifluidstate.getFluidState().createLegacyBlock(), 3);
 		}
 		
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.put("initvalues", NBTHelper.toNBT(this));
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state,CompoundNBT compound) {
-		super.read(state,compound);
+	public void load(BlockState state,CompoundNBT compound) {
+		super.load(state,compound);
 		CompoundNBT initValues = compound.getCompound("initvalues");
 		if(initValues != null) {
 			this.x = initValues.getInt("x");

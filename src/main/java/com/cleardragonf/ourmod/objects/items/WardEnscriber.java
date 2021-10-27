@@ -26,31 +26,31 @@ public class WardEnscriber extends Item{
     public ActionResultType onItemUse(ItemUseContext context) {
 
         CompoundNBT tag;
-        ItemStack itemStack = context.getItem().getStack();
+        ItemStack itemStack = context.getItemInHand().getStack();
         if(itemStack.hasTag()){
             tag = itemStack.getTag();
         }else{
             tag = new CompoundNBT();
         }
 
-        World world = context.getWorld();
-        BlockPos blockpos = context.getPos();
+        World world = context.getLevel();
+        BlockPos blockpos = context.getClickedPos();
         BlockState blockstate = world.getBlockState(blockpos);
-        TileEntity tileEntity = world.getTileEntity(blockpos);
+        TileEntity tileEntity = world.getBlockEntity(blockpos);
         if(tileEntity instanceof MasterWardStoneTileEntity){
             if(tag.contains("wardshape")){
 
             }else{
                 ITextComponent text = new TranslationTextComponent("Please select a Energy Source First");
-                context.getPlayer().sendMessage(text, context.getPlayer().getUniqueID());
+                context.getPlayer().sendMessage(text, context.getPlayer().getUUID());
             }
             return ActionResultType.SUCCESS;
         }
         else if(tileEntity instanceof BoundaryWardStoneTileEntity){
             CompoundNBT pos = new CompoundNBT();
-                pos.putInt("x", tileEntity.getPos().getX());
-                pos.putInt("y", tileEntity.getPos().getY());
-                pos.putInt("z", tileEntity.getPos().getZ());
+                pos.putInt("x", tileEntity.getBlockPos().getX());
+                pos.putInt("y", tileEntity.getBlockPos().getY());
+                pos.putInt("z", tileEntity.getBlockPos().getZ());
             tag.put("wardshape", pos);
 
             itemStack.setTag(tag);

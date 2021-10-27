@@ -44,12 +44,12 @@ public class EssenceCollector extends Block {
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
 			Hand hand, BlockRayTraceResult result) {
-		if (!worldIn.isRemote) {
-			TileEntity tile = worldIn.getTileEntity(pos);
+		if (!worldIn.isClientSide()) {
+			TileEntity tile = worldIn.getBlockEntity(pos);
 			if (tile instanceof EssenceCollectorTileEntity) {
-				if(player.getHeldItem(hand).getItem() instanceof PowerEnscriber){
+				if(player.getItemInHand(hand).getItem() instanceof PowerEnscriber){
 
 				}else{
 					NetworkHooks.openGui((ServerPlayerEntity) player, (EssenceCollectorTileEntity) tile, pos);
@@ -62,32 +62,32 @@ public class EssenceCollector extends Block {
 	}
 
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof EssenceCollectorTileEntity) {
 			EssenceCollectorTileEntity tile = (EssenceCollectorTileEntity) tileEntity;
 			ItemStack item = new ItemStack(this);
 			CompoundNBT tag = new CompoundNBT();
-			((EssenceCollectorTileEntity)tileEntity).write(tag);
+			((EssenceCollectorTileEntity)tileEntity).save(tag);
 
 			item.setTag(tag);
 
 			ItemEntity entity = new ItemEntity(worldIn, pos.getX() + .5, pos.getY(), pos.getZ() + .5, item);
-			worldIn.addEntity(entity);
+			worldIn.addFreshEntity(entity);
 		}
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, worldIn, pos, newState, isMoving);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+		super.setPlacedBy(worldIn, pos, state, placer, stack);
 
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof EssenceCollectorTileEntity) {
 			CompoundNBT tag = stack.getTag();
 			if(tag != null) {
 				((EssenceCollectorTileEntity)tileEntity).readRestorableNBT(tag);
-				worldIn.notifyBlockUpdate(pos, getDefaultState(), getDefaultState(), Constants.BlockFlags.DEFAULT);
+				worldIn.sendBlockUpdated(pos, defaultBlockState(), defaultBlockState(), Constants.BlockFlags.DEFAULT);
 			}
 		}
 	}
