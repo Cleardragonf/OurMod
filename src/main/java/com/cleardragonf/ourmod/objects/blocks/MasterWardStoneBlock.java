@@ -46,39 +46,39 @@ public class MasterWardStoneBlock extends Block{
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player,
 											 Hand hand, BlockRayTraceResult result) {
-		if (!world.isRemote) {
-			TileEntity tile = world.getTileEntity(pos);
+		if (!world.isClientSide()) {
+			TileEntity tile = world.getBlockEntity(pos);
 			if (tile instanceof MasterWardStoneTileEntity) {
 
 				CompoundNBT tag;
-				ItemStack item = player.getHeldItem(hand);
+				ItemStack item = player.getItemInHand(hand);
 				if(item.hasTag()){
 					tag = item.getTag();
 				}else{
 					tag = new CompoundNBT();
 				}
 				if(tag.contains("wardshape")){
-					MasterWardStoneTileEntity tileEntity = (MasterWardStoneTileEntity) world.getTileEntity(pos);
+					MasterWardStoneTileEntity tileEntity = (MasterWardStoneTileEntity) world.getBlockEntity(pos);
 					if(tileEntity.boundaryWardStones.size() < 4){
 						tileEntity.addWardStone(tag.get("wardshape"));
-						player.sendMessage(new TranslationTextComponent("Successfully connected boundary " + tileEntity.boundaryWardStones.size()),player.getUniqueID());
+						player.sendMessage(new TranslationTextComponent("Successfully connected boundary " + tileEntity.boundaryWardStones.size()),player.getUUID());
 					}else{
-						player.sendMessage(new TranslationTextComponent("You've tried to add too many boundaries...Master Ward has been reset"), player.getUniqueID());
+						player.sendMessage(new TranslationTextComponent("You've tried to add too many boundaries...Master Ward has been reset"), player.getUUID());
 						tileEntity.boundaryWardStones.clear();
 					}
 
-					tileEntity.markDirty();
+					tileEntity.setChanged();
 					tileEntity.updateBlock();
 				}
 				if(tag.contains("energypos")){
-					MasterWardStoneTileEntity tileEntity = (MasterWardStoneTileEntity) world.getTileEntity(pos);
+					MasterWardStoneTileEntity tileEntity = (MasterWardStoneTileEntity) world.getBlockEntity(pos);
 					tileEntity.energyblocks = tag.get("energypos");
-					tileEntity.markDirty();
+					tileEntity.setChanged();
 					tileEntity.updateBlock();
 				}
-				if(player.getHeldItem(hand).getItem() instanceof WardEnscriber || player.getHeldItem(hand).getItem() instanceof PowerEnscriber){
+				if(player.getItemInHand(hand).getItem() instanceof WardEnscriber || player.getItemInHand(hand).getItem() instanceof PowerEnscriber){
 
 				}else{
 					NetworkHooks.openGui((ServerPlayerEntity) player, (MasterWardStoneTileEntity) tile, pos);
@@ -91,33 +91,33 @@ public class MasterWardStoneBlock extends Block{
 	}
 
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof MasterWardStoneTileEntity) {
 
 			((MasterWardStoneTileEntity)tileEntity).rescendWard();
 			MasterWardStoneTileEntity tile = (MasterWardStoneTileEntity) tileEntity;
 			ItemStack item = new ItemStack(this);
 			CompoundNBT tag = new CompoundNBT();
-			((MasterWardStoneTileEntity)tileEntity).write(tag);
+			((MasterWardStoneTileEntity)tileEntity).save(tag);
 
 			item.setTag(tag);
 			ItemEntity entity = new ItemEntity(worldIn, pos.getX() + .5, pos.getY(), pos.getZ() + .5, item);
-			worldIn.addEntity(entity);
+			worldIn.addFreshEntity(entity);
 		}
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, worldIn, pos, newState, isMoving);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+		super.setPlacedBy(worldIn, pos, state, placer, stack);
 
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof MasterWardStoneTileEntity) {
 			CompoundNBT tag = stack.getTag();
 			if(tag != null) {
 				((MasterWardStoneTileEntity)tileEntity).readRestorableNBT(tag);
-				worldIn.notifyBlockUpdate(pos, getDefaultState(), getDefaultState(), Constants.BlockFlags.DEFAULT);
+				worldIn.sendBlockUpdated(pos, defaultBlockState(), defaultBlockState(), Constants.BlockFlags.DEFAULT);
 			}
 		}
 	}

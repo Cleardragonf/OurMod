@@ -19,10 +19,10 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 
 	public EssenceCollectorScreen(EssenceCollectorContainer Container, PlayerInventory inv, ITextComponent titleIn) {
 		super(Container, inv, titleIn);
-		this.guiLeft = 0;
-		this.guiTop = 0;
-		this.xSize = 176;
-		this.ySize = 246;
+		this.leftPos = 0;
+		this.topPos = 0;
+		this.imageWidth = 176;
+		this.imageHeight = 246;
 	}
 	
 	@Override
@@ -33,33 +33,33 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack,int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(matrixStack,mouseX, mouseY);
-		this.font.drawString(matrixStack,this.title.getUnformattedComponentText(), 8.0f, 6.0f, 4210752);
+	protected void renderLabels(MatrixStack matrixStack,int mouseX, int mouseY) {
+		super.renderLabels(matrixStack,mouseX, mouseY);
+		this.font.draw(matrixStack,this.title.getContents(), 8.0f, 6.0f, 4210752);
 
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack,float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(MatrixStack matrixStack,float partialTicks, int mouseX, int mouseY) {
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-		this.minecraft.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-		int x = (this.width - this.xSize) / 2;
-		int y = (this.height - this.ySize) / 2;
-		this.blit(matrixStack,x, y, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(BACKGROUND_TEXTURE);
+		int x = (this.width - this.imageWidth) / 2;
+		int y = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack,x, y, 0, 0, this.imageWidth, this.imageHeight);
 		//x,y,texturex,texturey,width,height @RyuShiTenshiKage
 		//Air Essence GUI
 		///this.blit((x + 17),y + 34, 179,33,8, this.container.getAir().getEnergyStored()/ 1000);
-		this.blit(matrixStack,(x + 17),(y + 134) - (this.container.getFire().getEnergyStored()/1000), 179,132  - (this.container.getFire().getEnergyStored()/1000),8, (this.container.getFire().getEnergyStored()/ 1000));
-		this.blit(matrixStack,(x + 45),(y + 134) - (this.container.getWater().getEnergyStored()/1000), 179,132  - (this.container.getWater().getEnergyStored()/1000),8, (this.container.getWater().getEnergyStored()/ 1000));
-		this.blit(matrixStack,(x + 68),(y + 134) - (this.container.getAir().getEnergyStored()/1000), 179,132  - (this.container.getAir().getEnergyStored()/1000),8, (this.container.getAir().getEnergyStored()/ 1000));
-		this.blit(matrixStack,(x + 92),(y + 134) - (this.container.getEarth().getEnergyStored()/1000), 179,132  - (this.container.getEarth().getEnergyStored()/1000),8, (this.container.getEarth().getEnergyStored()/ 1000));
-		this.blit(matrixStack,(x + 120),(y + 134) - (this.container.getDark().getEnergyStored()/1000), 179,132  - (this.container.getDark().getEnergyStored()/1000),8, (this.container.getDark().getEnergyStored()/ 1000));
-		this.blit(matrixStack,(x + 148),(y + 134) - (this.container.getLight().getEnergyStored()/1000), 179,132  - (this.container.getLight().getEnergyStored()/1000),8, (this.container.getLight().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 17),(y + 134) - (this.menu.getFire().getEnergyStored()/1000), 179,132  - (this.menu.getFire().getEnergyStored()/1000),8, (this.menu.getFire().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 45),(y + 134) - (this.menu.getWater().getEnergyStored()/1000), 179,132  - (this.menu.getWater().getEnergyStored()/1000),8, (this.menu.getWater().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 68),(y + 134) - (this.menu.getAir().getEnergyStored()/1000), 179,132  - (this.menu.getAir().getEnergyStored()/1000),8, (this.menu.getAir().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 92),(y + 134) - (this.menu.getEarth().getEnergyStored()/1000), 179,132  - (this.menu.getEarth().getEnergyStored()/1000),8, (this.menu.getEarth().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 120),(y + 134) - (this.menu.getDark().getEnergyStored()/1000), 179,132  - (this.menu.getDark().getEnergyStored()/1000),8, (this.menu.getDark().getEnergyStored()/ 1000));
+		this.blit(matrixStack,(x + 148),(y + 134) - (this.menu.getLight().getEnergyStored()/1000), 179,132  - (this.menu.getLight().getEnergyStored()/1000),8, (this.menu.getLight().getEnergyStored()/ 1000));
 
 	}
 	protected void renderHoveredToolTip(MatrixStack matrixStack,int x, int y){
-		int relX = (this.width - this.xSize) /2;
-		int relY = (this.height - this.ySize) /2;
+		int relX = (this.width - this.imageWidth) /2;
+		int relY = (this.height - this.imageWidth) /2;
 		if(trueZone(relX + 17, relY + 34, 8,100,x,y)) {
 			tooltipText(matrixStack,"Fire: ", x, y);
 		}
@@ -78,7 +78,7 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 		if(trueZone(relX + 148, relY + 34, 8,100,x,y)) {
 			tooltipText(matrixStack,"Light: ", x, y);
 		}
-		super.renderHoveredTooltip(matrixStack,x, y);
+		super.renderTooltip(matrixStack,x, y);
 	}
 
 	private boolean trueZone(int OffsX, int OffsY, int Width, int Height, double MouseX, double MouseY){
@@ -92,22 +92,22 @@ public class EssenceCollectorScreen extends ContainerScreen<EssenceCollectorCont
 	public void tooltipText(MatrixStack matrixStack, String string, int x, int y) {
 		switch (string) {
 			case "Fire: ":
-				this.renderTooltip(matrixStack, new TranslationTextComponent("Fire: '" + this.container.getFire().getEnergyStored() + "'"), x, y);
+				this.renderTooltip(matrixStack, new TranslationTextComponent("Fire: '" + this.menu.getFire().getEnergyStored() + "'"), x, y);
 				break;
 			case "Water: ":
-				this.renderTooltip(matrixStack,new TranslationTextComponent("Water: '" + this.container.getWater().getEnergyStored() + "'"), x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Water: '" + this.menu.getWater().getEnergyStored() + "'"), x, y);
 				break;
 			case "Air: ":
-				this.renderTooltip(matrixStack,new TranslationTextComponent("Air: '" + this.container.getAir().getEnergyStored() + "'"), x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Air: '" + this.menu.getAir().getEnergyStored() + "'"), x, y);
 				break;
 			case "Earth: ":
-				this.renderTooltip(matrixStack,new TranslationTextComponent("Earth: '" + this.container.getEarth().getEnergyStored() + "'"), x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Earth: '" + this.menu.getEarth().getEnergyStored() + "'"), x, y);
 				break;
 			case "Dark: ":
-				this.renderTooltip(matrixStack,new TranslationTextComponent("Dark: '" + this.container.getDark().getEnergyStored() + "'"), x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Dark: '" + this.menu.getDark().getEnergyStored() + "'"), x, y);
 				break;
 			case "Light: ":
-				this.renderTooltip(matrixStack,new TranslationTextComponent("Light: '" + this.container.getLight().getEnergyStored() + "'"), x, y);
+				this.renderTooltip(matrixStack,new TranslationTextComponent("Light: '" + this.menu.getLight().getEnergyStored() + "'"), x, y);
 				break;
 		}
 	}

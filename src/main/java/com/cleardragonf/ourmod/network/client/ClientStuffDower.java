@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class ClientStuffDower {
     public static void update(double temperature, double thirst, int awakeTimer, UUID uuid) {
-        if (uuid.equals(PlayerEntity.getUUID(Minecraft.getInstance().player.getGameProfile()))) {
+        if (uuid.equals(PlayerEntity.createPlayerUUID(Minecraft.getInstance().player.getGameProfile()))) {
             EntityStats.setTemperature((LivingEntity)(Minecraft.getInstance()).player, temperature);
             EntityStats.setThirst((LivingEntity)(Minecraft.getInstance()).player, thirst);
             EntityStats.setAwakeTime((LivingEntity)(Minecraft.getInstance().player), awakeTimer);

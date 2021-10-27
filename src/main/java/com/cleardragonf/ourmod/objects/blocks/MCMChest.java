@@ -39,9 +39,9 @@ import javax.annotation.Nullable;
 public class MCMChest extends Block {
 
 	public MCMChest() {
-		super(Properties.create(Material.IRON)
+		super(Properties.of(Material.METAL)
 				.sound(SoundType.METAL)
-				.hardnessAndResistance(2.0f)
+				.strength(2.0f)
 		);
 	}
 
@@ -52,7 +52,7 @@ public class MCMChest extends Block {
 
 	@Override
 	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
-		return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state,world ,pos) : 0;
+		return state.getValue(BlockStateProperties.POWERED) ? super.getLightValue(state,world ,pos) : 0;
 	}
 
 	@Nullable
@@ -62,37 +62,37 @@ public class MCMChest extends Block {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-		super.onBlockPlacedBy(world, pos, state, entity, stack);
+	public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+		super.setPlacedBy(world, pos, state, entity, stack);
 
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if(tileEntity instanceof MCMChestTileEntity) {
 			CompoundNBT tag = stack.getTag();
 			if(tag != null) {
 				((MCMChestTileEntity)tileEntity).readRestorableNBT(tag);
-				world.notifyBlockUpdate(pos, getDefaultState(), getDefaultState(), Constants.BlockFlags.DEFAULT);
+				world.sendBlockUpdated(pos, defaultBlockState(), defaultBlockState(), Constants.BlockFlags.DEFAULT);
 			}
 		}
 	}
 
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-		if (!world.isRemote) {
-			TileEntity tile = world.getTileEntity(pos);
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+		if (!world.isClientSide()) {
+			TileEntity tile = world.getBlockEntity(pos);
 			if (tile instanceof MCMChestTileEntity) {
 
 				CompoundNBT tag;
-				ItemStack item = player.getHeldItem(hand);
+				ItemStack item = player.getItemInHand(hand);
 				if(item.hasTag()){
 					tag = item.getTag();
 				}else{
 					tag = new CompoundNBT();
 				}
 				if(tag.contains("energypos")){
-					MCMChestTileEntity tileEntity = (MCMChestTileEntity) world.getTileEntity(pos);
+					MCMChestTileEntity tileEntity = (MCMChestTileEntity) world.getBlockEntity(pos);
 					tileEntity.energyblocks = tag.get("energypos");
-					tileEntity.markDirty();
+					tileEntity.setChanged();
 					tileEntity.updateBlock();
 				}
 
@@ -106,28 +106,28 @@ public class MCMChest extends Block {
 	}
 
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof MCMChestTileEntity) {
 			MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
 			ItemStack item = new ItemStack(this);
 			CompoundNBT tag = new CompoundNBT();
-			((MCMChestTileEntity)tileEntity).write(tag);
+			((MCMChestTileEntity)tileEntity).save(tag);
 
 			item.setTag(tag);
 
 			ItemEntity entity = new ItemEntity(worldIn, pos.getX() + .5, pos.getY(), pos.getZ() + .5, item);
-			worldIn.addEntity(entity);
+			worldIn.addFreshEntity(entity);
 		}
 	}
 
 	public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity) {
-		Vector3d vec = entity.getPositionVec();
-		return Direction.getFacingFromVector((float) (vec.x - clickedBlock.getX()), (float) (vec.y - clickedBlock.getY()), (float) (vec.z - clickedBlock.getZ()));
+		Vector3d vec = entity.position();
+		return Direction.getNearest((float) (vec.x - clickedBlock.getX()), (float) (vec.y - clickedBlock.getY()), (float) (vec.z - clickedBlock.getZ()));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(BlockStateProperties.FACING, BlockStateProperties.POWERED);
 	}
 }

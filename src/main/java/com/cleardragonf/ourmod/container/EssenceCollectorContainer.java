@@ -23,9 +23,9 @@ public class EssenceCollectorContainer extends Container {
 								  final EssenceCollectorTileEntity tileEntity) {
 		super(ModContainerTypes.ESSENCE_COLLECTOR.get(), windowId);
 		this.tileEntity = tileEntity;
-		this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
+		this.canInteractWithCallable = IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos());
 
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getFire().getEnergyStored();
@@ -36,7 +36,7 @@ public class EssenceCollectorContainer extends Container {
 				tileEntity.FireEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getWater().getEnergyStored();
@@ -47,7 +47,7 @@ public class EssenceCollectorContainer extends Container {
 				tileEntity.WaterEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getAir().getEnergyStored();
@@ -58,7 +58,7 @@ public class EssenceCollectorContainer extends Container {
 				tileEntity.AirEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getEarth().getEnergyStored();
@@ -69,7 +69,7 @@ public class EssenceCollectorContainer extends Container {
 				tileEntity.EarthEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getDark().getEnergyStored();
@@ -80,7 +80,7 @@ public class EssenceCollectorContainer extends Container {
 				tileEntity.DarkEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getLight().getEnergyStored();
@@ -99,7 +99,7 @@ public class EssenceCollectorContainer extends Container {
 														 final PacketBuffer data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
 		Objects.requireNonNull(data, "data cannot be null");
-		final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
+		final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 		if (tileAtPos instanceof EssenceCollectorTileEntity) {
 			return (EssenceCollectorTileEntity) tileAtPos;
 		}
@@ -111,8 +111,8 @@ public class EssenceCollectorContainer extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(canInteractWithCallable, playerIn, BlockInitNew.ESSENCE_COLLECTOR.get());
+	public boolean stillValid(PlayerEntity playerIn) {
+		return stillValid(canInteractWithCallable, playerIn, BlockInitNew.ESSENCE_COLLECTOR.get());
 	}
 
 	public CustomEnergyStorage getAir(){

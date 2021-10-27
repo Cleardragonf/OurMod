@@ -19,32 +19,32 @@ public class PortableChestScreen extends ContainerScreen<PortableChestContainer>
 	
 	public PortableChestScreen(PortableChestContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
-		this.guiLeft = 0;
-		this.guiTop = 0;
-		this.xSize = 175;
-		this.ySize = 183;
+		this.leftPos = 0;
+		this.topPos = 0;
+		this.imageWidth = 175;
+		this.imageHeight = 183;
 	}
 	
 	@Override
 	public void render(MatrixStack matrixStack,final int mouseX, final int mouseY, final float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack,mouseX, mouseY);
+		this.renderTooltip(matrixStack,mouseX, mouseY);
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack,int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
-		this.font.drawString(matrixStack,this.title.getUnformattedComponentText(), 8.0f, 6.0f, 4210752);
-		this.font.drawString(matrixStack,this.playerInventory.getDisplayName().getUnformattedComponentText(), 8.0f, 90.0f, 4210752);
+	protected void renderLabels(MatrixStack matrixStack,int mouseX, int mouseY) {
+		super.renderLabels(matrixStack, mouseX, mouseY);
+		this.font.draw(matrixStack,this.title.getContents(), 8.0f, 6.0f, 4210752);
+		this.font.draw(matrixStack,this.inventory.getDisplayName().getContents(), 8.0f, 90.0f, 4210752);
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrix,float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(MatrixStack matrix,float partialTicks, int mouseX, int mouseY) {
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-		this.minecraft.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-		int x = (this.width - this.xSize) / 2;
-		int y = (this.height - this.ySize) / 2;
-		this.blit(matrix, x, y, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(BACKGROUND_TEXTURE);
+		int x = (this.width - this.imageWidth) / 2;
+		int y = (this.height - this.imageHeight) / 2;
+		this.blit(matrix, x, y, 0, 0, this.imageWidth, this.imageHeight);
 	}
 }

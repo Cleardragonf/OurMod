@@ -19,9 +19,9 @@ public class EntityEffects {
 
     public static final Effect THIRST = register("thirst", new EntityEffect(EffectType.HARMFUL, 5797459));
 
-    public static final Effect HEAT_RESISTANCE = register("heat_resistance", new EntityEffect(EffectType.BENEFICIAL, 12221756)).addAttributesModifier(SurvivalAttributes.HEAT_RESISTANCE, "795606d6-4ac6-4ae7-8311-63ccdb293eb3", 25.0D, AttributeModifier.Operation.ADDITION);
+    public static final Effect HEAT_RESISTANCE = register("heat_resistance", new EntityEffect(EffectType.BENEFICIAL, 12221756)).addAttributeModifier(SurvivalAttributes.HEAT_RESISTANCE, "795606d6-4ac6-4ae7-8311-63ccdb293eb3", 25.0D, AttributeModifier.Operation.ADDITION);
 
-    public static final Effect COLD_RESISTANCE = register("cold_resistance", new EntityEffect(EffectType.BENEFICIAL, 5750248)).addAttributesModifier(SurvivalAttributes.COLD_RESISTANCE, "5cebe402-4f28-4d41-8539-2496f900ef90", 25.0D, AttributeModifier.Operation.ADDITION);
+    public static final Effect COLD_RESISTANCE = register("cold_resistance", new EntityEffect(EffectType.BENEFICIAL, 5750248)).addAttributeModifier(SurvivalAttributes.COLD_RESISTANCE, "5cebe402-4f28-4d41-8539-2496f900ef90", 25.0D, AttributeModifier.Operation.ADDITION);
 
     public static final Effect CHILLED = register("chilled", new EntityEffect(EffectType.BENEFICIAL, 5750248));
 

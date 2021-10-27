@@ -34,10 +34,10 @@ public class PortableChest extends Block {
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
 			Hand handIn, BlockRayTraceResult result) {
-		if (!worldIn.isRemote) {
-			TileEntity tile = worldIn.getTileEntity(pos);
+		if (!worldIn.isClientSide()) {
+			TileEntity tile = worldIn.getBlockEntity(pos);
 			if (tile instanceof PortableChestTileEntity) {
 				NetworkHooks.openGui((ServerPlayerEntity) player, (PortableChestTileEntity) tile, pos);
 				return ActionResultType.SUCCESS;
@@ -47,11 +47,11 @@ public class PortableChest extends Block {
 	}
 
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {
-			TileEntity te = worldIn.getTileEntity(pos);
+			TileEntity te = worldIn.getBlockEntity(pos);
 			if (te instanceof PortableChestTileEntity) {
-				InventoryHelper.dropItems(worldIn, pos, ((PortableChestTileEntity) te).getItems());
+				InventoryHelper.dropContents(worldIn, pos, ((PortableChestTileEntity) te).getItems());
 			}
 		}
 	}

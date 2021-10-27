@@ -20,7 +20,7 @@ public class WardInside extends Block {
     public static final IntegerProperty LIGHT = IntegerProperty.create("light", 0, 15);
 
     public WardInside() {
-        super(Properties.create(Material.AIR)
+        super(Properties.of(Material.AIR)
         );
     }
 
@@ -28,7 +28,7 @@ public class WardInside extends Block {
 
     @Override
     public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
-        return state.get(LIGHT);
+        return state.getValue(LIGHT);
     }
 
     /**
@@ -48,7 +48,7 @@ public class WardInside extends Block {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.LIT, BlockStateProperties.POWERED, LIGHT);
     }
 }

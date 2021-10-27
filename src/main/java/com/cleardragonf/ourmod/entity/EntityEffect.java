@@ -20,23 +20,23 @@ public class EntityEffect extends Effect {
         }
         else if (this == EntityEffects.HYPOTHERMIA && entityLivingBaseIn instanceof PlayerEntity) {
             if (!((PlayerEntity)entityLivingBaseIn).attackable()) {
-                entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPOTHERMIA, 0.4F);
+                entityLivingBaseIn.hurt(CDamageSource.HYPOTHERMIA, 0.4F);
             }
-            if(((PlayerEntity) entityLivingBaseIn).getFoodStats().getFoodLevel() > 0){
+            if(((PlayerEntity) entityLivingBaseIn).getFoodData().getFoodLevel() > 0){
 
             }else{
-                entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPOTHERMIA, 1);
+                entityLivingBaseIn.hurt(CDamageSource.HYPOTHERMIA, 1);
             }
 
         }
         else if (this == EntityEffects.HYPERTHERMIA && entityLivingBaseIn instanceof PlayerEntity) {
             if (!((PlayerEntity)entityLivingBaseIn).attackable()) {
-                entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPERTHERMIA, 0.4F);
+                entityLivingBaseIn.hurt(CDamageSource.HYPERTHERMIA, 0.4F);
             }
             if(EntityStats.getThirst((PlayerEntity)entityLivingBaseIn) > 0){
 
             }else{
-                entityLivingBaseIn.attackEntityFrom(CDamageSource.HYPERTHERMIA, 1);
+                entityLivingBaseIn.hurt(CDamageSource.HYPERTHERMIA, 1);
             }
 
 
@@ -49,21 +49,21 @@ public class EntityEffect extends Effect {
         }
         else if (this == EntityEffects.ANTI_HOSTILE_WARD && entityLivingBaseIn instanceof MonsterEntity){
             if (!((MonsterEntity)entityLivingBaseIn).attackable()) {
-                entityLivingBaseIn.attackEntityFrom(CDamageSource.WARDS, 50.0F);
+                entityLivingBaseIn.hurt(CDamageSource.WARDS, 50.0F);
             }
-                entityLivingBaseIn.attackEntityFrom(CDamageSource.WARDS, 50.0f);
+                entityLivingBaseIn.hurt(CDamageSource.WARDS, 50.0f);
 
         }
         else if (this == EntityEffects.ANTI_PASSIVE_WARD && entityLivingBaseIn instanceof AnimalEntity){
             if (!((AnimalEntity)entityLivingBaseIn).attackable()) {
-                entityLivingBaseIn.attackEntityFrom(CDamageSource.WARDS, 50.0F);
+                entityLivingBaseIn.hurt(CDamageSource.WARDS, 50.0F);
             }
-            entityLivingBaseIn.attackEntityFrom(CDamageSource.WARDS, 50.0f);
+            entityLivingBaseIn.hurt(CDamageSource.WARDS, 50.0f);
 
         }else{
             System.out.println(entityLivingBaseIn.getClass());
         }
-        super.performEffect(entityLivingBaseIn, amplifier);
+        super.applyEffectTick(entityLivingBaseIn, amplifier);
     }
 
     public boolean isReady(int duration, int amplifier) {

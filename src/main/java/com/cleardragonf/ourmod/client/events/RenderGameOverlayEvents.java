@@ -27,7 +27,7 @@ public class RenderGameOverlayEvents extends AbstractGui {
 
     static Minecraft mc = Minecraft.getInstance();
 
-    static IngameGui ingameGUI = mc.ingameGUI;
+    static IngameGui ingameGUI = mc.gui;
 
     static long healthUpdateCounter;
 
@@ -47,9 +47,9 @@ public class RenderGameOverlayEvents extends AbstractGui {
         //mc.fontRenderer.drawString("Player Thirst" + EntityStats.getThirst(player), mc.getMainWindow().getScaledWidth() + (10 -mc.getMainWindow().getScaledWidth()), mc.getMainWindow().getScaledHeight() - 30, 0xfffff);
         //mc.fontRenderer.drawString("Player Temp" + EntityStats.getTemperature(player), mc.getMainWindow().getScaledWidth() + (10 -mc.getMainWindow().getScaledWidth()), mc.getMainWindow().getScaledHeight() - 40, 0xfffff);
 
-        mc.fontRenderer.drawString(matrixStack,"Player Sleepy" + EntityStats.getAwakeTime(player), mc.getMainWindow().getScaledWidth() -100, mc.getMainWindow().getScaledHeight() - 60, 0xfffff);
-        int scaledWidth = mc.getMainWindow().getScaledWidth();
-        int scaledHeight = mc.getMainWindow().getScaledHeight();
+        mc.font.draw(matrixStack,"Player Sleepy" + EntityStats.getAwakeTime(player), mc.getWindow().getGuiScaledWidth() -100, mc.getWindow().getGuiScaledHeight() - 60, 0xfffff);
+        int scaledWidth = mc.getWindow().getGuiScaledWidth();
+        int scaledHeight = mc.getWindow().getGuiScaledHeight();
 
         renderThirstOverlay(scaledWidth, scaledHeight, player, matrixStack);
         renderTemperatureOverlay(scaledWidth, scaledHeight,  player, matrixStack);
@@ -61,12 +61,12 @@ public class RenderGameOverlayEvents extends AbstractGui {
     }
 
     private static void renderThirstOverlay(int scaledWidth, int scaledHeight, PlayerEntity player, MatrixStack matrixStack) {
-        int width = Minecraft.getInstance().getMainWindow().getScaledWidth();
-        int height = Minecraft.getInstance().getMainWindow().getScaledHeight();
-        Minecraft.getInstance().getRenderManager().textureManager.bindTexture(GUI_ICONS);
+        int width = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+        int height = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+        Minecraft.getInstance().getEntityRenderDispatcher().textureManager.bind(GUI_ICONS);
         int yStart = (height-150)/2 ;
-        int yPosition = (mc.getMainWindow().getScaledHeight() -mc.getMainWindow().getScaledHeight()) + (mc.getMainWindow().getScaledHeight() - 10);
-        int xPosition = (mc.getMainWindow().getScaledWidth() - 100);
+        int yPosition = (mc.getWindow().getGuiScaledHeight() -mc.getWindow().getGuiScaledHeight()) + (mc.getWindow().getGuiScaledHeight() - 10);
+        int xPosition = (mc.getWindow().getGuiScaledWidth() - 100);
 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableRescaleNormal();
@@ -172,25 +172,25 @@ public class RenderGameOverlayEvents extends AbstractGui {
 
         }
 
-        mc.fontRenderer.drawString(matrixStack,"Thirst: " + (int)EntityStats.getThirst((LivingEntity)player), xPosition, yPosition -40 , 0x00ccff);
+        mc.font.draw(matrixStack,"Thirst: " + (int)EntityStats.getThirst((LivingEntity)player), xPosition, yPosition -40 , 0x00ccff);
     }
 
     private static void EvenemptyThirstCounter(int thirst, int xPosition, int yPosition, MatrixStack matrixStack) {
         int empty = (20 - thirst)/2;
         for (int i = 0; i < empty; i++) {
-            mc.ingameGUI.blit(matrixStack,xPosition + ((thirst/2) * 10) + (i * 10), yPosition - 30, 31, 4, 10, 15);
+            mc.gui.blit(matrixStack,xPosition + ((thirst/2) * 10) + (i * 10), yPosition - 30, 31, 4, 10, 15);
         }
 
     }
     private static void OddemptyThirstCounter(int thirst, int xPosition, int yPosition, MatrixStack matrixStack) {
         int empty = (20 - thirst)/2;
         for (int i = 0; i < empty + 1; i++) {
-            mc.ingameGUI.blit(matrixStack,xPosition + ((thirst/2) * 10) + (i * 10), yPosition - 30, 31, 4, 10, 15);
+            mc.gui.blit(matrixStack,xPosition + ((thirst/2) * 10) + (i * 10), yPosition - 30, 31, 4, 10, 15);
         }
 
     }
     private static void halfthirstBarCounter(int thirst, int xPosition, int yPosition, MatrixStack matrixStack) {
-        mc.ingameGUI.blit(matrixStack,xPosition + ((thirst /2)* 10), yPosition - 30, 19, 4, 10, 15);
+        mc.gui.blit(matrixStack,xPosition + ((thirst /2)* 10), yPosition - 30, 19, 4, 10, 15);
 
     }
     public static void fullthirstBarCounter(int i, int xPosition, int yPosition, MatrixStack matrixStack){
@@ -200,17 +200,17 @@ public class RenderGameOverlayEvents extends AbstractGui {
             int amount = 20-i;
             int remainder = (20 - (20 - i))/2;
             for (int j = 0; j < remainder; j++) {
-                mc.ingameGUI.blit(matrixStack,xPosition + (j * 10), yPosition - 30, 7, 4, 10, 15);
+                mc.gui.blit(matrixStack,xPosition + (j * 10), yPosition - 30, 7, 4, 10, 15);
             }
     }
 
     private static void renderTemperatureOverlay(int scaledWidth, int scaledHeight, PlayerEntity player, MatrixStack matrixStack) {
-        int width = Minecraft.getInstance().getMainWindow().getScaledWidth();
-        int height = Minecraft.getInstance().getMainWindow().getScaledHeight();
-        Minecraft.getInstance().getRenderManager().textureManager.bindTexture(GUI_ICONS);
+        int width = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+        int height = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+        Minecraft.getInstance().getEntityRenderDispatcher().textureManager.bind(GUI_ICONS);
         int yStart = (height-150)/2 ;
-        int yPosition = (mc.getMainWindow().getScaledHeight() -mc.getMainWindow().getScaledHeight()) + (mc.getMainWindow().getScaledHeight() - 10);
-        int xPosition = (mc.getMainWindow().getScaledWidth() - 100);
+        int yPosition = (mc.getWindow().getGuiScaledHeight() -mc.getWindow().getGuiScaledHeight()) + (mc.getWindow().getGuiScaledHeight() - 10);
+        int xPosition = (mc.getWindow().getGuiScaledWidth() - 100);
 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableRescaleNormal();
@@ -220,10 +220,10 @@ public class RenderGameOverlayEvents extends AbstractGui {
         RenderSystem.defaultAlphaFunc();
 
         //x,y,tx,ty,width,height @RyuShiTenshiKage
-            mc.ingameGUI.blit(matrixStack,xPosition, yPosition, 7,34, 100,6);
-            mc.ingameGUI.blit(matrixStack,xPosition + ((int)EntityStats.getTemperature((LivingEntity)player) *2), yPosition -1, 7, 41, 5, 8);
+            mc.gui.blit(matrixStack,xPosition, yPosition, 7,34, 100,6);
+            mc.gui.blit(matrixStack,xPosition + ((int)EntityStats.getTemperature((LivingEntity)player) *2), yPosition -1, 7, 41, 5, 8);
 
-            mc.fontRenderer.drawString(matrixStack,"Temperature: " + (int)EntityStats.getTemperature((LivingEntity)player), xPosition, yPosition -10 , 0x00ccff);
+            mc.font.draw(matrixStack,"Temperature: " + (int)EntityStats.getTemperature((LivingEntity)player), xPosition, yPosition -10 , 0x00ccff);
     }
 
 

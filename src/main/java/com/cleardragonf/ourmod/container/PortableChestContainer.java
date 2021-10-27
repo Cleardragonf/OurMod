@@ -24,7 +24,7 @@ public class PortableChestContainer extends Container {
 			final PortableChestTileEntity tileEntity) {
 		super(ModContainerTypes.PORTABLE_CHEST.get(), windowId);
 		this.tileEntity = tileEntity;
-		this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
+		this.canInteractWithCallable = IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos());
 
 		// Main Inventory
 		int startX = 8;
@@ -57,7 +57,7 @@ public class PortableChestContainer extends Container {
 			final PacketBuffer data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
 		Objects.requireNonNull(data, "data cannot be null");
-		final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
+		final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 		if (tileAtPos instanceof PortableChestTileEntity) {
 			return (PortableChestTileEntity) tileAtPos;
 		}
@@ -69,29 +69,29 @@ public class PortableChestContainer extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(canInteractWithCallable, playerIn, BlockInitNew.PORTABLE_CHEST.get());
+	public boolean stillValid(PlayerEntity playerIn) {
+		return stillValid(canInteractWithCallable, playerIn, BlockInitNew.PORTABLE_CHEST.get());
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
+		Slot slot = this.slots.get(index);
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
 			if (index < 36) {
-				if (!this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), true)) {
+				if (!this.moveItemStackTo(itemstack1, 36, this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 0, 36, false)) {
+			} else if (!this.moveItemStackTo(itemstack1, 0, 36, false)) {
 				return ItemStack.EMPTY;
 			}
 
 			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 		}
 		return itemstack;

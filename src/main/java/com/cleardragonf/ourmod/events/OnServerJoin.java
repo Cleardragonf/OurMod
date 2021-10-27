@@ -19,11 +19,11 @@ public class OnServerJoin
 {
 	@SubscribeEvent
 	public static void  OnServerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-		event.getPlayer().sendMessage(new TranslationTextComponent("hello"), event.getPlayer().getUniqueID());
+		event.getPlayer().sendMessage(new TranslationTextComponent("hello"), event.getPlayer().getUUID());
 
 
 		ItemStack item = new ItemStack( ItemInitNew.ASURA_BOOK.get());
-		ItemEntity entity = new ItemEntity(event.getPlayer().world, event.getPlayer().getPosX() + .5, event.getPlayer().getPosY(), event.getPlayer().getPosZ() + .5, item);
-		event.getPlayer().world.addEntity(entity);
+		ItemEntity entity = new ItemEntity(event.getPlayer().level, event.getPlayer().getX() + .5, event.getPlayer().getY(), event.getPlayer().getZ() + .5, item);
+		event.getPlayer().level.addFreshEntity(entity);
 	}
 }

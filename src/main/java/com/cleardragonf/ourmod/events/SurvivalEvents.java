@@ -48,8 +48,8 @@ public class SurvivalEvents {
     public static Object2FloatMap<RegistryKey> BIOME_HEAT_MAP = (Object2FloatMap<RegistryKey>)new Object2FloatOpenHashMap();
 
     public static void  registerHeatMap(){
-        BLOCK_HEAT_MAP.put(Blocks.LAVA.getDefaultState(), 50.0f);
-        BLOCK_HEAT_MAP.put(Blocks.WATER.getDefaultState(), 25.0f);
+        BLOCK_HEAT_MAP.put(Blocks.LAVA.defaultBlockState(), 50.0f);
+        BLOCK_HEAT_MAP.put(Blocks.WATER.defaultBlockState(), 25.0f);
 
     }
 
@@ -177,13 +177,13 @@ public class SurvivalEvents {
 
     public static void addTiredEffect(ServerPlayerEntity player, int mul){
         if(EntityStats.getAwakeTime((LivingEntity)player) >= time(mul *6 + 0) && EntityStats.getAwakeTime((LivingEntity)player) < time(mul * 6 + 3)){
-            player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 60, mul, false, false, true));
+            player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60, mul, false, false, true));
         }
         if(EntityStats.getAwakeTime((LivingEntity)player) >= time(mul * 6 + 1) && EntityStats.getAwakeTime((LivingEntity)player) < time(mul * 6 + 4)){
-            player.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 60, mul, false, false, true));
+            player.addEffect(new EffectInstance(Effects.WEAKNESS, 60, mul, false, false, true));
         }
         if(EntityStats.getAwakeTime((LivingEntity)player) >= time(mul * 6 + 2) && EntityStats.getAwakeTime((LivingEntity)player) < time(mul * 6 + 5)){
-            player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 60, mul, false, false, true));
+            player.addEffect(new EffectInstance(Effects.BLINDNESS, 60, mul, false, false, true));
         }
     }
 
@@ -204,7 +204,7 @@ public class SurvivalEvents {
     }
     @SubscribeEvent
     public static void manageSleep(SleepFinishedTimeEvent event){
-        for(PlayerEntity player : event.getWorld().getPlayers()){
+        for(PlayerEntity player : event.getWorld().players()){
             EntityStats.setAwakeTime((LivingEntity)player, 0);
         }
     }
@@ -215,7 +215,7 @@ public class SurvivalEvents {
     public static void sendToClient(LivingEvent.LivingUpdateEvent event){
         if(event.getEntityLiving() instanceof ServerPlayerEntity){
             ServerPlayerEntity player = (ServerPlayerEntity)event.getEntityLiving();
-            OurMod.CHANNEL.sendTo(new SurvivalStatsPacket(player), player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+            OurMod.CHANNEL.sendTo(new SurvivalStatsPacket(player), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
@@ -227,13 +227,13 @@ public class SurvivalEvents {
             if(player.isSprinting()){
                 EntityStats.addThirst(player, -0.01d);
             }
-            if(player.isActualySwimming()){
+            if(player.isVisuallySwimming()){
                 EntityStats.addThirst(player, -0.001d);
             }
-            if(player.isOnLadder()){
+            if(player.onClimbable()){
 
             }
-            if(player.isSwingInProgress){
+            if(player.swinging){
                 EntityStats.addThirst(player, -0.001D);
             }
         }
@@ -247,7 +247,7 @@ public class SurvivalEvents {
     @SubscribeEvent
     public static void drinkWaterFromBottle(LivingEntityUseItemEvent.Finish event){
         if(event.getEntityLiving() instanceof PlayerEntity){
-            if(PotionUtils.getPotionFromItem(event.getItem()) == Potions.WATER){
+            if(PotionUtils.getPotion(event.getItem()) == Potions.WATER){
                 applyThirst(event.getEntityLiving());
                 EntityStats.addThirst(event.getEntityLiving(), 5.0D);
             }
@@ -268,41 +268,41 @@ public class SurvivalEvents {
             double maxColdStage1 = 10.0D;
             double maxColdStage2 = 5.0D;
             double maxColdStage3 = 0.0D;
-            if(!player.isPotionActive(EntityEffects.HYPERTHERMIA)){
+            if(!player.hasEffect(EntityEffects.HYPERTHERMIA)){
                 if(tempeature > maxHeatStage1 && tempeature <= maxHeatStage2){
                     EntityStats.addThirst((LivingEntity)player, -0.01d);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 100, 0, false, false, false));
+                    player.addEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 100, 0, false, false, false));
                 }else if(tempeature > maxHeatStage2 && tempeature <= maxHeatStage3){
                     EntityStats.addThirst((LivingEntity)player, -0.5d);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 120, 1, false, false, false));
+                    player.addEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 120, 1, false, false, false));
                 }else if(tempeature > maxHeatStage3){
                     EntityStats.addThirst((LivingEntity)player, -0.1d);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 160, 2, false, false, false));
+                    player.addEffect(new EffectInstance(EntityEffects.HYPERTHERMIA, 160, 2, false, false, false));
                 }
             }
-            if(!player.isPotionActive(EntityEffects.HYPOTHERMIA)){
+            if(!player.hasEffect(EntityEffects.HYPOTHERMIA)){
                 if(tempeature < maxColdStage1 && tempeature >= maxColdStage2){
-                    int food = player.getFoodStats().getFoodLevel();
-                    player.getFoodStats().setFoodLevel(food - 1);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 100, 0, false, false, false));
+                    int food = player.getFoodData().getFoodLevel();
+                    player.getFoodData().setFoodLevel(food - 1);
+                    player.addEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 100, 0, false, false, false));
                 }else if(tempeature < maxColdStage2 && tempeature >= maxColdStage3){
-                    int food = player.getFoodStats().getFoodLevel();
-                    player.getFoodStats().setFoodLevel(food - 1);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 120, 1, false, false, false));
+                    int food = player.getFoodData().getFoodLevel();
+                    player.getFoodData().setFoodLevel(food - 1);
+                    player.addEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 120, 1, false, false, false));
                 }else if(tempeature < maxColdStage3){
-                    int food = player.getFoodStats().getFoodLevel();
-                    player.getFoodStats().setFoodLevel(food - 1);
-                    player.addPotionEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 160, 2, false, false, false));
+                    int food = player.getFoodData().getFoodLevel();
+                    player.getFoodData().setFoodLevel(food - 1);
+                    player.addEffect(new EffectInstance(EntityEffects.HYPOTHERMIA, 160, 2, false, false, false));
                 }
             }
         }
     }
 
     public static float getExactWorldTemperature(World world, BlockPos pos, TempType type){
-        float biomeTemp = world.getBiome(pos).getTemperature();
+        float biomeTemp = world.getBiome(pos).getTemperature(pos);
         float gameTime = (float)(world.getGameTime());
-        float skyLight = world.getLightFor(LightType.SKY, pos);
-        float blockLight = world.getLight(pos);
+        float skyLight = world.getBrightness(LightType.SKY, pos);
+        float blockLight = world.getLightEmission(pos);
         gameTime /= 66.0F;
         if(type == TempType.SUN){
             //if(skyLight > 5.0F){
@@ -365,10 +365,10 @@ public class SurvivalEvents {
             for(TempType type : TempType.values()){
                 double temperature;
                 if(type == TempType.SHADE || type == TempType.SUN){
-                    temperature = getExactWorldTemperature(player.world, player.getPosition(), type);
+                    temperature = getExactWorldTemperature(player.level, player.blockPosition(), type);
                 }
                 else if(type == TempType.BIOME){
-                    temperature = getExactWorldTemperature(player.world, player.getPosition(), type);
+                    temperature = getExactWorldTemperature(player.level, player.blockPosition(), type);
                 }
                 else{
                     temperature = getAverageWorldTemperature();
@@ -376,7 +376,7 @@ public class SurvivalEvents {
                 double modifier = (temperature - EntityStats.getTemperature((LivingEntity)player)) / type.getReductionAmount();
                 int modInt = (int)(modifier * 1000.0D);
                 modifier = modInt / 1000.0D;
-                if(player.ticksExisted % type.getTickInterval() == type.getTickInterval() - 1)
+                if(player.tickCount % type.getTickInterval() == type.getTickInterval() - 1)
                     EntityStats.addTemperature((LivingEntity)player, modifier);
 
             }
@@ -389,8 +389,8 @@ public class SurvivalEvents {
             if(event.getEntityLiving() instanceof MonsterEntity){
                 MonsterEntity monster = (MonsterEntity) event.getEntityLiving();
 
-                monster.getActivePotionEffects().forEach(e -> {
-                    if(monster.isPotionActive(EntityEffects.ANTI_HOSTILE_WARD)){
+                monster.getActiveEffects().forEach(e -> {
+                    if(monster.hasEffect(EntityEffects.ANTI_HOSTILE_WARD)){
                         if(e.getAmplifier() <= 10){
                             monster.setHealth(monster.getHealth() - e.getAmplifier());
                         }
@@ -400,8 +400,8 @@ public class SurvivalEvents {
             else if(event.getEntityLiving() instanceof AnimalEntity){
                 AnimalEntity animal = (AnimalEntity)event.getEntityLiving();
 
-                animal.getActivePotionEffects().forEach(e ->{
-                    if(animal.isPotionActive(EntityEffects.ANTI_PASSIVE_WARD)){
+                animal.getActiveEffects().forEach(e ->{
+                    if(animal.hasEffect(EntityEffects.ANTI_PASSIVE_WARD)){
                         if(e.getAmplifier() <=10){
                             animal.setHealth(animal.getHealth() - e.getAmplifier());
                         }
@@ -411,16 +411,16 @@ public class SurvivalEvents {
             else{
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
 
-                player.getActivePotionEffects().forEach(e -> {
-                    if(player.isPotionActive(EntityEffects.HUNGER_WARD)){
+                player.getActiveEffects().forEach(e -> {
+                    if(player.hasEffect(EntityEffects.HUNGER_WARD)){
                         if(e.getAmplifier() <= 10){
-                            player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() + e.getAmplifier());
+                            player.getFoodData().setFoodLevel(player.getFoodData().getFoodLevel() + e.getAmplifier());
                         }
                         else if(e.getAmplifier() >= 11){
-                            player.getFoodStats().setFoodLevel(20);
+                            player.getFoodData().setFoodLevel(20);
                         }
                     }
-                    if(player.isPotionActive(EntityEffects.THIRST_WARD)){
+                    if(player.hasEffect(EntityEffects.THIRST_WARD)){
                         if(e.getAmplifier() <= 10){
                             EntityStats.addThirst(player, e.getAmplifier());
                         }
@@ -428,7 +428,7 @@ public class SurvivalEvents {
                             EntityStats.setThirst(player, 20);
                         }
                     }
-                    if(player.isPotionActive(EntityEffects.HEALING_WARD)){
+                    if(player.hasEffect(EntityEffects.HEALING_WARD)){
                         if(e.getAmplifier() <= 10){
                             player.setHealth(player.getHealth() + e.getAmplifier());
                         }
@@ -436,14 +436,14 @@ public class SurvivalEvents {
                             player.setHealth(player.getMaxHealth());
                         }
                     }
-                    if(player.isPotionActive(EntityEffects.TEMPERATURE_WARD)){
+                    if(player.hasEffect(EntityEffects.TEMPERATURE_WARD)){
                         if(e.getAmplifier() <= 10){
                             EntityStats.setTemperature(player,25);
                         }
                     }
-                    if(player.isPotionActive(EntityEffects.ANTI_GRAVITY_WARD)){
+                    if(player.hasEffect(EntityEffects.ANTI_GRAVITY_WARD)){
                         if(e.getAmplifier() <= 10){
-                            player.abilities.allowFlying = true;
+                            player.abilities.mayfly = true;
                         }
                     }
                 });

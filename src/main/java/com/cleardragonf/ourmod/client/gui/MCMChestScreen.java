@@ -19,32 +19,32 @@ public class MCMChestScreen extends ContainerScreen<MCMChestContainer> {
 
 	public MCMChestScreen(MCMChestContainer container, PlayerInventory inv, ITextComponent name) {
 		super(container, inv, name);
-		this.xSize = 176;
-		this.ySize = 256;
+		this.imageWidth = 176;
+		this.imageHeight = 256;
 	}
 
 	@Override
 	public void render(MatrixStack matrixStack,int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack,mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack,mouseX, mouseY);
+		this.renderTooltip(matrixStack,mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack,int mouseX, int mouseY) {
+	protected void renderLabels(MatrixStack matrixStack,int mouseX, int mouseY) {
 		//drawString(Minecraft.getInstance().fontRenderer, "Energy: " + this.container.getFire().getEnergyStored(), 10, 10, 0xffffff);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack,float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(MatrixStack matrixStack,float partialTicks, int mouseX, int mouseY) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(GUI);
-		int relX = (this.width - this.xSize) / 2;
-		int relY = (this.height - this.ySize) / 2;
-		this.blit(matrixStack,relX, relY, 0, 0, this.xSize, this.ySize);
-		int display = (int) this.container.getMCM().getEnergyStored();
+		this.minecraft.getTextureManager().bind(GUI);
+		int relX = (this.width - this.imageWidth) / 2;
+		int relY = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack,relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+		int display = (int) this.menu.getMCM().getEnergyStored();
 
-		drawString(matrixStack,Minecraft.getInstance().fontRenderer, "Energy: " + display, 10, 10, 0xffffff);
+		drawString(matrixStack,Minecraft.getInstance().font, "Energy: " + display, 10, 10, 0xffffff);
 
 	}
 }

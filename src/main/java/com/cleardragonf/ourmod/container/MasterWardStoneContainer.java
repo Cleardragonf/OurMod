@@ -29,11 +29,11 @@ public class MasterWardStoneContainer extends Container {
                                     final MasterWardStoneTileEntity tileEntity) {
 		super(ModContainerTypes.MASTER_WARD_STONE.get(), windowId);
 		this.tileEntity = tileEntity;
-		this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
+		this.canInteractWithCallable = IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos());
 
 		this.playerInventory = new InvWrapper(playerInventory);
 
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getFire().getEnergyStored();
@@ -44,7 +44,7 @@ public class MasterWardStoneContainer extends Container {
 				tileEntity.FireEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getWater().getEnergyStored();
@@ -55,7 +55,7 @@ public class MasterWardStoneContainer extends Container {
 				tileEntity.WaterEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getAir().getEnergyStored();
@@ -66,7 +66,7 @@ public class MasterWardStoneContainer extends Container {
 				tileEntity.AirEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getEarth().getEnergyStored();
@@ -77,7 +77,7 @@ public class MasterWardStoneContainer extends Container {
 				tileEntity.EarthEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getDark().getEnergyStored();
@@ -88,7 +88,7 @@ public class MasterWardStoneContainer extends Container {
 				tileEntity.DarkEnergy.setEnergy(value);
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getLight().getEnergyStored();
@@ -144,7 +144,7 @@ public class MasterWardStoneContainer extends Container {
 														 final PacketBuffer data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
 		Objects.requireNonNull(data, "data cannot be null");
-		final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
+		final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 		if (tileAtPos instanceof MasterWardStoneTileEntity) {
 			return (MasterWardStoneTileEntity) tileAtPos;
 		}
@@ -156,8 +156,8 @@ public class MasterWardStoneContainer extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(canInteractWithCallable, playerIn, BlockInitNew.MASTER_WARD_STONE.get());
+	public boolean stillValid(PlayerEntity playerIn) {
+		return stillValid(canInteractWithCallable, playerIn, BlockInitNew.MASTER_WARD_STONE.get());
 	}
 
 	public CustomEnergyStorage getAir(){

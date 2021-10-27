@@ -3,10 +3,7 @@ package com.cleardragonf.ourmod.container;
 import com.cleardragonf.ourmod.essence.CustomEnergyStorage;
 import com.cleardragonf.ourmod.init.BlockInitNew;
 import com.cleardragonf.ourmod.init.ModContainerTypes;
-import com.cleardragonf.ourmod.tileentity.EssenceCollectorTileEntity;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
-import com.cleardragonf.ourmod.tileentity.PortableChestTileEntity;
-import jdk.nashorn.internal.ir.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -18,14 +15,9 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -44,7 +36,7 @@ public class MCMChestContainer extends Container {
 		super(ModContainerTypes.MCM_CHEST.get(), windowId);
 		this.playerInventory = new InvWrapper(playerInventory);
 		this.tileEntity = tileEntity;
-		this.canInteractWithCallable = IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos());
+		this.canInteractWithCallable = IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos());
 		/*Depressiated
 		tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
 			addSlot(new SlotItemHandler(h, 0, 134, 31));
@@ -63,7 +55,7 @@ public class MCMChestContainer extends Container {
 
 		layoutPlayerInventorySlots(8, 70);
 
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getMCM().getEnergyStored() & 0xffff;
@@ -76,7 +68,7 @@ public class MCMChestContainer extends Container {
 
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return (getMCM().getEnergyStored() >> 16) & 0xffff;
@@ -88,7 +80,7 @@ public class MCMChestContainer extends Container {
 				tileEntity.MCMEnergy.setEnergy(energyStored | (value << 16));
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getAir().getEnergyStored() & 0xffff;
@@ -101,7 +93,7 @@ public class MCMChestContainer extends Container {
 
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return (getAir().getEnergyStored() >> 16) & 0xffff;
@@ -113,7 +105,7 @@ public class MCMChestContainer extends Container {
 				tileEntity.AirEnergy.setEnergy(energyStored | (value << 16));
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getDark().getEnergyStored() & 0xffff;
@@ -126,7 +118,7 @@ public class MCMChestContainer extends Container {
 
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return (getDark().getEnergyStored() >> 16) & 0xffff;
@@ -138,7 +130,7 @@ public class MCMChestContainer extends Container {
 				tileEntity.DarkEnergy.setEnergy(energyStored | (value << 16));
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getEarth().getEnergyStored() & 0xffff;
@@ -151,7 +143,7 @@ public class MCMChestContainer extends Container {
 
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return (getEarth().getEnergyStored() >> 16) & 0xffff;
@@ -163,7 +155,7 @@ public class MCMChestContainer extends Container {
 				tileEntity.EarthEnergy.setEnergy(energyStored | (value << 16));
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getFire().getEnergyStored() & 0xffff;
@@ -176,7 +168,7 @@ public class MCMChestContainer extends Container {
 
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return (getFire().getEnergyStored() >> 16) & 0xffff;
@@ -188,7 +180,7 @@ public class MCMChestContainer extends Container {
 				tileEntity.FireEnergy.setEnergy(energyStored | (value << 16));
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getLight().getEnergyStored() & 0xffff;
@@ -201,7 +193,7 @@ public class MCMChestContainer extends Container {
 
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return (getLight().getEnergyStored() >> 16) & 0xffff;
@@ -213,7 +205,7 @@ public class MCMChestContainer extends Container {
 				tileEntity.LightEnergy.setEnergy(energyStored | (value << 16));
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return getWater().getEnergyStored() & 0xffff;
@@ -226,7 +218,7 @@ public class MCMChestContainer extends Container {
 
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return (getWater().getEnergyStored() >> 16) & 0xffff;
@@ -249,7 +241,7 @@ public class MCMChestContainer extends Container {
 															final PacketBuffer data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
 		Objects.requireNonNull(data, "data cannot be null");
-		final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
+		final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 		if (tileAtPos instanceof MCMChestTileEntity) {
 			return (MCMChestTileEntity) tileAtPos;
 		}
@@ -296,40 +288,40 @@ public class MCMChestContainer extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerIn, BlockInitNew.MCM_CHEST.get());
+	public boolean stillValid(PlayerEntity playerIn) {
+		return stillValid(IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos()), playerIn, BlockInitNew.MCM_CHEST.get());
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
-		if (slot != null && slot.getHasStack()) {
-			ItemStack stack = slot.getStack();
+		Slot slot = this.slots.get(index);
+		if (slot != null && slot.hasItem()) {
+			ItemStack stack = slot.getItem();
 			itemstack = stack.copy();
 			if (index == 0) {
-				if (!this.mergeItemStack(stack, 1, 37, true)) {
+				if (!this.moveItemStackTo(stack, 1, 37, true)) {
 					return ItemStack.EMPTY;
 				}
-				slot.onSlotChange(stack, itemstack);
+				slot.onQuickCraft(stack, itemstack);
 			} else {
 				if (stack.getItem() == Items.DIAMOND) {
-					if (!this.mergeItemStack(stack, 0, 1, false)) {
+					if (!this.moveItemStackTo(stack, 0, 1, false)) {
 						return ItemStack.EMPTY;
 					}
 				} else if (index < 28) {
-					if (!this.mergeItemStack(stack, 28, 37, false)) {
+					if (!this.moveItemStackTo(stack, 28, 37, false)) {
 						return ItemStack.EMPTY;
 					}
-				} else if (index < 37 && !this.mergeItemStack(stack, 1, 28, false)) {
+				} else if (index < 37 && !this.moveItemStackTo(stack, 1, 28, false)) {
 					return ItemStack.EMPTY;
 				}
 			}
 
 			if (stack.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 
 			if (stack.getCount() == itemstack.getCount()) {

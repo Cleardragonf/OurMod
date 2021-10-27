@@ -168,7 +168,7 @@ public class MCMValues {
         mcmList.put(Items.CUT_RED_SANDSTONE,4);
         mcmList.put(Items.CUT_RED_SANDSTONE_SLAB,6);
         mcmList.put(Items.CUT_SANDSTONE,4);
-        mcmList.put(Items.CUT_SANDSTONE_SLAB,6);
+        mcmList.put(Items.CUT_STANDSTONE_SLAB,6);
         mcmList.put(Items.CYAN_BANNER,28);
         mcmList.put(Items.CYAN_BED,36);
         mcmList.put(Items.CYAN_CARPET,27);
@@ -261,7 +261,7 @@ public class MCMValues {
         mcmList.put(Items.GLASS_BOTTLE,12);
         mcmList.put(Items.GLASS_PANE,24);
         mcmList.put(Items.GLISTERING_MELON_SLICE,16);
-        mcmList.put(Items.GLOBE_BANNER_PATTERN,28);
+        mcmList.put(Items.GLOBE_BANNER_PATTER,28);
         mcmList.put(Items.GLOWSTONE,384);
         mcmList.put(Items.GLOWSTONE_DUST,96);
         mcmList.put(Items.GOLD_BLOCK,9000);

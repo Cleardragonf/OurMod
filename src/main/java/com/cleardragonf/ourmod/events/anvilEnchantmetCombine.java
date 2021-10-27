@@ -53,7 +53,7 @@ public class anvilEnchantmetCombine {
 
         ItemStack output = new ItemStack(item.getStack().getItem());
         for (Map.Entry<Enchantment, Integer> entry : enchantsItem.entrySet()){
-            output.addEnchantment(entry.getKey(), entry.getValue());
+            output.enchant(entry.getKey(), entry.getValue());
         }
 
 

@@ -16,47 +16,47 @@ import net.minecraftforge.registries.ObjectHolder;
 public class ItemInitNew {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, OurMod.MOD_ID);
 	
-	public static final RegistryObject<Item> SICKLE = ITEMS.register("sickle", () -> new Sickle(new Item.Properties().defaultMaxDamage(100).group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> ASURA_BOOK = ITEMS.register("asurabook", () -> new AsuraBook(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARDS_BOOK = ITEMS.register("wardsbook", () -> new WardsBook(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> SICKLE = ITEMS.register("sickle", () -> new Sickle(new Item.Properties().defaultDurability(100).tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> ASURA_BOOK = ITEMS.register("asurabook", () -> new AsuraBook(new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARDS_BOOK = ITEMS.register("wardsbook", () -> new WardsBook(new Item.Properties().tab(OurModItemGroup.instance)));
 
 	//FOOD
-	public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> RICE = ITEMS.register("rice", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> ONION = ITEMS.register("onion", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> CORN = ITEMS.register("corn", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> BROCCOLI = ITEMS.register("broccoli", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> LETTUCE = ITEMS.register("lettuce", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> PEANUT = ITEMS.register("peanut", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> PEPPER = ITEMS.register("pepper", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> CAULIFLOWER = ITEMS.register("cauliflower", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
-	public static final RegistryObject<Item> EGGPLANT = ITEMS.register("eggplant", () -> new Item(new Item.Properties().group(OurModItemGroup.instance).food(new Food.Builder().hunger(1).build())));
+	public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> RICE = ITEMS.register("rice", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> ONION = ITEMS.register("onion", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> CORN = ITEMS.register("corn", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> BROCCOLI = ITEMS.register("broccoli", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> LETTUCE = ITEMS.register("lettuce", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> PEANUT = ITEMS.register("peanut", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> PEPPER = ITEMS.register("pepper", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> CAULIFLOWER = ITEMS.register("cauliflower", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
+	public static final RegistryObject<Item> EGGPLANT = ITEMS.register("eggplant", () -> new Item(new Item.Properties().tab(OurModItemGroup.instance).food(new Food.Builder().nutrition(1).build())));
 	//SEEDS
-	public static final RegistryObject<Item> TOMATO_SEED = ITEMS.register("tomatoseed", () -> new BlockItem(BlockInitNew.TOMATO_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> RICE_SEED = ITEMS.register("riceseed", () -> new BlockItem(BlockInitNew.RICE_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> ONION_SEED = ITEMS.register("onionseed", () -> new BlockItem(BlockInitNew.ONION_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> CORN_SEED = ITEMS.register("cornseed", () -> new BlockItem(BlockInitNew.CORN_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> CUCUMBER_SEED = ITEMS.register("cucumberseed", () -> new BlockItem(BlockInitNew.CUCUMBER_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> BROCCOLI_SEED= ITEMS.register("broccoliseed", () -> new BlockItem(BlockInitNew.BROCCOLI_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> LETTUCE_SEED = ITEMS.register("lettuceseed", () -> new BlockItem(BlockInitNew.LETTUCE_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> PEANUT_SEED= ITEMS.register("peanutseed", () -> new BlockItem(BlockInitNew.PEANUT_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> PEPPER_SEED= ITEMS.register("pepperseed", () -> new BlockItem(BlockInitNew.PEPPER_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> CAULIFLOWER_SEED= ITEMS.register("cauliflowerseed", () -> new BlockItem(BlockInitNew.CAULIFLOWER_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> EGGPLANT_SEED= ITEMS.register("eggplantseed", () -> new BlockItem(BlockInitNew.EGGPLANT_CROP.get(), new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> TOMATO_SEED = ITEMS.register("tomatoseed", () -> new BlockItem(BlockInitNew.TOMATO_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> RICE_SEED = ITEMS.register("riceseed", () -> new BlockItem(BlockInitNew.RICE_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> ONION_SEED = ITEMS.register("onionseed", () -> new BlockItem(BlockInitNew.ONION_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> CORN_SEED = ITEMS.register("cornseed", () -> new BlockItem(BlockInitNew.CORN_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> CUCUMBER_SEED = ITEMS.register("cucumberseed", () -> new BlockItem(BlockInitNew.CUCUMBER_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> BROCCOLI_SEED= ITEMS.register("broccoliseed", () -> new BlockItem(BlockInitNew.BROCCOLI_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> LETTUCE_SEED = ITEMS.register("lettuceseed", () -> new BlockItem(BlockInitNew.LETTUCE_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> PEANUT_SEED= ITEMS.register("peanutseed", () -> new BlockItem(BlockInitNew.PEANUT_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> PEPPER_SEED= ITEMS.register("pepperseed", () -> new BlockItem(BlockInitNew.PEPPER_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> CAULIFLOWER_SEED= ITEMS.register("cauliflowerseed", () -> new BlockItem(BlockInitNew.CAULIFLOWER_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> EGGPLANT_SEED= ITEMS.register("eggplantseed", () -> new BlockItem(BlockInitNew.EGGPLANT_CROP.get(), new Item.Properties().tab(OurModItemGroup.instance)));
 
-	public static final RegistryObject<Item> POWER_ENSCRIBER = ITEMS.register("powerenscriber", () -> new PowerEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_ENSCRIBER = ITEMS.register("wardenscriber", () -> new WardEnscriber(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> POWER_ENSCRIBER = ITEMS.register("powerenscriber", () -> new PowerEnscriber(new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_ENSCRIBER = ITEMS.register("wardenscriber", () -> new WardEnscriber(new Item.Properties().tab(OurModItemGroup.instance)));
 
 	//Wards
-	public static final RegistryObject<Item> WARD_STONES_HEALING = ITEMS.register("healingward", () -> new HealingWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_STONES_ANTI_HUNGER = ITEMS.register("antihungerward", () -> new AntiHungerWard(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_STONES_THIRST = ITEMS.register("thirstward", () -> new ThirstWardTablet(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_STONES_TEMPERATURE = ITEMS.register("temperatureward", () -> new TemperatureWard(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_STONES_ANTI_HOSTILE = ITEMS.register("antihostileward", () -> new AntiHostileWard(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_STONES_ANTI_GRAVITY = ITEMS.register("antigravityward", () -> new AntiGravityWard(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_STONES_ANTI_PASSIVE = ITEMS.register("antipassiveward", () -> new AntiPassiveWard(new Item.Properties().group(OurModItemGroup.instance)));
-	public static final RegistryObject<Item> WARD_STONES_DAYLIGHT = ITEMS.register("daytimeward", () -> new DaytimeWard(new Item.Properties().group(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_HEALING = ITEMS.register("healingward", () -> new HealingWardTablet(new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_ANTI_HUNGER = ITEMS.register("antihungerward", () -> new AntiHungerWard(new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_THIRST = ITEMS.register("thirstward", () -> new ThirstWardTablet(new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_TEMPERATURE = ITEMS.register("temperatureward", () -> new TemperatureWard(new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_ANTI_HOSTILE = ITEMS.register("antihostileward", () -> new AntiHostileWard(new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_ANTI_GRAVITY = ITEMS.register("antigravityward", () -> new AntiGravityWard(new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_ANTI_PASSIVE = ITEMS.register("antipassiveward", () -> new AntiPassiveWard(new Item.Properties().tab(OurModItemGroup.instance)));
+	public static final RegistryObject<Item> WARD_STONES_DAYLIGHT = ITEMS.register("daytimeward", () -> new DaytimeWard(new Item.Properties().tab(OurModItemGroup.instance)));
 
 
 	/*

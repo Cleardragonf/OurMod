@@ -48,7 +48,7 @@ public class OurWardScreen extends Screen {
         }
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.renderBackground(matrixStack);
-        this.minecraft.getTextureManager().bindTexture(GUI);
+        this.minecraft.getTextureManager().bind(GUI);
         int x = (this.width) / 2;
         int y = (this.height - this.ySize) / 2;
         Button nextButton = new Button(x + 100, y + 200, 50, 20, new TranslationTextComponent("Next Page"), (button) -> {
@@ -64,17 +64,17 @@ public class OurWardScreen extends Screen {
         switch (pageNumber){
             case 1:
                 this.blit(matrixStack,x, y, 0, 0, this.xSize, this.ySize);
-                this.font.drawString(matrixStack,"Our Wards", x + ((this.xSize/2) - (font.getStringWidth("OurMod")/2)), y + 10, 4210752);
-                this.font.drawString(matrixStack,"Welcome Mage, to the Mystical Arts", x + 5, y + 20, 4210752);
-                this.font.drawString(matrixStack,"of Warding! Within this book you'll ", x + 5, y + 30, 4210752);
-                this.font.drawString(matrixStack,"find many secrets and wonders ", x + 5, y + 40,4210752);
-                this.font.drawString(matrixStack,"about the Mystical Art of wards.", x + 5, y + 50,4210752);
-                this.font.drawString(matrixStack,"This Book is solely dedicated", x + 5, y + 60,4210752);
-                this.font.drawString(matrixStack,"towards the betterment of your ", x + 5, y + 70,4210752);
-                this.font.drawString(matrixStack,"knowledge on wards.  Protect", x + 5, y + 80,4210752);
-                this.font.drawString(matrixStack,"this book with all your power", x + 5, y + 90,4210752);
-                this.font.drawString(matrixStack,"for there may be no way of", x + 5, y + 100,4210752);
-                this.font.drawString(matrixStack,"recovering it.", x + 5, y + 110,4210752);
+                this.font.draw(matrixStack,"Our Wards", x + ((this.xSize/2) - (font.width("OurMod")/2)), y + 10, 4210752);
+                this.font.draw(matrixStack,"Welcome Mage, to the Mystical Arts", x + 5, y + 20, 4210752);
+                this.font.draw(matrixStack,"of Warding! Within this book you'll ", x + 5, y + 30, 4210752);
+                this.font.draw(matrixStack,"find many secrets and wonders ", x + 5, y + 40,4210752);
+                this.font.draw(matrixStack,"about the Mystical Art of wards.", x + 5, y + 50,4210752);
+                this.font.draw(matrixStack,"This Book is solely dedicated", x + 5, y + 60,4210752);
+                this.font.draw(matrixStack,"towards the betterment of your ", x + 5, y + 70,4210752);
+                this.font.draw(matrixStack,"knowledge on wards.  Protect", x + 5, y + 80,4210752);
+                this.font.draw(matrixStack,"this book with all your power", x + 5, y + 90,4210752);
+                this.font.draw(matrixStack,"for there may be no way of", x + 5, y + 100,4210752);
+                this.font.draw(matrixStack,"recovering it.", x + 5, y + 110,4210752);
                 nextButton.visible = true;
                 prevButton.visible = false;
                 break;
@@ -222,13 +222,13 @@ public class OurWardScreen extends Screen {
         int var = 0;
         if(type == "String"){
             if(prevType == "String"){
-                this.font.drawString(matrixStack,string, x +5, y + (line * 10 + 10), 4210752);
+                this.font.draw(matrixStack,string, x +5, y + (line * 10 + 10), 4210752);
             }
             else if(prevType == "GUI"){
-                this.font.drawString(matrixStack,string, x +5, y + (line * 10 + 60), 4210752);
+                this.font.draw(matrixStack,string, x +5, y + (line * 10 + 60), 4210752);
             }
             else if(prevType == "Image"){
-                this.font.drawString(matrixStack,string, x +5, y + (line *10 + 100), 4210752);
+                this.font.draw(matrixStack,string, x +5, y + (line *10 + 100), 4210752);
             }
         }
         else if(type == "GUI"){
@@ -261,13 +261,13 @@ public class OurWardScreen extends Screen {
         int var = 0;
         if(type == "String"){
             if(prevType == "String"){
-                this.font.drawString(matrixStack,string, x - 180, y + (line * 10 + 10), 4210752);
+                this.font.draw(matrixStack,string, x - 180, y + (line * 10 + 10), 4210752);
             }
             else if(prevType == "GUI"){
-                this.font.drawString(matrixStack,string, x - 180, y + (line * 10 + 60), 4210752);
+                this.font.draw(matrixStack,string, x - 180, y + (line * 10 + 60), 4210752);
             }
             else if(prevType == "Image"){
-                this.font.drawString(matrixStack,string, x -180, y + (line *10 + 100), 4210752);
+                this.font.draw(matrixStack,string, x -180, y + (line *10 + 100), 4210752);
             }
         }
         else if(type == "GUI"){
@@ -301,7 +301,7 @@ public class OurWardScreen extends Screen {
     public void guiRecipeRender(MatrixStack matrixStack,int x, int y, ItemStack item1,  ItemStack item2,  ItemStack item3,  ItemStack item4,  ItemStack item5,  ItemStack item6,  ItemStack item7,
                                 ItemStack item8,  ItemStack item9,  ItemStack endItem, String side, int line, String prevType){
             if(prevType == "String"){
-                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.minecraft.textureManager.bind(BLANK_CRAFTING);
 
                 int gridX = x - 180;
                 int gridY = y + (line * 10 + 10);
@@ -314,7 +314,7 @@ public class OurWardScreen extends Screen {
 
             }
             else if(prevType == "GUI"){
-                this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+                this.minecraft.textureManager.bind(BLANK_CRAFTING);
                 this.blit(matrixStack,x -180, y + (line * 10 + 65), 0,0,130,50);
                 int gridX = x - 180;
                 if(side == "Right"){
@@ -332,19 +332,19 @@ public class OurWardScreen extends Screen {
     public void guiDisplayManager(MatrixStack matrixStack,ItemStack item1,ItemStack item2,ItemStack item3,ItemStack item4,ItemStack item5,
                                   ItemStack item6,ItemStack item7,ItemStack item8,ItemStack item9,ItemStack endItem, int gridX, int gridY){
         if(tick<120){
-            this.itemRenderer.renderItemIntoGUI(item1.getItem().getDefaultInstance(), gridX + 1, gridY + 1);
-            this.itemRenderer.renderItemIntoGUI(item2.getItem().getDefaultInstance(), gridX + 18, gridY + 1);
-            this.itemRenderer.renderItemIntoGUI(item3.getItem().getDefaultInstance(), gridX + 35, gridY + 1);
-            this.itemRenderer.renderItemIntoGUI(item4.getItem().getDefaultInstance(), gridX + 1, gridY + 18);
-            this.itemRenderer.renderItemIntoGUI(item5.getItem().getDefaultInstance(), gridX + 18, gridY + 18);
-            this.itemRenderer.renderItemIntoGUI(item6.getItem().getDefaultInstance(), gridX + 35, gridY + 18);
-            this.itemRenderer.renderItemIntoGUI(item7.getItem().getDefaultInstance(), gridX + 1, gridY + 35);
-            this.itemRenderer.renderItemIntoGUI(item8.getItem().getDefaultInstance(), gridX + 18, gridY + 35);
-            this.itemRenderer.renderItemIntoGUI(item9.getItem().getDefaultInstance(), gridX + 35, gridY + 35);
-            this.minecraft.textureManager.bindTexture(BLANK_CRAFTING);
+            this.itemRenderer.renderGuiItem(item1.getItem().getDefaultInstance(), gridX + 1, gridY + 1);
+            this.itemRenderer.renderGuiItem(item2.getItem().getDefaultInstance(), gridX + 18, gridY + 1);
+            this.itemRenderer.renderGuiItem(item3.getItem().getDefaultInstance(), gridX + 35, gridY + 1);
+            this.itemRenderer.renderGuiItem(item4.getItem().getDefaultInstance(), gridX + 1, gridY + 18);
+            this.itemRenderer.renderGuiItem(item5.getItem().getDefaultInstance(), gridX + 18, gridY + 18);
+            this.itemRenderer.renderGuiItem(item6.getItem().getDefaultInstance(), gridX + 35, gridY + 18);
+            this.itemRenderer.renderGuiItem(item7.getItem().getDefaultInstance(), gridX + 1, gridY + 35);
+            this.itemRenderer.renderGuiItem(item8.getItem().getDefaultInstance(), gridX + 18, gridY + 35);
+            this.itemRenderer.renderGuiItem(item9.getItem().getDefaultInstance(), gridX + 35, gridY + 35);
+            this.minecraft.textureManager.bind(BLANK_CRAFTING);
             this.blit(matrixStack,gridX + 58, gridY + 7,0,52,34-(34/tick), 24);
         }else{
-            this.itemRenderer.renderItemIntoGUI(endItem.getItem().getDefaultInstance(), gridX + 105, gridY + 16);
+            this.itemRenderer.renderGuiItem(endItem.getItem().getDefaultInstance(), gridX + 105, gridY + 16);
         }
     }
 

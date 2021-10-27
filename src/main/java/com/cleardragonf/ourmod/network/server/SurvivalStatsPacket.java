@@ -35,7 +35,7 @@ public class SurvivalStatsPacket {
         this(
                 EntityStats.getTemperature((LivingEntity)player),
                 EntityStats.getThirst((LivingEntity)player),
-                EntityStats.getAwakeTime((LivingEntity)player), player.getUniqueID());
+                EntityStats.getAwakeTime((LivingEntity)player), player.getUUID());
     }
 
     public static void encode(SurvivalStatsPacket msg, PacketBuffer packetBuffer) {
