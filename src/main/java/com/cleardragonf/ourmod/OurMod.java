@@ -12,6 +12,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -132,7 +133,7 @@ OurMod
         SurvivalEvents.registerBiomeHeatMap();
         MCMValueProvider.registerCapability();
         NetRegistries.registerMSG();
-        OreGeneration.registerOre();
+        //OreGeneration.registerOre();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -140,10 +141,10 @@ OurMod
     }
 
 
-    @SubscribeEvent
-    public static void loadCompleteEvent(FMLLoadCompleteEvent event){
-        //OreGeneration.setupOreGeneration();
-    }
+    //@SubscribeEvent
+    //public static void biomeLoadingEvent(final BiomeLoadingEvent event){
+    //    OreGeneration.generateOres(event);
+    //}
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
