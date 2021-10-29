@@ -33,7 +33,7 @@ public class PowerEnscriber extends Item{
 
 
 
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
 
         CompoundNBT tag;
         ItemStack itemStack = context.getItemInHand().getStack();

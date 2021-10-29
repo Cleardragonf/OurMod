@@ -20,9 +20,7 @@ import java.util.Map;
 @Mod.EventBusSubscriber
 public class anvilEnchantmetCombine {
 
-
-    public static int applyCost = 10;
-    public static int mergeCost = 10;
+    public static int mergeCost = 1;
 
     @SubscribeEvent
     public static void onEnchanting(AnvilUpdateEvent event){
@@ -30,6 +28,20 @@ public class anvilEnchantmetCombine {
         ItemStack right = event.getRight();
 
         if(!left.isEmpty() && !right.isEmpty()) {
+            if(left.getItem() == Items.ENCHANTED_BOOK){
+                if(right.getItem() == Items.ENCHANTED_BOOK){
+                    handleTome(left,right,event);
+                }else{
+                    handleEnchant(right,left,event);
+                }
+            }else{
+                if(right.getItem() == Items.ENCHANTED_BOOK){
+                    handleEnchant(left, right, event);
+                }else if(right.getItem() == Items.BOOK){
+                    handleDishenchant(left,right,event);
+                }
+            }
+
             if ((right.getItem() == Items.ENCHANTED_BOOK) && (left.getItem() == Items.ENCHANTED_BOOK)) {
                 handleTome(left, right, event);
             }else if((right.getItem() == Items.ENCHANTED_BOOK) && (left.getItem() instanceof SwordItem  || left.getItem() instanceof ToolItem || left.getItem() instanceof ArmorItem)){
@@ -42,6 +54,7 @@ public class anvilEnchantmetCombine {
 
         Map<Enchantment, Integer> enchantsItem= EnchantmentHelper.getEnchantments(item);
         Map<Enchantment, Integer> enchantsTome = EnchantmentHelper.getEnchantments(book);
+        mergeCost = 1;
 
         if (enchantsTome == null) {
             return;
@@ -49,11 +62,13 @@ public class anvilEnchantmetCombine {
 
         for (Map.Entry<Enchantment, Integer> entry : enchantsTome.entrySet()) {
             enchantsItem.put(entry.getKey(), entry.getValue() + 1);
+            mergeCost += 1;
         }
 
         ItemStack output = new ItemStack(item.getStack().getItem());
         for (Map.Entry<Enchantment, Integer> entry : enchantsItem.entrySet()){
             output.enchant(entry.getKey(), entry.getValue());
+            mergeCost +=1;
         }
 
 
@@ -65,26 +80,52 @@ public class anvilEnchantmetCombine {
             Map<Enchantment, Integer> enchantBook1 = EnchantmentHelper.getEnchantments(book1);
             Map<Enchantment, Integer> enchantBook2 = EnchantmentHelper.getEnchantments(book2);
 
+            ItemStack output = new ItemStack(Items.ENCHANTED_BOOK);
+            mergeCost = 1;
             if (enchantBook2 == null) {
                 return;
             }
 
-            //This is what controls the Adding of the enchantment
-        //book 1 Enchantment get enchantments from bookk 2 there value
-            for (Map.Entry<Enchantment, Integer> entry : enchantBook2.entrySet()) {
-                if(enchantBook1.containsKey(entry.getKey())) {
-                    enchantBook1.put(entry.getKey(), enchantBook1.get(entry.getKey()).intValue() + 1);
+            //new code
+            for(Map.Entry<Enchantment, Integer> entry : enchantBook1.entrySet()){
+                if(enchantBook2.containsKey(entry.getKey())){
+                    if(enchantBook2.get(entry.getKey()).intValue() == enchantBook1.get(entry.getKey()).intValue()){
+                        enchantBook1.put(entry.getKey(), enchantBook1.get(entry.getKey()).intValue() +1);
+                        mergeCost += 1;
+                    }
                 }
-                else return;
+            }
+            for(Map.Entry<Enchantment, Integer> entry : enchantBook2.entrySet()){
+                if(!(enchantBook1.containsKey(entry.getKey()))){
+                    enchantBook1.put(entry.getKey(), enchantBook2.get(entry.getKey()).intValue());
+                    mergeCost +=1;
+                }
             }
 
-            ItemStack output = new ItemStack(Items.ENCHANTED_BOOK);
             for (Map.Entry<Enchantment, Integer> entry : enchantBook1.entrySet()){
                 EnchantedBookItem.addEnchantment(output, new EnchantmentData(entry.getKey(),entry.getValue()));
             }
 
-
             event.setOutput(output);
             event.setCost(mergeCost);
         }
+
+    private static void handleDishenchant(ItemStack item, ItemStack book, AnvilUpdateEvent event){
+        Map<Enchantment, Integer> enchantedItem = EnchantmentHelper.getEnchantments(item);
+
+        ItemStack output = new ItemStack(Items.ENCHANTED_BOOK);
+        mergeCost = 1;
+        if (book == null) {
+            return;
+        }
+
+        for (Map.Entry<Enchantment, Integer> entry : enchantedItem.entrySet()){
+            EnchantedBookItem.addEnchantment(output, new EnchantmentData(entry.getKey(),entry.getValue()));
+            mergeCost += entry.getValue();
+        }
+
+        event.setOutput(output);
+        event.setCost(mergeCost);
+    }
+
 }
