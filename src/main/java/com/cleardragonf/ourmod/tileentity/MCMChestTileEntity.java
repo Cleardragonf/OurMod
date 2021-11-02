@@ -248,42 +248,42 @@ public class MCMChestTileEntity extends TileEntity implements ITickableTileEntit
 
 
 					if(tileTarget.FireEnergy.getEnergyStored() > 0 && this.FireEnergy.getEnergyStored() < 1000000){
-						int transfer = tileTarget.FireEnergy.getEnergyStored();
+						int transfer = tileTarget.FireEnergy.getEnergyStored() / 100;
 						tileTarget.FireEnergy.consumeEnergy(transfer);
 						this.FireEnergy.addEnergy(transfer);
 						save(tag);
 						setChanged();
 					}
 					if(tileTarget.WaterEnergy.getEnergyStored() > 0 && this.WaterEnergy.getEnergyStored() < 1000000){
-						int transfer = tileTarget.WaterEnergy.getEnergyStored();
+						int transfer = tileTarget.WaterEnergy.getEnergyStored() / 100;
 						tileTarget.WaterEnergy.consumeEnergy(transfer);
 						this.WaterEnergy.addEnergy(transfer);
 						save(tag);
 						setChanged();
 					}
 					if(tileTarget.AirEnergy.getEnergyStored() > 0 && this.AirEnergy.getEnergyStored() < 1000000){
-						int transfer = tileTarget.AirEnergy.getEnergyStored();
+						int transfer = tileTarget.AirEnergy.getEnergyStored() / 100;
 						tileTarget.AirEnergy.consumeEnergy(transfer);
 						this.AirEnergy.addEnergy(transfer);
 						save(tag);
 						setChanged();
 					}
 					if(tileTarget.EarthEnergy.getEnergyStored() > 0 && this.EarthEnergy.getEnergyStored() < 1000000){
-						int transfer = tileTarget.EarthEnergy.getEnergyStored();
+						int transfer = tileTarget.EarthEnergy.getEnergyStored() / 100;
 						tileTarget.EarthEnergy.consumeEnergy(transfer);
 						this.EarthEnergy.addEnergy(transfer);
 						save(tag);
 						setChanged();
 					}
 					if(tileTarget.DarkEnergy.getEnergyStored() > 0 && this.DarkEnergy.getEnergyStored() < 1000000){
-						int transfer = tileTarget.DarkEnergy.getEnergyStored();
+						int transfer = tileTarget.DarkEnergy.getEnergyStored() / 100;
 						tileTarget.DarkEnergy.consumeEnergy(transfer);
 						this.DarkEnergy.addEnergy(transfer);
 						save(tag);
 						setChanged();
 					}
 					if(tileTarget.LightEnergy.getEnergyStored() > 0 && this.LightEnergy.getEnergyStored() < 1000000){
-						int transfer = tileTarget.LightEnergy.getEnergyStored();
+						int transfer = tileTarget.LightEnergy.getEnergyStored() / 100;
 						tileTarget.LightEnergy.consumeEnergy(transfer);
 						this.LightEnergy.addEnergy(transfer);
 						save(tag);
