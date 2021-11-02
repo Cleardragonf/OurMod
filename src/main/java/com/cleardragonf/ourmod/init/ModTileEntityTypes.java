@@ -15,6 +15,7 @@ public class ModTileEntityTypes {
 	public static final RegistryObject<TileEntityType<QuarryTileEntity>> QUARRY = TILE_ENTITY_TYPES.register("quarry", () -> TileEntityType.Builder.of(QuarryTileEntity::new, BlockInitNew.QUARRY.get()).build(null));
 	
 	public static final RegistryObject<TileEntityType<PortableChestTileEntity>> PORTABLE_CHEST = TILE_ENTITY_TYPES.register("portablechest", () -> TileEntityType.Builder.of(PortableChestTileEntity::new, BlockInitNew.PORTABLE_CHEST.get()).build(null));
+	public static final RegistryObject<TileEntityType<MCMForgeTileEntity>> MCM_FORGE = TILE_ENTITY_TYPES.register("mcmforge", () -> TileEntityType.Builder.of(MCMForgeTileEntity::new, BlockInitNew.MCM_FORGE.get()).build(null));
 	public static final RegistryObject<TileEntityType<FishingNetTileEntity>> FISHING_NET = TILE_ENTITY_TYPES.register("fishingnet", () -> TileEntityType.Builder.of(FishingNetTileEntity::new, BlockInitNew.FISHING_NET.get()).build(null));
 	public static final RegistryObject<TileEntityType<EssenceCollectorTileEntity>> ESSENCE_COLLECTOR = TILE_ENTITY_TYPES.register("essencecollector", () -> TileEntityType.Builder.of(EssenceCollectorTileEntity::new, BlockInitNew.ESSENCE_COLLECTOR.get()).build(null));
 	public static final RegistryObject<TileEntityType<MCMChestTileEntity>> MCM_Chest = TILE_ENTITY_TYPES.register("mcmchest", () -> TileEntityType.Builder.of(MCMChestTileEntity::new, BlockInitNew.MCM_CHEST.get()).build(null));

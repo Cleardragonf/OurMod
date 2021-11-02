@@ -113,7 +113,6 @@ public class PortableChestTileEntity extends LockableLootTileEntity {
 			if (this.numPlayersUsing < 0) {
 				this.numPlayersUsing = 0;
 			}
-
 			++this.numPlayersUsing;
 			this.onOpenOrClose();
 		}

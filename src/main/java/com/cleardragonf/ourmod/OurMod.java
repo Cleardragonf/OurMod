@@ -7,6 +7,7 @@ import com.cleardragonf.ourmod.events.SurvivalEvents;
 import com.cleardragonf.ourmod.network.NetRegistries;
 import com.cleardragonf.ourmod.objects.blocks.*;
 import com.cleardragonf.ourmod.world.OreGeneration;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;

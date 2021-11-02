@@ -22,6 +22,7 @@ public class BlockInitNew {
 
 	//TileEntities
 	public static final RegistryObject<Block> PORTABLE_CHEST = BLOCKS.register("portablechest", ()-> new PortableChest(Block.Properties.of(Material.METAL).strength(10.0f, 15.0f)));
+	public static final RegistryObject<Block> MCM_FORGE = BLOCKS.register("mcmforge", MCMForge::new);
 	public static final RegistryObject<Block> QUARRY = BLOCKS.register("quarry", ()-> new BlockQuarry(Block.Properties.of(Material.METAL).strength(10.0f, 15.0f)));
 	public static final RegistryObject<Block> ESSENCE_COLLECTOR = BLOCKS.register("essencecollector", ()-> new EssenceCollector(Block.Properties.of(Material.METAL).strength(10.0f, 15.0f)));
 	public static final RegistryObject<Block> FISHING_NET = BLOCKS.register("fishingnet", ()-> new FishingNet(Block.Properties.of(Material.METAL).strength(10.0f, 15.0f)));
