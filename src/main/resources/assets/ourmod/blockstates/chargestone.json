@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north": { "model":"ourmod:block/mcmchest"},
+		"facing=south": { "model":"ourmod:block/mcmchest", "y": 180 },
+		"facing=west": { "model":"ourmod:block/mcmchest", "y": 270 },
+		"facing=east": { "model":"ourmod:block/mcmchest", "y": 90 },
+		"facing=up": { "model":"ourmod:block/mcmchest", "x": -90 },
+		"facing=down": { "model":"ourmod:block/mcmchest", "x": 90 }
+	}
+}

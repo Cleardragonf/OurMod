@@ -26,6 +26,7 @@ public class ClientEventBusSubscriber {
 		ScreenManager.register(ModContainerTypes.FISHING_NET.get(), FishingNetScreen::new);
 		ScreenManager.register(ModContainerTypes.ESSENCE_COLLECTOR.get(), EssenceCollectorScreen::new);
 		ScreenManager.register(ModContainerTypes.MCM_CHEST.get(), MCMChestScreen::new);
+		ScreenManager.register(ModContainerTypes.CHARGE_STONE.get(), ChargeStoneScreen::new);
 		ScreenManager.register(ModContainerTypes.MASTER_WARD_STONE.get(), MasterWardStoneScreen::new);
 		ScreenManager.register(ModContainerTypes.BOUNDARY_WARD_STONE.get(), BoundaryWardStoneScreen::new);
 		RenderTypeLookup.setRenderLayer(BlockInitNew.WARDBARRIER.get(), RenderType.translucent());

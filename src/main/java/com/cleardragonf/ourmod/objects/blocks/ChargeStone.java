@@ -1,5 +1,6 @@
 package com.cleardragonf.ourmod.objects.blocks;
 
+import com.cleardragonf.ourmod.tileentity.ChargeStoneTileEntity;
 import com.cleardragonf.ourmod.tileentity.MCMChestTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,9 +30,9 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber
-public class MCMChest extends Block {
+public class ChargeStone extends Block {
 
-	public MCMChest() {
+	public ChargeStone() {
 		super(Properties.of(Material.METAL)
 				.sound(SoundType.METAL)
 				.strength(2.0f)
@@ -48,21 +49,17 @@ public class MCMChest extends Block {
 		return state.getValue(BlockStateProperties.POWERED) ? super.getLightValue(state,world ,pos) : 0;
 	}
 
-	@Nullable
-	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new MCMChestTileEntity();
-	}
 
 	@Override
 	public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
 		super.setPlacedBy(world, pos, state, entity, stack);
 
 		TileEntity tileEntity = world.getBlockEntity(pos);
-		if(tileEntity instanceof MCMChestTileEntity) {
+		if(tileEntity instanceof ChargeStoneTileEntity) {
+			((ChargeStoneTileEntity)tileEntity).setMasterSlave();
 			CompoundNBT tag = stack.getTag();
 			if(tag != null) {
-				((MCMChestTileEntity)tileEntity).readRestorableNBT(tag);
+				((ChargeStoneTileEntity)tileEntity).readRestorableNBT(tag);
 				world.sendBlockUpdated(pos, defaultBlockState(), defaultBlockState(), Constants.BlockFlags.DEFAULT);
 			}
 		}
@@ -73,7 +70,7 @@ public class MCMChest extends Block {
 	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
 		if (!world.isClientSide()) {
 			TileEntity tile = world.getBlockEntity(pos);
-			if (tile instanceof MCMChestTileEntity) {
+			if (tile instanceof ChargeStoneTileEntity) {
 
 				CompoundNBT tag;
 				ItemStack item = player.getItemInHand(hand);
@@ -83,7 +80,7 @@ public class MCMChest extends Block {
 					tag = new CompoundNBT();
 				}
 				if(tag.contains("energypos")){
-					MCMChestTileEntity tileEntity = (MCMChestTileEntity) world.getBlockEntity(pos);
+					ChargeStoneTileEntity tileEntity = (ChargeStoneTileEntity) world.getBlockEntity(pos);
 					tileEntity.energyblocks = tag.get("energypos");
 					tileEntity.setChanged();
 					tileEntity.updateBlock();
@@ -91,7 +88,7 @@ public class MCMChest extends Block {
 
 
 
-				NetworkHooks.openGui((ServerPlayerEntity) player, (MCMChestTileEntity) tile, pos);
+				NetworkHooks.openGui((ServerPlayerEntity) player, (ChargeStoneTileEntity) tile, pos);
 				return ActionResultType.SUCCESS;
 			}
 		}
@@ -101,11 +98,11 @@ public class MCMChest extends Block {
 	@Override
 	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		TileEntity tileEntity = worldIn.getBlockEntity(pos);
-		if(tileEntity instanceof MCMChestTileEntity) {
-			MCMChestTileEntity tile = (MCMChestTileEntity) tileEntity;
+		if(tileEntity instanceof ChargeStoneTileEntity) {
+			ChargeStoneTileEntity tile = (ChargeStoneTileEntity) tileEntity;
 			ItemStack item = new ItemStack(this);
 			CompoundNBT tag = new CompoundNBT();
-			((MCMChestTileEntity)tileEntity).save(tag);
+			((ChargeStoneTileEntity)tileEntity).save(tag);
 
 			item.setTag(tag);
 

@@ -97,6 +97,9 @@ public class ItemInitNew {
 	@ObjectHolder("ourmod:mcmchest")
 	public static final Item MCM_CHEST = null;
 
+	@ObjectHolder("ourmod:chargestone")
+	public static final Item CHARGE_STONE = null;
+
 	@ObjectHolder("ourmod:fishingnet")
 	public static final Item FISHING_NET = null;
 

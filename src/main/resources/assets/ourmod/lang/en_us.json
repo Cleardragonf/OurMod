@@ -68,6 +68,7 @@
 	"block.ourmod.fishingnet": "Fishing Net",
 	"block.ourmod.essencecollector": "Essence Collector",
 	"block.ourmod.mcmchest": "MCM Chest",
+	"block.ourmod.chargestone": "Charge Stone",
 	"block.ourmod.masterwardstone": "Master Warding Stone",
 	"block.ourmod.boundarywardstone": "Boundary Ward Stone",
 
@@ -76,6 +77,7 @@
 	"container.portablechest": "Portable Chest",
 	"container.fishingnet": "Fishing Net",
 	"container.mcmchest": "MCM Chest",
+	"container.chargestone": "Charge Stone",
 
 	"effect.ourmod.hypothermia": "Hypothermia",
 	"effect.ourmod.hyperthermia": "Hyperthermia",

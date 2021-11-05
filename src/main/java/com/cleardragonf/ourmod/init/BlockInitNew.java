@@ -26,6 +26,7 @@ public class BlockInitNew {
 	public static final RegistryObject<Block> ESSENCE_COLLECTOR = BLOCKS.register("essencecollector", ()-> new EssenceCollector(Block.Properties.of(Material.METAL).strength(10.0f, 15.0f)));
 	public static final RegistryObject<Block> FISHING_NET = BLOCKS.register("fishingnet", ()-> new FishingNet(Block.Properties.of(Material.METAL).strength(10.0f, 15.0f)));
 	public static final RegistryObject<MCMChest> MCM_CHEST = BLOCKS.register("mcmchest", MCMChest::new);
+	public static final RegistryObject<ChargeStone> CHARGE_STONE = BLOCKS.register("chargestone", ChargeStone::new);
 	public static final RegistryObject<Block> MASTER_WARD_STONE = BLOCKS.register("masterwardstone", ()-> new MasterWardStoneBlock(Block.Properties.of(Material.METAL).strength(10.0f, 15.0f)));
 	public static final RegistryObject<Block> BOUNDARY_WARD_STONE = BLOCKS.register("boundarywardstone", ()-> new BoundaryWardStoneBlock(Block.Properties.of(Material.METAL).strength(10.0f, 15.0f)));
 
